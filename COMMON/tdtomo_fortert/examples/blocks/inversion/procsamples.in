@@ -1,0 +1,51 @@
+********************************************************************************************************************************
+* (A) INPUT FILES                                                                                                              *
+********************************************************************************************************************************
+samples.out                   :: File containing Voronoi models (gets renamed to e.g. samples.out1 for chain 1)
+ncells.out                    :: File containing number of cells (gets renamed to e.g. ncells.out1 for chain 1)
+sigmas.out                    :: File containing data noise parameters (gets renamed to e.g. noise.out1 for chain 1)
+misfit.out                    :: File containing misfits (gets renamed to e.g. misfit.out1 for chain 1)
+aratios.out                   :: File containing acceptance ratios (gets renamed to e.g. aratios.out1 for chain 1)
+temper.out                    :: File containing temperature jumps (gets renamed to e.g. temper.out)
+residuals.out                 :: File containing residuals (gets renamed to e.g. residuals.out1 for chain 1)
+********************************************************************************************************************************
+* (B) OUTPUT FILES                                                                                                             *
+********************************************************************************************************************************
+average.out                   :: Average model
+stdev.out                     :: Standard deviation map
+median.out                    :: Median model
+maximum.out                   :: Maximum-a-posteriori model
+harmean.out                   :: Harmonic mean model
+root_mean_square.out          :: Root-mean-square model
+entropy.out                   :: Entropy map
+skewness.out                  :: Skewness map
+kurtosis.out                  :: Kurtosis map
+ncells_iter.out               :: Number of cells as a function of iteration number
+misfit_iter.out               :: Misfit as a function of iteration number
+posterior_ncells.out          :: Posterior distribution on number of cells
+posterior_noise.out           :: Posterior distribution on data noise
+posterior_resistivity.out     :: Posterior distribution on resistivities
+node_density.out              :: Density of Voronoi nuclei
+first.out                     :: First Voronoi model (initial point of Markov chain)
+last.out                      :: Last Voronoi model (final point of Markov chain)
+residuals_histo.out           :: Residuals
+********************************************************************************************************************************
+* (C) PROCESSING PARAMETERS                                                                                                    *
+********************************************************************************************************************************
+0                             :: Output maps in vtx format (=0) or xyz format (=1)
+401   1   121                 :: Number of resistivity pixels in x,y,z
+5   5   5                     :: Size of x,y,z pixels for calculation of Voronoi centre density
+150                           :: Number of pixels in resistivity posterior
+100                           :: Number of pixels in noise posterior
+401                           :: Number of pixels in residuals
+100  200                      :: Only consider residuals whose absolute value is less than this
+********************************************************************************************************************************
+* (D) MARKOV CHAIN PARAMETERS                                                                                                  *
+********************************************************************************************************************************
+1500                          :: Burn-in period
+10                            :: Thinning of the chain
+-1                            :: Stop taking samples at this chain iteration number (-1 to use whole chain)
+0                             :: Number of "bad" Markov chains to ignore (=0 if all chains are to be used)
+1                             :: Markov chains to ignore (chain numbers one below the other)
+2
+********************************************************************************************************************************

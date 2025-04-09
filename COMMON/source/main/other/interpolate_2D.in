@@ -1,0 +1,27 @@
+*******************************************************************************************
+* INPUT                                                                                   *
+*******************************************************************************************
+1                              :: Model file format: Voronoi (=1), vtx 2D (=2), vtx 3D (=3)
+model.vtx                      :: Model file
+../electrodes.dat              :: Electrodes file
+*******************************************************************************************
+* OUTPUT                                                                                  *
+*******************************************************************************************
+10                             :: Grid dicing
+grid.z                         :: GMT output file for slice
+bound.gmt                      :: GMT plotting bounds for slice
+1                              :: Plot electrodes?
+electrodes.dat                 :: Electrodes file compatible with GMT
+*******************************************************************************************
+* 2D SLICE OPTIONS (only used if the file is Voronoi or vtx 3D)                           *
+*******************************************************************************************
+1                              :: Plot xy plane (=0), xz plane (=1), yz plane (=2)
+0                              :: Value of z if xy plane, y if xz plane, x if yz plane
+*******************************************************************************************
+* VORONOI MODEL OPTIONS (only used if the file is Voronoi)                                *
+*******************************************************************************************
+-50   50                       :: Minimum and maximum x
+0   0                          :: Minimum and maximum y
+0   30                         :: Minimum and maximum z
+201   1   61                   :: Number of pixels in [x y z]
+*******************************************************************************************

@@ -1,0 +1,76 @@
+********************************************************************************************************************************
+* (A) DATA                                                                                                                     *
+********************************************************************************************************************************
+electrodes.dat                :: File of electrode coordinates
+data.dat                      :: File of resistance measurements
+1                             :: Number of datasets with different noise parameterisation
+datasets.dat                  :: File containing dataset associations (only used if number of datasets > 1)
+********************************************************************************************************************************
+* (B) OUTPUT FILES                                                                                                             *
+********************************************************************************************************************************
+samples.out                   :: File containing Voronoi models (gets renamed to e.g. samples.out1 for chain 1)
+ncells.out                    :: File containing number of cells (gets renamed to e.g. ncells.out1 for chain 1)
+sigmas.out                    :: File containing data noise parameters (gets renamed to e.g. noise.out1 for chain 1)
+misfit.out                    :: File containing misfits (gets renamed to e.g. misfit.out1 for chain 1)
+aratios.out                   :: File containing acceptance ratios (gets renamed to e.g. aratios.out1 for chain 1)
+temper.out                    :: File containing temperature jumps
+1                             :: Save residuals? (1=yes,0=no)
+residuals.out                 :: File containing residuals (gets renamed to e.g. residuals.out1 for chain 1)
+********************************************************************************************************************************
+* (C) PRIOR PARAMETERS                                                                                                         *
+********************************************************************************************************************************
+3   100                       :: Minimum and maximum number of Voronoi cells
+0.6   10                      :: Minimum and maximum log10(resistivity) / fracture length
+1.5  12.5                     :: Minimum and maximum x
+0   0                         :: Minimum and maximum y (not used in 2D)
+6   16.6                      :: Minimum and maximum z
+6                             :: Noise parameterisation type
+0.001   0.1                   :: Noise type 1,2: minimum and maximum noise parameter "a"
+0.002   0.2                   :: Noise type 1,2: minimum and maximum noise parameter "b"
+0.01   10                     :: Noise type 3,6: minimum and maximum noise parameter "lambda"
+0.05   0.2                    :: Noise type 0: minimum and maximum noise parameter "sigma"
+6                             :: Noise type 6: standard deviation associated to the homogeneous matrix (no fracture) "sigma_mat"
+12.5                          :: Targetted electrical resisitivty of the homegeneous matrix
+********************************************************************************************************************************
+* (D) PROPOSAL PARAMETERS                                                                                                      *
+********************************************************************************************************************************
+0.6                           :: log10(resistivity) perturbation
+0.3                           :: log10(resistivity) perturbation for delayed rejection
+5  5  5                       :: Perturbation of x,y,z position (percentage of x,y,z prior range)
+2  2  2                       :: Perturbation of x,y,z position for delayed rejection (percentage of x,y,z prior range)
+0.2                           :: log10(resistivity) perturbation for birth step
+0.3                           :: Perturbation of noise parameter "a"
+0.2                           :: Perturbation of noise parameter "b"
+0.2                           :: Perturbation of noise parameter "lambda"
+0.5                           :: Perturbation of noise parameter "sigma"
+********************************************************************************************************************************
+* (E) LIKELIHOOD PARAMETERS                                                                                                    *
+********************************************************************************************************************************
+0                             :: Use Gaussian or Laplacian likelihood function? (0=Gaussian,1=Laplacian)
+********************************************************************************************************************************
+* (F) FORWARD MODELLING PARAMETERS
+********************************************************************************************************************************
+2                             :: Modelling method (1=fwd2_5D, 2=ERT_DDP_2.5D)
+forward.in                    :: File containing forward modelling parameters for modelling method 1
+********************************************************************************************************************************
+* (G) MARKOV CHAIN PARAMETERS                                                                                                  *
+********************************************************************************************************************************
+0.3                           :: Maximum run time in hours
+1500                             :: Number of samples in this run
+3000                          :: Total number of samples per chain including all runs (=0 to switch off this limit)
+5                            :: Sample interval for displaying information in output file
+1                             :: Add 1s sleep time between the display of each chain's information? (1=yes, 0=no)
+0                             :: Run inversion without data? (1=yes,0=no)
+********************************************************************************************************************************
+* (H) PARALLEL TEMPERING PARAMETERS                                                                                            *
+********************************************************************************************************************************
+1                             :: Use parallel tempering? (1=yes,0=no)
+0                             :: Jump type (0=random,1=near,2=nearest)
+0                             :: Apply parallel tempering starting from this sample number
+3   3                         :: Number of temperatures =1 and >1 (sum must be equal to total number of parallel chains)
+8                             :: Temperatures >1 (one below the other) / 1st row = hottest temperature if nb temperatures>1 is > 2
+7
+********************************************************************************************************************************
+* (I) PATH TO ert_ddp_2_5d REPOSITORY                                                                                          *
+********************************************************************************************************************************
+/home/lelimouzinl/scratch/TERT_work_R4_noise/tdtomo_fortert/source/forward/ert_ddp_2_5d/

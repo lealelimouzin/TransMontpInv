@@ -1,0 +1,15 @@
+************************************************************************************
+* INPUT                                                                            *
+************************************************************************************
+electrodes.dat                :: File of electrode coordinates
+data.dat                      :: File of resistance measurements
+1                             :: Model file type (0=smooth, 1=voronoi)
+grid.dat                      :: Resistivity model file
+1                             :: Resistivities in model file are log10 (1=yes, 0=no)
+forward.in                    :: Forward modelling file
+************************************************************************************
+* OUTPUT                                                                           *
+************************************************************************************
+resistances.out               :: File of resistances
+apparentrho.out               :: File of apparent resistivities
+************************************************************************************

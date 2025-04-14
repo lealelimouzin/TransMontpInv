@@ -190,8 +190,6 @@ FilesParameters::FilesParameters(){
 	//code_path="/home/lelimouzinl/work_ert_ddp/Stage_Lea_Lelimouzin/Code_C++/Code2.5D/Code2.5D";
 	string simu_file_name=code_path+"/input/SimuType.txt";
 	//cout << simu_file_name << endl;
-	std::filesystem::path cwd = std::filesystem::current_path();
-	cout << cwd << endl;
 	ifstream fichier1(simu_file_name.c_str());
 	string simu_name;
 	if (fichier1.is_open()){fichier1 >> simu_name;fichier1.close();}

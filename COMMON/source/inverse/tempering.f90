@@ -130,17 +130,18 @@ END SUBROUTINE
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE do_tempering()
+SUBROUTINE do_tempering(modelled_data)
 
 USE alpha_calculation
 IMPLICIT NONE
+DOUBLE PRECISION, DIMENSION(:), INTENT(IN)  :: modelled_data
 DOUBLE PRECISION        :: tempering_normalization
 DOUBLE PRECISION        :: alpha_swap
 DOUBLE PRECISION        :: random_deviate
 
 swap_temperatures=.FALSE.
 
-CALL calculate_normalization(number_of_measurements,noise_T1,noise_T2,tempering_normalization)
+CALL calculate_normalization(number_of_measurements,modelled_data,noise_T1,noise_T2,tempering_normalization)
 
 alpha_swap=MINVAL([DBLE(0),-likelihood_T1/T2_value&
                            +likelihood_T2/T2_value&

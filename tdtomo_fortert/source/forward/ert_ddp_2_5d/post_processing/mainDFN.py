@@ -63,8 +63,8 @@ def mainDFN(tabVar,res_cxx):
 
     for i in range(nb_exp):
 
-        index_elec_A = int(matrixIndex[i, 0])
-        index_elec_B = int(matrixIndex[i, 1])
+        index_elec_A = int(matrixIndex[i, 0])-1
+        index_elec_B = int(matrixIndex[i, 1])-1
 
         position_elec_xA = configx[i, 0]; position_elec_yA = configy[i, 0]
         position_elec_xB = configx[i, 1]; position_elec_yB = configy[i, 1]
@@ -81,19 +81,19 @@ def mainDFN(tabVar,res_cxx):
         # Inversion of the potential distribution in the real domain
         [x, y, Potential_matrix_AB_DFN] = InverseFourierPotential(Fourier_pot_AB_DFN, Nx, Ny, Lx, Ly, position_elec_xA,
                                                                   position_elec_xB, position_elec_yA, position_elec_yB)
-        [x, y, Potential_matrix_BA_DFN] = InverseFourierPotential(Fourier_pot_AB_DFN, Nx, Ny, Lx, Ly, position_elec_xB,
-                                                                  position_elec_xA, position_elec_yB, position_elec_yA)
+        #[x, y, Potential_matrix_BA_DFN] = InverseFourierPotential(Fourier_pot_AB_DFN, Nx, Ny, Lx, Ly, position_elec_xB,
+       #                                                           position_elec_xA, position_elec_yB, position_elec_yA)
 
-        Potential_matrix_AB_DFN = (Potential_matrix_AB_DFN + Potential_matrix_BA_DFN) / 2
+        #Potential_matrix_AB_DFN = (Potential_matrix_AB_DFN + Potential_matrix_BA_DFN) / 2
 
         V_MN_DFN = (Potential_matrix_AB_DFN[math.ceil(position_elec_yM / delta_y) - 1,
                                             math.ceil(position_elec_xM / delta_x) - 1] - Potential_matrix_AB_DFN[
                         math.ceil(position_elec_yN / delta_y) - 1, math.ceil(position_elec_xN / delta_x) - 1])
-        V_MN_DFN_inv = (Potential_matrix_BA_DFN[math.ceil(position_elec_yM / delta_y) - 1,
-                                                math.ceil(position_elec_xM / delta_x) - 1] - Potential_matrix_BA_DFN[
-                            math.ceil(position_elec_yN / delta_y) - 1, math.ceil(position_elec_xN / delta_x) - 1])
+        #V_MN_DFN_inv = (Potential_matrix_BA_DFN[math.ceil(position_elec_yM / delta_y) - 1,
+        #                                        math.ceil(position_elec_xM / delta_x) - 1] - Potential_matrix_BA_DFN[
+        #                    math.ceil(position_elec_yN / delta_y) - 1, math.ceil(position_elec_xN / delta_x) - 1])
 
-        V_MN_DFN = (V_MN_DFN + V_MN_DFN_inv) / 2
+        #V_MN_DFN = (V_MN_DFN + V_MN_DFN_inv) / 2
 
         # Geometric factor
         AM = np.sqrt(np.square(np.subtract(position_elec_xM, position_elec_xA)) + np.square(

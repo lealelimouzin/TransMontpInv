@@ -148,7 +148,7 @@ LOGICAL, INTENT(IN)             :: temper
 DOUBLE PRECISION, INTENT(OUT)   :: alpha_delayed
 DOUBLE PRECISION                :: value_min,value_max
 DOUBLE PRECISION                :: TT1,TT2,TT3,TT2x,TT2y,TT2z,TT3t,TT3b
-DOUBLE PRECISION                :: change_perturbation
+DOUBLE PRECISION                :: l_change
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': calculating alpha delayed ---'
 
@@ -171,11 +171,11 @@ IF (move) THEN
                 -(voronoi_proposed(cell_number,3)-voronoi_delayed(cell_number,3))**2)/(2*z_change**2)
         TT2=TT2x+TT2y+TT2z
 ELSE IF (value) THEN
-        change_perturbation=gausrand()*powerrand_std(value_min,value_max)
+        l_change=gausrand()*powerrand_std(value_min,value_max)
         !TT2=(-(voronoi_proposed(cell_number,4)-voronoi_delayed(cell_number,4))**2&
         !        +(voronoi_proposed(cell_number,4)-voronoi_current(cell_number,4))**2)/(2*value_change**2)
         TT2=(-(voronoi_proposed(cell_number,4)-voronoi_delayed(cell_number,4))**2&
-                +(voronoi_proposed(cell_number,4)-voronoi_current(cell_number,4))**2)/(2*change_perturbation**2)
+                +(voronoi_proposed(cell_number,4)-voronoi_current(cell_number,4))**2)/(2*l_change**2)
 END IF
 
 IF (.NOT.inside_prior.AND.inside_prior_delayed) THEN ! if the first proposal was rejected because out of bounds, then TT3=0
@@ -243,20 +243,21 @@ END SUBROUTINE
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE calculate_normalization(number_of_measurements,uncertainty_current,uncertainty_proposed,normalization)
+SUBROUTINE calculate_normalization(number_of_measurements,modelled_data,uncertainty_current,uncertainty_proposed,normalization)
 
 IMPLICIT NONE
 INTEGER, INTENT(IN)                             :: number_of_measurements
 DOUBLE PRECISION, DIMENSION(:), INTENT(IN)      :: uncertainty_current,uncertainty_proposed
+DOUBLE PRECISION, DIMENSION(:), INTENT(IN)      :: modelled_data
 DOUBLE PRECISION, INTENT(OUT)                   :: normalization
 INTEGER                                         :: ii
 
 normalization=0
 
 DO ii=1,number_of_measurements
-        
-        normalization=normalization+LOG(uncertainty_current(ii)/uncertainty_proposed(ii))
-        
+        IF (modelled_data(ii).GT.0) THEN
+                normalization=normalization+LOG(uncertainty_current(ii)/uncertainty_proposed(ii))
+        END IF
 END DO
 
 END SUBROUTINE

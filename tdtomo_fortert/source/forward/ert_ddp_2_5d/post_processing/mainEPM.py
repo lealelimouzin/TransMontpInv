@@ -64,8 +64,8 @@ def mainEPM(tabVar,res_cxx):
 
     for i in range(nb_exp):
 
-        index_elec_A = int(matrixIndex[i, 0])
-        index_elec_B = int(matrixIndex[i, 1])
+        index_elec_A = int(matrixIndex[i, 0])-1
+        index_elec_B = int(matrixIndex[i, 1])-1
 
         position_elec_xA = elec_configx[i, 0]; position_elec_yA = elec_configy[i, 0]
         position_elec_xB = elec_configx[i, 1]; position_elec_yB = elec_configy[i, 1]
@@ -105,5 +105,5 @@ def mainEPM(tabVar,res_cxx):
         # Apparent resistivity
         rho_a_EPM[i] = V_MN_EPM * k_fact
         
-
+    print(rho_a_EPM)
     return rho_a_EPM

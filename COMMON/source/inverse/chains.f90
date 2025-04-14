@@ -48,7 +48,7 @@ DOUBLE PRECISION, SAVE                                  :: a_change,b_change
 DOUBLE PRECISION, SAVE                                  :: lambda_change
 DOUBLE PRECISION, SAVE                                  :: sigma_change
 INTEGER, SAVE                                           :: likelihood_type
-DOUBLE PRECISION                                        :: change_perturbation ! needed when changing length of a fracture
+DOUBLE PRECISION                                        :: l_change ! needed when changing length of a fracture
 ! Models
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE           :: voronoi_current,voronoi_proposed,voronoi_delayed,voronoi_0
 INTEGER                                                 :: ncell_current,ncell_proposed,cell_number
@@ -118,9 +118,7 @@ INTEGER, SAVE                                           :: acceptance_unit=54
 INTEGER, SAVE                                           :: temperatures_unit=55
 INTEGER, SAVE                                           :: residuals_unit=56
 
-
 CONTAINS
-
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE initialize_chains()
@@ -393,19 +391,24 @@ IF (modelling_method.EQ.1) THEN
 ELSE IF (modelling_method.EQ.2) THEN
         !voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
         !                                +powerrand(value_min)*value_change
-        change_perturbation=gausrand()*powerrand_std(value_min,value_max)
-        voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+change_perturbation
-        !IF (voronoi_current(cell_number,4).LE.change_perturbation) THEN
-        !        voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+change_perturbation
+        l_change=gausrand()*powerrand_std(value_min,value_max)
+        ! proposotion CC 10/04/2025
+        ! l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max) <- prefered
+        ! ou
+        ! l_change=(unirand()-0.5)*2.*powerrand_std(value_min,value_max)*value_change
+        ! WARNING UNIT VALUE CHANGE: %
+        voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
+        !IF (voronoi_current(cell_number,4).LE.l_change) THEN
+        !        voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
         !ELSE
         !        IF (unirand().LE.0.5) THEN 
-        !                voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)-change_perturbation 
+        !                voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)-l_change 
         !        ELSE
-        !                voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+change_perturbation
+        !                voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
         !        END IF
         !END IF
         !voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
-        !                                +unirand()*powerlaw_std(value_min,value_max)
+        !                                +unirand()*powerrand_std(value_min,value_max)
 
         ! Check if the fracture edge values are in the domain boundaries
         x1 = voronoi_proposed(cell_number,1) - voronoi_proposed(cell_number,4)/2
@@ -519,8 +522,8 @@ IF (modelling_method.EQ.1) THEN
 !---------- If ert_ddp_2_5d ----------
 ELSE IF (modelling_method.EQ.2) THEN
 
-        change_perturbation=gausrand()*powerrand_std(value_min,value_max)
-        voronoi_delayed(cell_number,4)=voronoi_delayed(cell_number,4)+change_perturbation
+        l_change=gausrand()*powerrand_std(value_min,value_max)
+        voronoi_delayed(cell_number,4)=voronoi_delayed(cell_number,4)+l_change
         
         !voronoi_delayed(cell_number,4)=voronoi_current(cell_number,4)&
         !                                +powerrand(value_min,value_max)*value_change_delayed

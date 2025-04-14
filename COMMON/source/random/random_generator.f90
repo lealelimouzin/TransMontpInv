@@ -93,7 +93,7 @@ RETURN
 END FUNCTION
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! Generate a random number from a power law distribution (fracure length estimation)
+! Generate a random number from a power law distribution (fracture length estimation)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 FUNCTION powerrand(value_min,value_max) RESULT(value)
 
@@ -119,9 +119,10 @@ RETURN
 END FUNCTION
 
 FUNCTION powerrand_std(value_min,value_max) RESULT(powerlaw_std)
-
+    
     IMPLICIT NONE
-    DOUBLE PRECISION        :: value_min, value_max, a, powerlaw_std,part1,part2 ,part3 
+    DOUBLE PRECISION        :: value_min,value_max,a,powerlaw_std,part1,part2 ,part3
+
     a=2
     if (a.EQ.2) then
         powerlaw_std = sqrt( value_min*value_max - ((log(value_max)-log(value_min))/(value_min**(-1)-value_max**(-1)))**2 )
@@ -134,8 +135,7 @@ FUNCTION powerrand_std(value_min,value_max) RESULT(powerlaw_std)
         write(*,*) 'When a>3, the standard deviation of a power-law truncated at both ends has not been implemented.'
     end if 
     
-RETURN
+    RETURN
 END FUNCTION
-
 
 END MODULE

@@ -173,7 +173,7 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 	//cout << "PERFORM end" << endl;
 
 	t_end=clock();
-	//cout << "CPU Time = " << (t_end-t_begin)/CLOCKS_PER_SEC << endl;
+	cout << "CPU Time = " << (t_end-t_begin)/CLOCKS_PER_SEC << endl;
 
     /*// Test eigen matrix
     int n = 5;

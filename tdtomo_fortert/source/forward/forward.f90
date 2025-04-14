@@ -143,7 +143,7 @@ END SUBROUTINE
 SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         IMPLICIT NONE
         INTEGER, INTENT(IN)                                     :: chain_number
-        DOUBLE precision                                        :: rho_mat
+        !DOUBLE PRECISION                                        :: rho_mat
         INTEGER                                                 :: CSTAT,I
         CHARACTER(200)                                          :: namedir,cdtmp
         CHARACTER(300)                                          :: textfileDFN, textfileEPM,cwd
@@ -152,6 +152,8 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         DOUBLE PRECISION, DIMENSION(number_of_measurements)     :: modelled_data_epm, modelled_data_dfn
         INTEGER, INTENT(OUT)                                    :: info
         
+        write(*,*)'rho_mat ',rho_mat
+
         ! Go to the result directory
         CALL CHDIR (namedir)
         
@@ -169,6 +171,8 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
                         read(88,*) modelled_data_dfn(I) 
                 end do
         close(88)
+        write(*,*)'dfn'
+        write(*,*)modelled_data_dfn
 
         textfileEPM = ADJUSTL(ADJUSTR(namedir)//TRIM("/results_fwd/rho_a_EPM.txt"))
         open (unit=89, file=textfileEPM, status='old', action='read')
@@ -176,8 +180,14 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
                         read(89,*) modelled_data_epm(I) 
                 end do
         close(89)
+        write(*,*)'epm'
+        write(*,*)modelled_data_epm
+
+        write(*,*)'rho_mat ',rho_mat 
         
         modelled_data = modelled_data_dfn-(modelled_data_epm-rho_mat) ! ratio of simulated data
+        write(*,*)'modelled_data'
+        write(*,*)modelled_data
 
         !write(*,*) 'modelled_data: ', modelled_data
 

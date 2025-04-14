@@ -40,6 +40,8 @@ CHARACTER(LEN=13)                                       :: min_unc,max_unc
 CHARACTER(LEN=10)                                       :: t_acc
 CHARACTER(LEN=*), PARAMETER                             :: FMT1="(f9.4)"
 CHARACTER(LEN=*), PARAMETER                             :: FMT2="(f12.4)"
+INTEGER                                                 :: ii,k=1
+DOUBLE PRECISION,DIMENSION(SIZE(data_current))                :: data_tempo,noise_tempo
 
 IF (start_end.EQ.1.OR.start_end.EQ.2) THEN
         
@@ -78,9 +80,26 @@ ELSE IF (start_end.EQ.3) THEN
         WRITE(md_acc,FMT1)acceptances(8)
         WRITE(vm_acc,FMT1)acceptances(9)
         WRITE(vd_acc,FMT1)acceptances(10)
-        WRITE(min_unc,FMT2)MINVAL(noise_current/ABS(data_current)*100)
-        WRITE(max_unc,FMT2)MAXVAL(noise_current/ABS(data_current)*100)
-        
+        !WRITE(min_unc,FMT2)MINVAL(noise_current/ABS(data_current)*100)
+        !WRITE(max_unc,FMT2)MAXVAL(noise_current/ABS(data_current)*100)
+
+        !--------------------------Modifs-------------------------------------------------
+        DO ii=1,number_of_measurements
+                IF (data_current(ii).GT.0) THEN
+                        data_tempo(k) = data_current(ii)
+                        noise_tempo(k) = noise_current(ii)
+                        k=k+1
+                END IF
+        END DO
+        WRITE(min_unc,FMT2)MINVAL(noise_tempo/ABS(data_tempo)*100)
+        WRITE(max_unc,FMT2)MAXVAL(noise_tempo/ABS(data_tempo)*100)
+
+        WRITE(*,*)MINVAL(noise_current/ABS(data_current)*100),MINVAL(ABS(noise_current)),MAXVAL(data_current)
+        WRITE(*,*)MAXVAL(noise_current/ABS(data_current)*100),MAXVAL(noise_current),MINVAL(ABS(data_current))
+        WRITE(*,*)MINVAL(noise_tempo/ABS(data_tempo)*100),MINVAL(ABS(noise_tempo)),MAXVAL(data_tempo)
+        WRITE(*,*)MAXVAL(noise_tempo/ABS(data_tempo)*100),MAXVAL(noise_tempo),MINVAL(ABS(data_tempo))
+        !----------------------------------------------------------------------
+
         WRITE(*,*)'--------------------------------------'
         WRITE(*,*)'Chain number: ',TRIM(chain_name),'/',TRIM(int2str(number_of_chains))
         WRITE(*,*)'Sample: ',TRIM(int2str(samples_at_start+iteration)),'/',&

@@ -28,8 +28,11 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parame
     int elec_nb;
     double source_position_x, source_position_y, source_value = 1.0;
     // Initial domain and system
+    clock_t t_begin=clock(),t_end;
     EPMSystem epd_model_init(param), epd_model;
     epd_model_init.DetermineBasicLinearSystem();
+    t_end=clock();
+	//cout << "initial domain and system Time = " << (t_end-t_begin)/(double)CLOCKS_PER_SEC << endl;
     // Loop on the different electrode positions <-> different experiments
     for (map<int, pair<double, double> >::iterator it1 = source_term_positions.begin();
          it1 != source_term_positions.end(); it1++) {
@@ -59,9 +62,12 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parame
             // Update the linear system with the boundary conditions and source terms
             epd_model.UpdateLinearSystemBoundaryConditionsAndSourceTerms(fourier);
             //Potential_Matrices[*it1]=epd_model.PotentialComputation();
+            clock_t t_begin=clock(),t_end;
             Potential_Vector[*it2] = LinearSystemSolving(epd_model.matrix_syst, epd_model.vector_syst);
+            t_end=clock();
+	       // cout << "system lineaire par elec par w Time = " << (t_end-t_begin)/(double)CLOCKS_PER_SEC << endl;
         }
-        /*// Write the results
+        // Write the results
         stringstream ss;
         string str_cpt;
         ss << elec_nb;
@@ -69,12 +75,13 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parame
         string output_file = "Results" + str_cpt;
         output_file = output_file + ".txt";
         //Results results(param.files_param.output_path+output_file,Potential_Matrices);
-        Results results(param.files_param.output_path + output_file, Potential_Vector, epd_model.Nx, epd_model.Ny);*/
+        Results results(param.files_param.output_path + output_file, Potential_Vector, epd_model.Nx, epd_model.Ny);
 
         // Store results in the map of eigen matrices to be used then in the matlab or python post-processing
         // (required transposition and translation of the matrix which contains the electrical potential distribution
         // defined from the equivalent vector)
         //Eigen::SparseMatrix<double> A(w_vect.size()*epd_model.Ny, epd_model.Nx);
+        clock_t t_begin=clock(),t_end;
         Eigen::SparseMatrix<double> A(w_vect.size()*epd_model.Nx, epd_model.Ny);
         ublas_vector current_vector;
         std::vector<T> coefficients;
@@ -93,6 +100,8 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parame
                         }
                 }
                 cpt_w++;
+        t_end=clock();
+	    //cout << "remplissage eigen par electrode Time = " << (t_end-t_begin)/(double)CLOCKS_PER_SEC << endl;
         }
         A.setFromTriplets(coefficients.begin(), coefficients.end());
         res_matrices[elec_nb]=A;
@@ -187,7 +196,9 @@ void FourierPotentialDDP(Parameters param, Domain domain, bool singularity, bool
     // 1.2. Fracture network generation
     NetworkMeshes net_mesh(domain, param, param.simu_param.simu_option);
     bool fourier = true;
+    clock_t t1 = clock();
     DDPModel ddp_model(param, domain, net_mesh, fourier, singularity);
+    clock_t t2 = clock();
     cout << "time for generating the fracture network = t2-t1" << endl;
     // 2. Simulation for each wave number
     for (vector<double>::iterator it1 = w_vect.begin(); it1 != w_vect.end(); it1++) {
@@ -215,7 +226,10 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
     std::map<int, Eigen::SparseMatrix<double> > res_matrices;
     vector<double> w_vect = param.simu_param.DDP_param.w_vect;
     // 1.2 Fracture network generation
+    clock_t t1 = clock();
     NetworkMeshes net_mesh(domain, param, param.simu_param.simu_option);
+    clock_t t2 = clock();
+    //cout << "Computation time for generating the fracture network = " << (t2-t1)/CLOCKS_PER_SEC << " seconds" << endl;
     bool fourier = true;
     // 1.3. Variables for the source term positions
     double source_value = 1.0, source_position_x, source_position_y;
@@ -224,6 +238,7 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
     // 2.1. Basic linear system (defined the coefficients depending on the porous domain properties and which do not depend on the Fourier variable, boundary conditions, and source terms)
     DDPModel ddp_model_init(param, domain, net_mesh, fourier, singularity);
     ddp_model_init.DetermineBasicLinearSystemDDP();
+    t1 = clock();
     // 2.2. Loop for the simulations
     //cout << "omp_get_max_threads() = " << omp_get_max_threads() << endl;
     map<int, pair<double, double> >::iterator it1;
@@ -295,11 +310,11 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
                         //matrix_syst.resize(0,0,false);vector_syst.clear();
                     }
                     //cout << endl;
-                    /*// 2.3. Write the results
+                    // 2.3. Write the results
                     str_cpt = to_string(nb_elec);
                     output_file_matrix = "Matrix_Potential" + str_cpt;
                     output_file_matrix = output_file_matrix + ".txt";
-                    results = Results(param.files_param.output_path + output_file_matrix, Potential_Matrices);*/
+                    results = Results(param.files_param.output_path + output_file_matrix, Potential_Matrices);
 
                     // 2.4. Free memory
                     DFN_potential.clear();
@@ -330,6 +345,7 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
             }
         }
     }
+    t2 = clock();
     //cout << "Computation time for simulating all the experiments = "
      //    << (t2 - t1) / CLOCKS_PER_SEC / omp_get_max_threads() << " seconds" << endl;
     //exit(0);

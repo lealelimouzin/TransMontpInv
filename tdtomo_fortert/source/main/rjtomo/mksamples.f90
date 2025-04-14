@@ -355,7 +355,7 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                                                   data_proposed,noise_proposed,&
                                                   likelihood_type,likelihood_proposed,&
                                                   misfit_proposed)
-                        CALL calculate_normalization(number_of_measurements,noise_current,&
+                        CALL calculate_normalization(number_of_measurements,data_proposed,noise_current,&
                                                      noise_proposed,likelihood_normalization)
                 END IF
                 
@@ -412,7 +412,7 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                                 CALL calculate_noise(2,data_delayed)
                                 CALL calculate_likelihood(number_of_measurements,observed_data,data_delayed,noise_delayed,&
                                                           likelihood_type,likelihood_delayed,misfit_delayed)
-                                CALL calculate_normalization(number_of_measurements,noise_current,&
+                                CALL calculate_normalization(number_of_measurements,data_delayed,noise_current,&
                                                              noise_delayed,likelihood_normalization)
                                 
                         END IF
@@ -510,9 +510,19 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                 
                 ! Check whether the temperatures are swapping
                 IF (chain_number.EQ.1) THEN
-                        CALL do_tempering()
+                        IF (inside_prior_delayed) THEN 
+                                write(*,*)'temper+delayed'
+                                CALL do_tempering(data_delayed)
+                        ELSE
+                                write(*,*)'temper+proposed'
+                                CALL do_tempering(data_proposed)
+                        END IF
                         CALL update_temperatures(iteration)
                 END IF
+                !IF (chain_number.EQ.1) THEN
+                !        CALL do_tempering()
+                !        CALL update_temperatures(iteration)
+                !END IF
                 CALL MPI_BCAST(temperature_values,number_of_temperatures,MPI_DOUBLE_PRECISION,&
                                0,MPI_COMM_WORLD,ierror)
                 CALL MPI_BCAST(temperature_indices,number_of_temperatures,MPI_INT,&

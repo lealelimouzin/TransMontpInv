@@ -66,153 +66,115 @@ PERFORM.o: ../PERFORM.cpp ../InputOutput/Parameters.h \
  ../FourierModel/../InputOutput/Parameters.h \
  ../FourierModel/../DomainDefinition/Domain.h \
  ../../Library/Eigen/IterativeLinearSolvers \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/pybind11.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/class.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/attr.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/common.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/Python.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/patchlevel.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pyconfig.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pymacconfig.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pyport.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/exports.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pymacro.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pymath.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pymem.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pymem.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pytypedefs.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pybuffer.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pystats.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pyatomic.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyatomic.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyatomic_gcc.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/lock.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/lock.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/object.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/object.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/objimpl.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/objimpl.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/typeslots.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pyhash.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyhash.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pydebug.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/bytearrayobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/bytearrayobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/bytesobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/bytesobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/unicodeobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/unicodeobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pyerrors.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyerrors.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/longobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/longobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/longintrepr.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/boolobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/floatobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/floatobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/complexobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/complexobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/rangeobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/memoryobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/memoryobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/tupleobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/tupleobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/listobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/listobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/dictobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/dictobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/odictobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/enumobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/setobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/setobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/methodobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/methodobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/moduleobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/monitoring.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/monitoring.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/funcobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/classobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/fileobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/fileobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pycapsule.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/code.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pyframe.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyframe.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/traceback.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/traceback.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/sliceobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/cellobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/iterobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/initconfig.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pystate.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pystate.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/genobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/descrobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/descrobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/genericaliasobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/warnings.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/warnings.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/weakrefobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/weakrefobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/structseq.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/picklebufobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pytime.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/codecs.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pythread.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pythread.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/context.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/modsupport.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/modsupport.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/compile.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/compile.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pythonrun.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pythonrun.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pylifecycle.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pylifecycle.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/ceval.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/ceval.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/sysmodule.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/sysmodule.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/osmodule.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/intrcheck.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/import.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/import.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/abstract.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/abstract.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/bltinmodule.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/critical_section.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/critical_section.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyctype.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pystrtod.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pystrcmp.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/fileutils.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/fileutils.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyfpe.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/tracemalloc.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/frameobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/cpython/frameobject.h \
- /home/leal/miniconda3/envs/tert/include/python3.13/pythread.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/cast.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/descr.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/type_caster_base.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/pytypes.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/buffer_info.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/cpp_conduit.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/internals.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/typeid.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/value_and_holder.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/options.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/exception_translation.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/init.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/gil.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/gil_safe_call_once.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/typing.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/stl.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/eigen.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/eigen/matrix.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/numpy.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/complex.h \
- /home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/eigen/common.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/pybind11.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/class.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/attr.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/common.h \
+ /usr/include/python3.10/Python.h /usr/include/python3.10/patchlevel.h \
+ /usr/include/python3.10/pyconfig.h /usr/include/python3.10/pymacconfig.h \
+ /usr/include/python3.10/pyport.h /usr/include/python3.10/exports.h \
+ /usr/include/python3.10/pymacro.h /usr/include/python3.10/pymath.h \
+ /usr/include/python3.10/pymem.h /usr/include/python3.10/cpython/pymem.h \
+ /usr/include/python3.10/object.h \
+ /usr/include/python3.10/cpython/object.h \
+ /usr/include/python3.10/objimpl.h \
+ /usr/include/python3.10/cpython/objimpl.h \
+ /usr/include/python3.10/typeslots.h /usr/include/python3.10/pyhash.h \
+ /usr/include/python3.10/cpython/pydebug.h \
+ /usr/include/python3.10/bytearrayobject.h \
+ /usr/include/python3.10/cpython/bytearrayobject.h \
+ /usr/include/python3.10/bytesobject.h \
+ /usr/include/python3.10/cpython/bytesobject.h \
+ /usr/include/python3.10/unicodeobject.h \
+ /usr/include/python3.10/cpython/unicodeobject.h \
+ /usr/include/python3.10/longobject.h \
+ /usr/include/python3.10/longintrepr.h \
+ /usr/include/python3.10/boolobject.h \
+ /usr/include/python3.10/floatobject.h \
+ /usr/include/python3.10/complexobject.h \
+ /usr/include/python3.10/rangeobject.h \
+ /usr/include/python3.10/memoryobject.h \
+ /usr/include/python3.10/tupleobject.h \
+ /usr/include/python3.10/cpython/tupleobject.h \
+ /usr/include/python3.10/listobject.h \
+ /usr/include/python3.10/cpython/listobject.h \
+ /usr/include/python3.10/dictobject.h \
+ /usr/include/python3.10/cpython/dictobject.h \
+ /usr/include/python3.10/cpython/odictobject.h \
+ /usr/include/python3.10/enumobject.h /usr/include/python3.10/setobject.h \
+ /usr/include/python3.10/methodobject.h \
+ /usr/include/python3.10/cpython/methodobject.h \
+ /usr/include/python3.10/moduleobject.h \
+ /usr/include/python3.10/funcobject.h \
+ /usr/include/python3.10/classobject.h \
+ /usr/include/python3.10/fileobject.h \
+ /usr/include/python3.10/cpython/fileobject.h \
+ /usr/include/python3.10/pycapsule.h /usr/include/python3.10/code.h \
+ /usr/include/python3.10/cpython/code.h /usr/include/python3.10/pyframe.h \
+ /usr/include/python3.10/traceback.h \
+ /usr/include/python3.10/cpython/traceback.h \
+ /usr/include/python3.10/sliceobject.h \
+ /usr/include/python3.10/cellobject.h \
+ /usr/include/python3.10/iterobject.h \
+ /usr/include/python3.10/cpython/initconfig.h \
+ /usr/include/python3.10/genobject.h /usr/include/python3.10/pystate.h \
+ /usr/include/python3.10/cpython/pystate.h \
+ /usr/include/python3.10/abstract.h \
+ /usr/include/python3.10/cpython/abstract.h \
+ /usr/include/python3.10/descrobject.h \
+ /usr/include/python3.10/genericaliasobject.h \
+ /usr/include/python3.10/warnings.h \
+ /usr/include/python3.10/weakrefobject.h \
+ /usr/include/python3.10/structseq.h \
+ /usr/include/python3.10/namespaceobject.h \
+ /usr/include/python3.10/cpython/picklebufobject.h \
+ /usr/include/python3.10/cpython/pytime.h \
+ /usr/include/python3.10/codecs.h /usr/include/python3.10/pyerrors.h \
+ /usr/include/python3.10/cpython/pyerrors.h \
+ /usr/include/python3.10/pythread.h /usr/include/python3.10/context.h \
+ /usr/include/python3.10/modsupport.h /usr/include/python3.10/compile.h \
+ /usr/include/python3.10/cpython/compile.h \
+ /usr/include/python3.10/pythonrun.h \
+ /usr/include/python3.10/cpython/pythonrun.h \
+ /usr/include/python3.10/pylifecycle.h \
+ /usr/include/python3.10/cpython/pylifecycle.h \
+ /usr/include/python3.10/ceval.h /usr/include/python3.10/cpython/ceval.h \
+ /usr/include/python3.10/sysmodule.h \
+ /usr/include/python3.10/cpython/sysmodule.h \
+ /usr/include/python3.10/osmodule.h /usr/include/python3.10/intrcheck.h \
+ /usr/include/python3.10/import.h \
+ /usr/include/python3.10/cpython/import.h \
+ /usr/include/python3.10/bltinmodule.h /usr/include/python3.10/eval.h \
+ /usr/include/python3.10/cpython/pyctype.h \
+ /usr/include/python3.10/pystrtod.h /usr/include/python3.10/pystrcmp.h \
+ /usr/include/python3.10/fileutils.h \
+ /usr/include/python3.10/cpython/fileutils.h \
+ /usr/include/python3.10/cpython/pyfpe.h \
+ /usr/include/python3.10/tracemalloc.h \
+ /usr/include/python3.10/frameobject.h \
+ /usr/include/python3.10/cpython/frameobject.h \
+ /usr/include/python3.10/pythread.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/cast.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/descr.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/type_caster_base.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/pytypes.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/buffer_info.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/cpp_conduit.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/internals.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/typeid.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/value_and_holder.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/options.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/exception_translation.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/init.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/gil.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/gil_safe_call_once.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/typing.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/stl.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/eigen.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/eigen/matrix.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/numpy.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/complex.h \
+ /usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/eigen/common.h \
  ../../Library/Eigen/SparseCore
 ../InputOutput/Parameters.h:
 ../InputOutput/BoundaryConditions.h:
@@ -288,151 +250,130 @@ PERFORM.o: ../PERFORM.cpp ../InputOutput/Parameters.h \
 ../FourierModel/../InputOutput/Parameters.h:
 ../FourierModel/../DomainDefinition/Domain.h:
 ../../Library/Eigen/IterativeLinearSolvers:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/pybind11.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/class.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/attr.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/common.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/Python.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/patchlevel.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pyconfig.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pymacconfig.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pyport.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/exports.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pymacro.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pymath.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pymem.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pymem.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pytypedefs.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pybuffer.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pystats.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pyatomic.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyatomic.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyatomic_gcc.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/lock.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/lock.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/object.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/object.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/objimpl.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/objimpl.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/typeslots.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pyhash.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyhash.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pydebug.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/bytearrayobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/bytearrayobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/bytesobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/bytesobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/unicodeobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/unicodeobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pyerrors.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyerrors.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/longobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/longobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/longintrepr.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/boolobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/floatobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/floatobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/complexobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/complexobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/rangeobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/memoryobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/memoryobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/tupleobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/tupleobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/listobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/listobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/dictobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/dictobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/odictobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/enumobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/setobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/setobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/methodobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/methodobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/moduleobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/monitoring.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/monitoring.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/funcobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/classobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/fileobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/fileobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pycapsule.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/code.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pyframe.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyframe.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/traceback.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/traceback.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/sliceobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/cellobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/iterobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/initconfig.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pystate.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pystate.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/genobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/descrobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/descrobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/genericaliasobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/warnings.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/warnings.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/weakrefobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/weakrefobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/structseq.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/picklebufobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pytime.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/codecs.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pythread.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pythread.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/context.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/modsupport.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/modsupport.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/compile.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/compile.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pythonrun.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pythonrun.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pylifecycle.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pylifecycle.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/ceval.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/ceval.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/sysmodule.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/sysmodule.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/osmodule.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/intrcheck.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/import.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/import.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/abstract.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/abstract.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/bltinmodule.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/critical_section.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/critical_section.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyctype.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pystrtod.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pystrcmp.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/fileutils.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/fileutils.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/pyfpe.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/tracemalloc.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/frameobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/cpython/frameobject.h:
-/home/leal/miniconda3/envs/tert/include/python3.13/pythread.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/cast.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/descr.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/type_caster_base.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/pytypes.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/buffer_info.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/cpp_conduit.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/internals.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/typeid.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/value_and_holder.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/options.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/exception_translation.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/detail/init.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/gil.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/gil_safe_call_once.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/typing.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/stl.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/eigen.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/eigen/matrix.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/numpy.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/complex.h:
-/home/leal/miniconda3/envs/tert/lib/python3.13/site-packages/pybind11/include/pybind11/eigen/common.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/pybind11.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/class.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/attr.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/common.h:
+/usr/include/python3.10/Python.h:
+/usr/include/python3.10/patchlevel.h:
+/usr/include/python3.10/pyconfig.h:
+/usr/include/python3.10/pymacconfig.h:
+/usr/include/python3.10/pyport.h:
+/usr/include/python3.10/exports.h:
+/usr/include/python3.10/pymacro.h:
+/usr/include/python3.10/pymath.h:
+/usr/include/python3.10/pymem.h:
+/usr/include/python3.10/cpython/pymem.h:
+/usr/include/python3.10/object.h:
+/usr/include/python3.10/cpython/object.h:
+/usr/include/python3.10/objimpl.h:
+/usr/include/python3.10/cpython/objimpl.h:
+/usr/include/python3.10/typeslots.h:
+/usr/include/python3.10/pyhash.h:
+/usr/include/python3.10/cpython/pydebug.h:
+/usr/include/python3.10/bytearrayobject.h:
+/usr/include/python3.10/cpython/bytearrayobject.h:
+/usr/include/python3.10/bytesobject.h:
+/usr/include/python3.10/cpython/bytesobject.h:
+/usr/include/python3.10/unicodeobject.h:
+/usr/include/python3.10/cpython/unicodeobject.h:
+/usr/include/python3.10/longobject.h:
+/usr/include/python3.10/longintrepr.h:
+/usr/include/python3.10/boolobject.h:
+/usr/include/python3.10/floatobject.h:
+/usr/include/python3.10/complexobject.h:
+/usr/include/python3.10/rangeobject.h:
+/usr/include/python3.10/memoryobject.h:
+/usr/include/python3.10/tupleobject.h:
+/usr/include/python3.10/cpython/tupleobject.h:
+/usr/include/python3.10/listobject.h:
+/usr/include/python3.10/cpython/listobject.h:
+/usr/include/python3.10/dictobject.h:
+/usr/include/python3.10/cpython/dictobject.h:
+/usr/include/python3.10/cpython/odictobject.h:
+/usr/include/python3.10/enumobject.h:
+/usr/include/python3.10/setobject.h:
+/usr/include/python3.10/methodobject.h:
+/usr/include/python3.10/cpython/methodobject.h:
+/usr/include/python3.10/moduleobject.h:
+/usr/include/python3.10/funcobject.h:
+/usr/include/python3.10/classobject.h:
+/usr/include/python3.10/fileobject.h:
+/usr/include/python3.10/cpython/fileobject.h:
+/usr/include/python3.10/pycapsule.h:
+/usr/include/python3.10/code.h:
+/usr/include/python3.10/cpython/code.h:
+/usr/include/python3.10/pyframe.h:
+/usr/include/python3.10/traceback.h:
+/usr/include/python3.10/cpython/traceback.h:
+/usr/include/python3.10/sliceobject.h:
+/usr/include/python3.10/cellobject.h:
+/usr/include/python3.10/iterobject.h:
+/usr/include/python3.10/cpython/initconfig.h:
+/usr/include/python3.10/genobject.h:
+/usr/include/python3.10/pystate.h:
+/usr/include/python3.10/cpython/pystate.h:
+/usr/include/python3.10/abstract.h:
+/usr/include/python3.10/cpython/abstract.h:
+/usr/include/python3.10/descrobject.h:
+/usr/include/python3.10/genericaliasobject.h:
+/usr/include/python3.10/warnings.h:
+/usr/include/python3.10/weakrefobject.h:
+/usr/include/python3.10/structseq.h:
+/usr/include/python3.10/namespaceobject.h:
+/usr/include/python3.10/cpython/picklebufobject.h:
+/usr/include/python3.10/cpython/pytime.h:
+/usr/include/python3.10/codecs.h:
+/usr/include/python3.10/pyerrors.h:
+/usr/include/python3.10/cpython/pyerrors.h:
+/usr/include/python3.10/pythread.h:
+/usr/include/python3.10/context.h:
+/usr/include/python3.10/modsupport.h:
+/usr/include/python3.10/compile.h:
+/usr/include/python3.10/cpython/compile.h:
+/usr/include/python3.10/pythonrun.h:
+/usr/include/python3.10/cpython/pythonrun.h:
+/usr/include/python3.10/pylifecycle.h:
+/usr/include/python3.10/cpython/pylifecycle.h:
+/usr/include/python3.10/ceval.h:
+/usr/include/python3.10/cpython/ceval.h:
+/usr/include/python3.10/sysmodule.h:
+/usr/include/python3.10/cpython/sysmodule.h:
+/usr/include/python3.10/osmodule.h:
+/usr/include/python3.10/intrcheck.h:
+/usr/include/python3.10/import.h:
+/usr/include/python3.10/cpython/import.h:
+/usr/include/python3.10/bltinmodule.h:
+/usr/include/python3.10/eval.h:
+/usr/include/python3.10/cpython/pyctype.h:
+/usr/include/python3.10/pystrtod.h:
+/usr/include/python3.10/pystrcmp.h:
+/usr/include/python3.10/fileutils.h:
+/usr/include/python3.10/cpython/fileutils.h:
+/usr/include/python3.10/cpython/pyfpe.h:
+/usr/include/python3.10/tracemalloc.h:
+/usr/include/python3.10/frameobject.h:
+/usr/include/python3.10/cpython/frameobject.h:
+/usr/include/python3.10/pythread.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/cast.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/descr.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/type_caster_base.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/pytypes.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/buffer_info.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/cpp_conduit.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/internals.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/typeid.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/value_and_holder.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/options.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/exception_translation.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/detail/init.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/gil.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/gil_safe_call_once.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/typing.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/stl.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/eigen.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/eigen/matrix.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/numpy.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/complex.h:
+/usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/eigen/common.h:
 ../../Library/Eigen/SparseCore:

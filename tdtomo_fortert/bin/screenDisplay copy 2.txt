@@ -1,0 +1,294 @@
+
+ ***************************
+  Job started on 10-04-2025
+  at 16:01:45
+ ***************************
+
+  Hello from rj-McMC tomography and chain 1 on core 0!                 
+  Hello from rj-McMC tomography and chain 2 on core 1!                 
+***** Hej från Python initialize_fracmodels.py på res_chain_2! *****
+WARNING: /res_chain_2/ directory already exists! It is removed before starting the new simulation.
+***** Hej från Python initialize_fracmodels.py på res_chain_1! *****
+WARNING: /res_chain_1/ directory already exists! It is removed before starting the new simulation.
+***** Demat da Python main.py res_chain_2 ! *****
+***** Demat da Python main.py res_chain_1 ! *****
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_1"
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_2"
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_1"
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_2"
+
+ STARTING CHAINS FROM SAMPLE 0
+
+ Max run time is: 0.29999999999999999 hr (1080.0000000000000 sec)
+
+ Number of measurements: 2008
+
+  Initial number of cells on chain 1: 5                                
+  Initial number of cells on chain 2: 5                                
+
+  Initial misfit on chain 1: 4357.8928851375113                        
+  Initial misfit on chain 2: 6000.3820673850059                        
+
+ change noise at chain 1
+ alpha (move/value/noise) at chain 1 is :    0.0000000000000000     
+ noise proposed at chain 1 =   6.0847465933448799     
+ noise current at chain 1 =   6.0835209953071363     
+ likelihood proposed at chain 1 =   2178.0687581839570     
+ likelihood current at chain 1 =   2178.9464425687556     
+ likelihood normalization at chain 1 = -0.40449486341114366     
+ Metropolis-Hastings acceptance criterion at chain 1 =  -9.0759748727656273     
+ Is the proposed model accepted at chain 1 ?  T
+ change length at chain 2
+***** Demat da Python main.py res_chain_2 ! *****
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_2"
+ alpha (move/value/noise) at chain 2 is :    0.0000000000000000     
+ noise proposed at chain 2 =   6.0873117815648934     
+ noise current at chain 2 =   6.0873117815648934     
+ likelihood proposed at chain 2 =   2960.0504600737813     
+ likelihood current at chain 2 =   3000.1910336925034     
+ likelihood normalization at chain 2 =   0.0000000000000000     
+ Metropolis-Hastings acceptance criterion at chain 2 =  -5.3684982651701282E-002
+ Is the proposed model accepted at chain 2 ?  T
+   8.2770818823378161        6.0847465933448799        8.6061234765828445     
+   966008.19633786904        6.0847465933448799        6.2988560722487819E-004
+ --------------------------------------
+ Chain number: 1/2
+ Sample: 1/3000
+ Iteration in this run: 1/3
+
+ Number of cells: 5
+
+ Dataset 1, "lambda": 4.2373296672439782
+ Minimum uncertainty:       8.2771 %
+ Maximum uncertainty:  966008.1963 %
+
+ Misfit : 4356.1375163679140
+
+ BIRTH acceptance:    0.0000 %
+ DEATH acceptance:    0.0000 %
+ MOVE  acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ NOISE acceptance:  100.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+   5.8308113482783535        6.0873117815648934        14.526986624897830     
+   1888075.5407498360        6.0873117815648934        3.2240827499663283E-004
+ --------------------------------------
+ Chain number: 2/2
+ Sample: 1/3000
+ Iteration in this run: 1/3
+
+ Number of cells: 5
+
+ Dataset 1, "lambda": 4.3655890782446569
+ Minimum uncertainty:       5.8308 %
+ Maximum uncertainty: 1888075.5407 %
+
+ Misfit : 5920.1009201475626
+
+ BIRTH acceptance:    0.0000 %
+ DEATH acceptance:    0.0000 %
+ MOVE  acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:  100.0000 %
+       main:  100.0000 %
+       delayed:    0.0000 %
+ NOISE acceptance:    0.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+ --------------------------------------
+ PARALLEL TEMPERING acceptance:    0.0000 %
+ --------------------------------------
+ TIME ELAPSED: 0h 7m 13s
+ --------------------------------------
+ delete a cell at chain 2
+ alpha component (delete) at chain 2=   0.63829787234042556     
+  0.77113253801607573     
+ Add new frac at chain 1: length =   0.77113253801607573     
+ alpha component (add) at chain 1=    1.5666666666666667     
+***** Demat da Python main.py res_chain_2 ! *****
+***** Demat da Python main.py res_chain_1 ! *****
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_2"
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_1"
+ alpha (delete) at chain 2 is :    0.0000000000000000     
+ noise proposed at chain 2 =   6.0873117815648934     
+ noise current at chain 2 =   6.0873117815648934     
+ likelihood proposed at chain 2 =   2947.2394805780082     
+ likelihood current at chain 2 =   2960.0504600737813     
+ likelihood normalization at chain 2 =   0.0000000000000000     
+ Metropolis-Hastings acceptance criterion at chain 2 = -0.86662523268454705     
+ Is the proposed model accepted at chain 2 ?  T
+ alpha (add) at chain 1 is :    0.0000000000000000     
+ noise proposed at chain 1 =   6.0847465933448799     
+ noise current at chain 1 =   6.0847465933448799     
+ likelihood proposed at chain 1 =   2081.5175209650060     
+ likelihood current at chain 1 =   2178.0687581839570     
+ likelihood normalization at chain 1 =   0.0000000000000000     
+ Metropolis-Hastings acceptance criterion at chain 1 =  -2.3822930714533244     
+ Is the proposed model accepted at chain 1 ?  T
+   8.1569517803232809        6.0847465933448799        8.6114443132749017     
+   964587.75211859378        6.0847465933448799        6.3081317173896423E-004
+ --------------------------------------
+ Chain number: 1/2
+ Sample: 2/3000
+ Iteration in this run: 2/3
+
+ Number of cells: 6
+
+ Dataset 1, "lambda": 4.2373296672439782
+ Minimum uncertainty:       8.1570 %
+ Maximum uncertainty:  964587.7521 %
+
+ Misfit : 4163.0350419300121
+
+ BIRTH acceptance:  100.0000 %
+ DEATH acceptance:    0.0000 %
+ MOVE  acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ NOISE acceptance:  100.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+   5.8583077553121266        6.0873117815648934        14.780131697084215     
+   1896531.8947300452        6.0873117815648934        3.2097070439363051E-004
+ --------------------------------------
+ Chain number: 2/2
+ Sample: 2/3000
+ Iteration in this run: 2/3
+
+ Number of cells: 4
+
+ Dataset 1, "lambda": 4.3655890782446569
+ Minimum uncertainty:       5.8583 %
+ Maximum uncertainty: 1896531.8947 %
+
+ Misfit : 5894.4789611560172
+
+ BIRTH acceptance:    0.0000 %
+ DEATH acceptance:  100.0000 %
+ MOVE  acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:  100.0000 %
+       main:  100.0000 %
+       delayed:    0.0000 %
+ NOISE acceptance:    0.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+ --------------------------------------
+ PARALLEL TEMPERING acceptance:    0.0000 %
+ --------------------------------------
+ TIME ELAPSED: 0h 7m 15s
+ --------------------------------------
+ change length at chain 1
+ change length at chain 2
+***** Demat da Python main.py res_chain_2 ! *****
+***** Demat da Python main.py res_chain_1 ! *****
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_1"
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_2"
+ alpha (move/value/noise) at chain 1 is :   -54.616011940988756     
+ noise proposed at chain 1 =   6.0847465933448799     
+ noise current at chain 1 =   6.0847465933448799     
+ likelihood proposed at chain 1 =   2136.1335329059948     
+ likelihood current at chain 1 =   2081.5175209650060     
+ likelihood normalization at chain 1 =   0.0000000000000000     
+ Metropolis-Hastings acceptance criterion at chain 1 = -0.40085668244868672     
+ Is the proposed model accepted at chain 1 ?  F
+ change value delayed at chain 1
+***** Demat da Python main.py res_chain_1 ! *****
+"/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_1"
+ alpha (move/value/noise) at chain 2 is :    0.0000000000000000     
+ noise proposed at chain 2 =   6.0873117815648934     
+ noise current at chain 2 =   6.0873117815648934     
+ likelihood proposed at chain 2 =   2946.2740413831175     
+ likelihood current at chain 2 =   2947.2394805780082     
+ likelihood normalization at chain 2 =   0.0000000000000000     
+ Metropolis-Hastings acceptance criterion at chain 2 = -0.35830099456117004     
+ Is the proposed model accepted at chain 2 ?  T
+ noise proposed DELAYED at chain 1=   6.0847465933448799     
+ noise current DELAYED at chain 1=   6.0847465933448799     
+ likelihood proposed DELAYED at chain 1=   2136.1335329059948     
+ likelihood current DELAYED at chain 1=   2081.5175209650060     
+ likelihood normalization DELAYED at chain 1=   0.0000000000000000     
+ alpha DELAYED at chain 1=   0.0000000000000000     
+ Metropolis-Hastings acceptance criterion DELAYED at chain 1= -0.86942022060336799     
+ Is the poposed DELAYED model accepted at chain 1?  T
+   4.8526680778730391        6.0847465933448799        8.6458213249069757     
+   961600.98502335534        6.0847465933448799        6.3277250004034613E-004
+ --------------------------------------
+ Chain number: 1/2
+ Sample: 3/3000
+ Iteration in this run: 3/3
+
+ Number of cells: 6
+
+ Dataset 1, "lambda": 4.2373296672439782
+ Minimum uncertainty:       4.8527 %
+ Maximum uncertainty:  961600.9850 %
+
+ Misfit : 4192.3003515872024
+
+ BIRTH acceptance:  100.0000 %
+ DEATH acceptance:    0.0000 %
+ MOVE  acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:  100.0000 %
+       main:    0.0000 %
+       delayed:  100.0000 %
+ NOISE acceptance:  100.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+   3.9765221809835429        6.0873117815648934        14.588708292476355     
+   1894930.7688437842        6.0873117815648934        3.2124190929039287E-004
+ --------------------------------------
+ Chain number: 2/2
+ Sample: 3/3000
+ Iteration in this run: 3/3
+
+ Number of cells: 4
+
+ Dataset 1, "lambda": 4.3655890782446569
+ Minimum uncertainty:       3.9765 %
+ Maximum uncertainty: 1894930.7688 %
+
+ Misfit : 5892.5480827662350
+
+ BIRTH acceptance:    0.0000 %
+ DEATH acceptance:  100.0000 %
+ MOVE  acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:  100.0000 %
+       main:  100.0000 %
+       delayed:    0.0000 %
+ NOISE acceptance:    0.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+ --------------------------------------
+ PARALLEL TEMPERING acceptance:    0.0000 %
+ --------------------------------------
+ TIME ELAPSED: 0h 7m 17s
+ --------------------------------------
+
+Elapsed time is   0.12 hours.
+
+ ****************************
+  Job finished on 10-04-2025
+  at 16:39:50
+ ****************************
+

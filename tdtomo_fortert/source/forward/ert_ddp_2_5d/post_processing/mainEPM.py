@@ -105,5 +105,5 @@ def mainEPM(tabVar,res_cxx):
         # Apparent resistivity
         rho_a_EPM[i] = V_MN_EPM * k_fact
         
-    print(rho_a_EPM)
+        
     return rho_a_EPM

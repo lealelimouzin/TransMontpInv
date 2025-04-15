@@ -169,7 +169,7 @@ int main(int argc, char **argv) {
 
 	t_end=clock();
 	//cout << "CPU Time = " << (t_end-t_begin)/CLOCKS_PER_SEC << endl;
-	cout << "CPU Time = " << (t_end-t_begin) << endl;
+	//cout << "CPU Time = " << (t_end-t_begin) << endl;
 
 	// Test eigen matrix
     /*int n = 5;

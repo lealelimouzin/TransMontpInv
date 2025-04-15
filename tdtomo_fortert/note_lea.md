@@ -91,3 +91,7 @@ In source/compile/Makefile, change:
 - inc = ../../../COMMON/source/tools/superlu/SRC
 
 Make a link to libsuperlu: ln -s /usr/lib64/libsuperlu.so.5.1 libsuperlu.so
+
+## Notes
+
+Be careful to python version (python3.13 was used here). Depending on the version some errors may occur with python thread state. Check the file "PERFORM.d".

@@ -37,21 +37,16 @@ INTEGER, INTENT(OUT)                                                            
 CHARACTER(100)                                                                  :: nametmp
 CHARACTER(200)                                                                  :: namedir
 
-! Correspondance if using ert_ddp_2_5d : 
-!       - number_of_cells: number_of _fractures
-!       - vornoi_model: model parameters, i.e. properties of the fractures
-!       - modelled_data: modelled (or simulated) apparent electrical reistivity values considerring the fractures 
 
 IF (modelling_method.EQ.1) THEN
                 
         CALL forward_with_fw2_5d(number_of_cells,voronoi_model(1:number_of_cells,[1,3,4]),modelled_data,info)
 
 ELSEIF (modelling_method.EQ.2) THEN
+
         ! Go to the chain directory
         nametmp = "results_chains/"//"res_chain_"//TRIM(int2str(chain_number))
         namedir = ADJUSTL(ADJUSTR(path_fwdFrac)//nametmp)
-        !namedir = ADJUSTL(ADJUSTR("../source/forward/ert_ddp_2_5d/")//nametmp)
-        !write(*,*) namedir
 
         IF (iteration.GT.0) THEN
                 CALL write2DFN(number_of_cells,voronoi_model,namedir)
@@ -143,7 +138,6 @@ END SUBROUTINE
 SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         IMPLICIT NONE
         INTEGER, INTENT(IN)                                     :: chain_number
-        !DOUBLE PRECISION                                        :: rho_mat
         INTEGER                                                 :: CSTAT,I
         CHARACTER(200)                                          :: namedir,cdtmp
         CHARACTER(300)                                          :: textfileDFN, textfileEPM,cwd
@@ -151,8 +145,6 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         DOUBLE PRECISION, DIMENSION(:), INTENT(OUT)             :: modelled_data
         DOUBLE PRECISION, DIMENSION(number_of_measurements)     :: modelled_data_epm, modelled_data_dfn
         INTEGER, INTENT(OUT)                                    :: info
-        
-        write(*,*)'rho_mat ',rho_mat
 
         ! Go to the result directory
         CALL CHDIR (namedir)
@@ -171,8 +163,6 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
                         read(88,*) modelled_data_dfn(I) 
                 end do
         close(88)
-        write(*,*)'dfn'
-        write(*,*)modelled_data_dfn
 
         textfileEPM = ADJUSTL(ADJUSTR(namedir)//TRIM("/results_fwd/rho_a_EPM.txt"))
         open (unit=89, file=textfileEPM, status='old', action='read')
@@ -180,16 +170,8 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
                         read(89,*) modelled_data_epm(I) 
                 end do
         close(89)
-        write(*,*)'epm'
-        write(*,*)modelled_data_epm
-
-        write(*,*)'rho_mat ',rho_mat 
         
         modelled_data = modelled_data_dfn-(modelled_data_epm-rho_mat) ! ratio of simulated data
-        write(*,*)'modelled_data'
-        write(*,*)modelled_data
-
-        !write(*,*) 'modelled_data: ', modelled_data
 
         ! Go back to the bin directory
         cdtmp = "../../../../../bin/"
@@ -199,27 +181,5 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         
 END SUBROUTINE
 
-
-!SUBROUTINE store2txt(number_of_fractures,fracture_model)!,resistivity_data)
-!        IMPLICIT NONE
-!        INTEGER                                     :: number_of_fractures, j
-!        DOUBLE PRECISION, DIMENSION(number_of_fractures,3), INTENT(IN)        :: fracture_model
-        !DOUBLE PRECISION, DIMENSION(:), INTENT(OUT)             :: resistivity_data
-
-!        open (unit=15,file="nb_frac.txt",action="write")
-!        write (15,*) number_of_fractures
- !       close (15)
-
- !       open (unit=20,file="fracture_model.txt",action="write")
- !       do j=1,size(fracture_model,1)
- !               write (20,*) fracture_model(j,:)
-!        end do
- !       close (20)
-
-        !open (unit=25,file="simulated_ratio.txt",action="write")
-        !write (25,*) number_of_fractures
-        !end do
-        !close (25)
-!END SUBROUTINE
 
 END MODULE

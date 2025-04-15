@@ -21,6 +21,7 @@ if __name__ == "__main__":
 
 
     # Obtain the name of the current folder (name depends on the chain)
+    
     path_folder = os.getcwd()
     name_new_folder = os.path.basename(os.getcwd())
     # path_folder = '/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/results_chains/res_chain_1/'

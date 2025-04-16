@@ -80,24 +80,31 @@ ELSE IF (start_end.EQ.3) THEN
         WRITE(md_acc,FMT1)acceptances(8)
         WRITE(vm_acc,FMT1)acceptances(9)
         WRITE(vd_acc,FMT1)acceptances(10)
-        !WRITE(min_unc,FMT2)MINVAL(noise_current/ABS(data_current)*100)
-        !WRITE(max_unc,FMT2)MAXVAL(noise_current/ABS(data_current)*100)
+        WRITE(min_unc,FMT2)MINVAL(noise_current/ABS(data_current)*100)
+        WRITE(max_unc,FMT2)MAXVAL(noise_current/ABS(data_current)*100)
 
         !--------------------------Modifs-------------------------------------------------
-        DO ii=1,number_of_measurements
-                IF (data_current(ii).GT.0) THEN
-                        data_tempo(k) = data_current(ii)
-                        noise_tempo(k) = noise_current(ii)
-                        k=k+1
-                END IF
-        END DO
-        WRITE(min_unc,FMT2)MINVAL(noise_tempo/ABS(data_tempo)*100)
-        WRITE(max_unc,FMT2)MAXVAL(noise_tempo/ABS(data_tempo)*100)
+        !DO ii=1,number_of_measurements
+        !        IF (data_current(ii).GT.0) THEN
+        !                data_tempo(k) = data_current(ii)
+        !                noise_tempo(k) = noise_current(ii)
+        !                k=k+1
+        !        END IF
+        !END DO
+        !DO ii=1,number_of_measurements
+        !        IF (data_current(ii).LT.0) THEN
+        !                data_current(ii)=0
+        !                noise_current(ii)=0
+        !        END IF
+        !END DO
 
-        WRITE(*,*)MINVAL(noise_current/ABS(data_current)*100),MINVAL(ABS(noise_current)),MAXVAL(data_current)
-        WRITE(*,*)MAXVAL(noise_current/ABS(data_current)*100),MAXVAL(noise_current),MINVAL(ABS(data_current))
-        WRITE(*,*)MINVAL(noise_tempo/ABS(data_tempo)*100),MINVAL(ABS(noise_tempo)),MAXVAL(data_tempo)
-        WRITE(*,*)MAXVAL(noise_tempo/ABS(data_tempo)*100),MAXVAL(noise_tempo),MINVAL(ABS(data_tempo))
+        !WRITE(min_unc,FMT2)MINVAL(noise_tempo/ABS(data_tempo)*100)
+        !WRITE(max_unc,FMT2)MAXVAL(noise_tempo/ABS(data_tempo)*100)
+
+        !WRITE(*,*)MINVAL(noise_current/ABS(data_current)*100),MINVAL(ABS(noise_current)),MAXVAL(data_current)
+        !WRITE(*,*)MAXVAL(noise_current/ABS(data_current)*100),MAXVAL(noise_current),MINVAL(ABS(data_current))
+        !WRITE(*,*)MINVAL(noise_tempo/ABS(data_tempo)*100),MINVAL(ABS(noise_tempo)),MAXVAL(data_tempo)
+        !WRITE(*,*)MAXVAL(noise_tempo/ABS(data_tempo)*100),MAXVAL(noise_tempo),MINVAL(ABS(data_tempo))
         !----------------------------------------------------------------------
 
         WRITE(*,*)'--------------------------------------'

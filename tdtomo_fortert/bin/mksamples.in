@@ -64,7 +64,7 @@ forward.in                    :: File containing forward modelling parameters fo
 ********************************************************************************************************************************
 * (H) PARALLEL TEMPERING PARAMETERS                                                                                            *
 ********************************************************************************************************************************
-0                             :: Use parallel tempering? (1=yes,0=no)
+1                             :: Use parallel tempering? (1=yes,0=no)
 0                             :: Jump type (0=random,1=near,2=nearest)
 0                             :: Apply parallel tempering starting from this sample number
 1   1                         :: Number of temperatures =1 and >1 (sum must be equal to total number of parallel chains)

@@ -48,6 +48,11 @@ def mainEPM(tabVar,res_cxx):
     delta_x = np.round(Lx / Nx, 4)
     delta_y = np.round(Ly / Ny, 4)
 
+    # Results in the Fourier domain (from C++ code)
+    if res_cxx==0:
+        path_results_EPM = pjoin("output",tabVar[0])
+        file_name_EPM = 'Results'
+
     # Define the electrode configurations
     [elec_configx, elec_configy] = Farum_elecConfig(data_xx_yy)
     matrixIndex=tabVar[5][:,1:4]
@@ -60,7 +65,10 @@ def mainEPM(tabVar,res_cxx):
     AllResultsEPM = np.zeros([nb_electrodes, 4 * Ny, Nx]) # if executable
 
     for i in range(0, nb_electrodes):
-        AllResultsEPM[i, :, :] = res_cxx[i+1].toarray()
+        if res_cxx == 0: # If the executable version of the C++ code is used
+            AllResultsEPM[i, :, :] = np.loadtxt(pjoin(path_results_EPM, f'{file_name_EPM}{i+1}.txt'))
+        else:
+            AllResultsEPM[i, :, :] = res_cxx[i+1].toarray()
 
     for i in range(nb_exp):
 

@@ -39,6 +39,11 @@ def mainDFN(tabVar,res_cxx):
     Lx = matrix_properties[0]
     Ly = matrix_properties[1]
 
+    # Results in the Fourier domain (from C++ code)
+    if res_cxx==0:
+        path_results_DFN = pjoin("output",tabVar[1])
+        file_name_DFN= 'Matrix_Potential'
+
     # Simu
     file_name_simu = 'Simu.txt'
     Simu = pd.read_csv(pjoin(path_MatrixProperties, file_name_simu), delimiter='\t')
@@ -59,7 +64,10 @@ def mainDFN(tabVar,res_cxx):
     AllResultsDFN = np.zeros([nb_electrodes, 4 * Ny, Nx])
 
     for i in range(0, nb_electrodes):
-        AllResultsDFN[i, :, :] = res_cxx[i+1].toarray()
+        if res_cxx == 0: # If the executable version of the C++ code is used
+            AllResultsDFN[i, :, :] = np.loadtxt(pjoin(path_results_DFN, f'{file_name_DFN}{i+1}.txt'))
+        else: # If the library version of the C++ code is used
+            AllResultsDFN[i, :, :] = res_cxx[i+1].toarray()
 
     for i in range(nb_exp):
 

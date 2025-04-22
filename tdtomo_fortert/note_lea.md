@@ -30,10 +30,18 @@ Another option to create a Python environment can be to use Python "venv" packag
 
 Once the working environment is created, the code needs to be compiled in the environment from the terminal:
 
-- To compile the C++ forward code:
+- To compile the C++ forward code as a library:
     - Go to: `cd tdtomo_fortert/source/forward/ert_ddp_2_5d/src/electrical_resistivity/Release`
     - Make sure everything is cleaned: `make clean`
     - Compile: `make shared`
+    - In `initialize_fracmodels.py`, comment lines 45 and 46
+    - In `main.py` change optCompile to `1`
+- To compile the C++ forward code as an executable (text files):
+    - Go to: `cd tdtomo_fortert/source/forward/ert_ddp_2_5d/src/electrical_resistivity/Release`
+    - Make sure everything is cleaned: `make clean`
+    - Compile: `make`
+    - In `initialize_fracmodels.py`, uncomment lines 45 and 46
+    - In `main.py` change optCompile to `2`
 - To compile the Fortran code:
     - Go to the compile directory: `cd tdtomo_fortert/source/compile`
     - Make sure everything is cleaned: `make clean`
@@ -92,6 +100,16 @@ In source/compile/Makefile, change:
 
 Make a link to libsuperlu: ln -s /usr/lib64/libsuperlu.so.5.1 libsuperlu.so
 
-## Notes
+## Common errors and how to handle them
 
-Be careful to python version (python3.13 was used here). Depending on the version some errors may occur with python thread state. Check the file "PERFORM.d".
+### "PERFORM" not found
+
+Be careful to python version (here, python3.13 was used on the local computer, and 3.10 on the cluster). Depending on the version, some errors may occur with python thread state. Check the file "PERFORM.d", the version should be the same as the one used in your Anaconda environment or the version installed on your computer. To check python version, use the command: `python3 -V` (ubuntu).
+
+### Error in "Parameters.cpp"
+
+If the compilation fails and an error occurs on the parameters, comment `#include < filesystem>` (write `//` in front of the line) at the beginning of `InputOut/Parameters.cpp`.
+
+### keyError
+
+A keyError may occur when loading the C++ results in the post-processing python functions using the libraries PERFORM.so and PyBind11. It means that a given data is not found in the dictionnary.

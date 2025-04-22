@@ -196,4 +196,5 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 PYBIND11_MODULE(PERFORM, m) {
     m.doc() = "pybind11 electrical resistivity"; // optional module docstring
     m.def("perform", &perform, py::return_value_policy::reference);
+	//m.def("perform", &perform, py::return_value_policy::reference_internal);
 }

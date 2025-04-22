@@ -15,10 +15,14 @@
 import os
 from os.path import join as pjoin
 import sys
+import subprocess
 from post_processing.mainEPM import mainEPM
 from post_processing.mainDFN import mainDFN
-sys.path.append(pjoin(os.getcwd(), '..', '..','src','electrical_resistivity', 'Release'))
-from  PERFORM import perform
+try:
+    sys.path.append(pjoin(os.getcwd(), '..', '..','src','electrical_resistivity', 'Release'))
+    from  PERFORM import perform
+except:
+    print('PERFORM.so not found. C++ code may be run in executable mode.')
 
 
 def fwdEPM(tabVar):
@@ -28,7 +32,11 @@ def fwdEPM(tabVar):
         f.write(str(tabVar[0]))
     
     # C++ (simulate current injection in the Fourier domain)
-    res_cxx = perform()
+    if tabVar[6]==2:
+        res_cxx=0
+        subprocess.run([pjoin("electrical_resistivity","Release", "ElectricalResistivity")])
+    else:
+        res_cxx = perform()
 
     # Calculate the electrical resistivity from the C++ outputs
     rho_a_EPM = mainEPM(tabVar,res_cxx)
@@ -43,7 +51,11 @@ def fwdDFN(tabVar):
         f.write(str(tabVar[1]))
 
     # C++ (simulate current injection in the Fourier domain)
-    res_cxx = perform()
+    if tabVar[6]==2:
+        res_cxx=0
+        subprocess.run([pjoin("electrical_resistivity","Release", "ElectricalResistivity")])
+    else:
+        res_cxx = perform()
 
     # Calculate the electrical resistivity from the C++ outputs
     rho_a_DFN = mainDFN(tabVar,res_cxx)

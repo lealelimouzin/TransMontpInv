@@ -67,6 +67,7 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parame
             t_end=clock();
 	       // cout << "system lineaire par elec par w Time = " << (t_end-t_begin)/(double)CLOCKS_PER_SEC << endl;
         }
+        
         // Write the results
         stringstream ss;
         string str_cpt;

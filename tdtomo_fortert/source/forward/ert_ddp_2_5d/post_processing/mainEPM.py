@@ -68,7 +68,7 @@ def mainEPM(tabVar,res_cxx):
         if res_cxx == 0: # If the executable version of the C++ code is used
             AllResultsEPM[i, :, :] = np.loadtxt(pjoin(path_results_EPM, f'{file_name_EPM}{i+1}.txt'))
         else:
-            AllResultsEPM[i, :, :] = res_cxx[i+1].toarray()
+            AllResultsEPM[i, :, :] = res_cxx[i+1].toarray(order='C')
 
     for i in range(nb_exp):
 

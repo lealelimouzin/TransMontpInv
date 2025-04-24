@@ -34,8 +34,8 @@ residuals.out                 :: File containing residuals (gets renamed to e.g.
 ********************************************************************************************************************************
 * (D) PROPOSAL PARAMETERS                                                                                                      *
 ********************************************************************************************************************************
-0.6                           :: log10(resistivity) perturbation
-0.3                           :: log10(resistivity) perturbation for delayed rejection
+1                             :: log10(resistivity) perturbation (0.6)
+0.5                           :: log10(resistivity) perturbation for delayed rejection (0.3)
 5  5  5                       :: Perturbation of x,y,z position (percentage of x,y,z prior range)
 2  2  2                       :: Perturbation of x,y,z position for delayed rejection (percentage of x,y,z prior range)
 0.2                           :: log10(resistivity) perturbation for birth step

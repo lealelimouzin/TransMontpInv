@@ -271,8 +271,9 @@ IF (inside_prior) THEN
         !---------- If ert_ddp_2_5d ----------
         ELSEIF (modelling_method.EQ.2) THEN
 
-                alpha_component=1/powerrand_k(value_min,value_max)
-                write(*,*) 'alpha component (add) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
+                !alpha_component=1/powerrand_k(value_min,value_max)
+                alpha_component=1
+                !write(*,*) 'alpha component (add) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
 
         END IF
 
@@ -326,8 +327,9 @@ ELSEIF (modelling_method.EQ.2) THEN
         END IF
         
         ! Calculate term needed to evaluate the acceptance ratio later
-        alpha_component= powerrand_k(value_min,value_max)
-        write(*,*) 'alpha component (delete) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
+        !alpha_component= powerrand_k(value_min,value_max)
+        alpha_component=1
+        !write(*,*) 'alpha component (delete) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
 END IF
 
 END SUBROUTINE
@@ -391,9 +393,9 @@ IF (modelling_method.EQ.1) THEN
 ELSE IF (modelling_method.EQ.2) THEN
         !voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
         !                                +powerrand(value_min)*value_change
-        l_change=gausrand()*powerrand_std(value_min,value_max)
+        !l_change=gausrand()*powerrand_std(value_min,value_max)
         ! proposotion CC 10/04/2025
-        ! l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max) <- prefered
+        l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
         ! ou
         ! l_change=(unirand()-0.5)*2.*powerrand_std(value_min,value_max)*value_change
         ! WARNING UNIT VALUE CHANGE: %
@@ -522,7 +524,8 @@ IF (modelling_method.EQ.1) THEN
 !---------- If ert_ddp_2_5d ----------
 ELSE IF (modelling_method.EQ.2) THEN
 
-        l_change=gausrand()*powerrand_std(value_min,value_max)
+        !l_change=gausrand()*powerrand_std(value_min,value_max)
+        l_change=(gausrand()*value_change_delayed)*powerrand_std(value_min,value_max)
         voronoi_delayed(cell_number,4)=voronoi_delayed(cell_number,4)+l_change
         
         !voronoi_delayed(cell_number,4)=voronoi_current(cell_number,4)&

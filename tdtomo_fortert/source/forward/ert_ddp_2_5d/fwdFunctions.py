@@ -15,6 +15,7 @@
 import os
 from os.path import join as pjoin
 import sys
+import numpy as np
 import subprocess
 from post_processing.mainEPM import mainEPM
 from post_processing.mainDFN import mainDFN

@@ -67,7 +67,7 @@ def mainDFN(tabVar,res_cxx):
         if res_cxx == 0: # If the executable version of the C++ code is used
             AllResultsDFN[i, :, :] = np.loadtxt(pjoin(path_results_DFN, f'{file_name_DFN}{i+1}.txt'))
         else: # If the library version of the C++ code is used
-            AllResultsDFN[i, :, :] = res_cxx[i+1].toarray()
+            AllResultsDFN[i, :, :] = res_cxx[i+1].toarray(order='C')
 
     for i in range(nb_exp):
 

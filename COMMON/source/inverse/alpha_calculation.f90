@@ -91,28 +91,42 @@ IF (modelling_method.EQ.1) THEN
 ELSEIF (modelling_method.EQ.2) THEN
         IF (birth) THEN
                 IF (no_data.EQ.0) THEN
+                        !IF (temper) THEN
+                                !alpha=MINVAL([DBLE(0),alpha_component&
+                                !                +(-likelihood_proposed+likelihood_current+likelihood_normalization)/temperature])
+                        !ELSE
+                        !        alpha=MINVAL([DBLE(0),alpha_component&
+                        !                        -likelihood_proposed+likelihood_current+likelihood_normalization])
+                        !END IF
                         IF (temper) THEN
-                                alpha=MINVAL([DBLE(0),alpha_component&
-                                                +(-likelihood_proposed+likelihood_current+likelihood_normalization)/temperature])
+                                alpha=MINVAL([DBLE(0),(-likelihood_proposed+likelihood_current&
+                                                        +likelihood_normalization)/temperature])
                         ELSE
-                                alpha=MINVAL([DBLE(0),alpha_component&
-                                                -likelihood_proposed+likelihood_current+likelihood_normalization])
+                                alpha=MINVAL([DBLE(0),-likelihood_proposed+likelihood_current+likelihood_normalization])
                         END IF
                 ELSE IF (no_data.EQ.1) THEN
-                        alpha=MINVAL([DBLE(0),alpha_component-LOG(value_max-value_min)])
+                        !alpha=MINVAL([DBLE(0),alpha_component-LOG(value_max-value_min)])
+                        alpha=MINVAL([DBLE(0),-LOG(value_max-value_min)])
                 END IF
                 write(*,*) 'alpha (add) at chain ', TRIM(chain_name), ' is : ', alpha
         ELSE IF (death) THEN
                 IF (no_data.EQ.0) THEN
+                        !IF (temper) THEN
+                        !        alpha=MINVAL([DBLE(0),alpha_component&
+                        !                        +(-likelihood_proposed+likelihood_current+likelihood_normalization)/temperature])
+                        !ELSE
+                        !        alpha=MINVAL([DBLE(0),alpha_component&
+                        !                        -likelihood_proposed+likelihood_current+likelihood_normalization])
+                        !END IF
                         IF (temper) THEN
-                                alpha=MINVAL([DBLE(0),alpha_component&
-                                                +(-likelihood_proposed+likelihood_current+likelihood_normalization)/temperature])
+                                alpha=MINVAL([DBLE(0),(-likelihood_proposed+likelihood_current&
+                                                        +likelihood_normalization)/temperature])
                         ELSE
-                                alpha=MINVAL([DBLE(0),alpha_component&
-                                                -likelihood_proposed+likelihood_current+likelihood_normalization])
+                                alpha=MINVAL([DBLE(0),-likelihood_proposed+likelihood_current+likelihood_normalization])
                         END IF
                 ELSE IF (no_data.EQ.1) THEN
-                        alpha=MINVAL([DBLE(0),alpha_component-LOG(value_max-value_min)])
+                        !alpha=MINVAL([DBLE(0),alpha_component-LOG(value_max-value_min)])
+                        alpha=MINVAL([DBLE(0),-LOG(value_max-value_min)])
                 END IF
                 write(*,*) 'alpha (delete) at chain ', TRIM(chain_name), ' is : ', alpha
         ELSE IF (move.OR.value.OR.noise) THEN
@@ -171,7 +185,7 @@ IF (move) THEN
                 -(voronoi_proposed(cell_number,3)-voronoi_delayed(cell_number,3))**2)/(2*z_change**2)
         TT2=TT2x+TT2y+TT2z
 ELSE IF (value) THEN
-        l_change=gausrand()*powerrand_std(value_min,value_max)
+        l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
         !TT2=(-(voronoi_proposed(cell_number,4)-voronoi_delayed(cell_number,4))**2&
         !        +(voronoi_proposed(cell_number,4)-voronoi_current(cell_number,4))**2)/(2*value_change**2)
         TT2=(-(voronoi_proposed(cell_number,4)-voronoi_delayed(cell_number,4))**2&

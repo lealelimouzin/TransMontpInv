@@ -17,7 +17,11 @@ temper.out                    :: File containing temperature jumps
 1                             :: Save residuals? (1=yes,0=no)
 residuals.out                 :: File containing residuals (gets renamed to e.g. residuals.out1 for chain 1)
 ********************************************************************************************************************************
-* (C) PRIOR PARAMETERS                                                                                                         *
+* (C) NUMBER OF MODEL PARAMETERS                                                                                               *
+********************************************************************************************************************************
+4                             :: Number of model parameters to be inverted 
+********************************************************************************************************************************
+* (D) PRIOR PARAMETERS                                                                                                         *
 ********************************************************************************************************************************
 3   100                       :: Minimum and maximum number of Voronoi cells
 0.6   10                      :: Minimum and maximum log10(resistivity) / fracture length
@@ -32,7 +36,7 @@ residuals.out                 :: File containing residuals (gets renamed to e.g.
 6                             :: Noise type 6: standard deviation associated to the homogeneous matrix (no fracture) "sigma_mat"
 12.5                          :: Targetted electrical resisitivty of the homegeneous matrix
 ********************************************************************************************************************************
-* (D) PROPOSAL PARAMETERS                                                                                                      *
+* (F) PROPOSAL PARAMETERS                                                                                                      *
 ********************************************************************************************************************************
 1                             :: log10(resistivity) perturbation (0.6)
 0.5                           :: log10(resistivity) perturbation for delayed rejection (0.3)
@@ -44,16 +48,16 @@ residuals.out                 :: File containing residuals (gets renamed to e.g.
 0.2                           :: Perturbation of noise parameter "lambda"
 0.5                           :: Perturbation of noise parameter "sigma"
 ********************************************************************************************************************************
-* (E) LIKELIHOOD PARAMETERS                                                                                                    *
+* (G) LIKELIHOOD PARAMETERS                                                                                                    *
 ********************************************************************************************************************************
 0                             :: Use Gaussian or Laplacian likelihood function? (0=Gaussian,1=Laplacian)
 ********************************************************************************************************************************
-* (F) FORWARD MODELLING PARAMETERS
+* (H) FORWARD MODELLING PARAMETERS
 ********************************************************************************************************************************
 2                             :: Modelling method (1=fwd2_5D, 2=ERT_DDP_2.5D)
 forward.in                    :: File containing forward modelling parameters for modelling method 1
 ********************************************************************************************************************************
-* (G) MARKOV CHAIN PARAMETERS                                                                                                  *
+* (I) MARKOV CHAIN PARAMETERS                                                                                                  *
 ********************************************************************************************************************************
 0.3                           :: Maximum run time in hours
 3                             :: Number of samples in this run
@@ -62,7 +66,7 @@ forward.in                    :: File containing forward modelling parameters fo
 1                             :: Add 1s sleep time between the display of each chain's information? (1=yes, 0=no)
 0                             :: Run inversion without data? (1=yes,0=no)
 ********************************************************************************************************************************
-* (H) PARALLEL TEMPERING PARAMETERS                                                                                            *
+* (J) PARALLEL TEMPERING PARAMETERS                                                                                            *
 ********************************************************************************************************************************
 1                             :: Use parallel tempering? (1=yes,0=no)
 0                             :: Jump type (0=random,1=near,2=nearest)
@@ -71,6 +75,6 @@ forward.in                    :: File containing forward modelling parameters fo
 8                             :: Temperatures >1 (one below the other) / 1st row = hottest temperature if nb temperatures>1 is > 2
 7
 ********************************************************************************************************************************
-* (I) PATH TO ert_ddp_2_5d REPOSITORY                                                                                          *
+* (K) PATH TO ert_ddp_2_5d REPOSITORY                                                                                          *
 ********************************************************************************************************************************
 /home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/

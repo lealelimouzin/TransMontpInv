@@ -19,7 +19,7 @@
 
 MODULE input_files
 
-USE chains, ONLY: number_of_chains,number_of_measurements
+USE chains, ONLY: number_of_chains,number_of_measurements,number_of_parameters
 CHARACTER (LEN=30), SAVE                        :: samples_file,ncell_file,noise_file,acceptance_file,&
                                                    residuals_file,misfits_file,temperatures_file
 INTEGER, SAVE                                   :: save_residuals,add_sleep
@@ -50,7 +50,7 @@ USE chains, ONLY: number_of_datasets,ncell_min,ncell_max,value_min,value_max,x_m
                   value_change,value_change_delayed,x_change,y_change,z_change,x_change_delayed,y_change_delayed,z_change_delayed,&
                   birth_change,a_change,b_change,lambda_change,sigma_change,likelihood_type,&
                   max_runtime,number_of_samples,max_number_of_samples,display_interval,no_data,&
-                  parallel_tempering,jump_type,tempering_start,sigma_mat,rho_mat
+                  parallel_tempering,jump_type,tempering_start,sigma_mat,rho_mat,number_of_parameters
 IMPLICIT NONE
 INTEGER                 :: nn
 CHARACTER(LEN=3)        :: section
@@ -76,6 +76,10 @@ READ(60,'(a30)')acceptance_file
 READ(60,'(a30)')temperatures_file
 READ(60,*)save_residuals
 READ(60,'(a30)')residuals_file
+READ(60,*)
+READ(60,*)
+READ(60,*)
+READ(60,*)number_of_parameters
 READ(60,*)
 READ(60,*)
 READ(60,*)
@@ -134,12 +138,12 @@ ELSE
         READ(60,*) 
         READ(60,*) 
 END IF
-IF (input_error) section='(H)'
+IF (input_error) section='(I)'
 READ(60,*) 
 READ(60,*) 
 READ(60,*) 
 READ(60,'(a200)')path_fwdFrac
-IF (input_error) section='(I)'
+IF (input_error) section='(J)'
 CLOSE(60)
 
 
@@ -149,39 +153,39 @@ IF (save_residuals.NE.0.AND.save_residuals.NE.1) THEN
 END IF
 IF (likelihood_type.NE.0.AND.likelihood_type.NE.1) THEN
         input_error=.TRUE.
-        section='(E)'
+        section='(F)'
 END IF
 IF (max_runtime.LE.0) THEN
         input_error=.TRUE.
-        section='(G)'
+        section='(H)'
 END IF
 IF (number_of_samples.LE.0.OR.max_number_of_samples.LT.0) THEN
         input_error=.TRUE.
-        section='(G)'
+        section='(H)'
 END IF
 IF (display_interval.LE.0) THEN
         input_error=.TRUE.
-        section='(G)'
+        section='(H)'
 END IF
 IF (add_sleep.NE.0.AND.add_sleep.NE.1) THEN
         input_error=.TRUE.
-        section='(G)'
+        section='(H)'
 END IF
 IF (no_data.NE.0.AND.no_data.NE.1) THEN
         input_error=.TRUE.
-        section='(G)'
+        section='(H)'
 END IF
 IF (parallel_tempering.NE.0.AND.parallel_tempering.NE.1) THEN
         input_error=.TRUE.
-        section='(H)'
+        section='(I)'
 END IF
 IF (jump_type.NE.0.AND.jump_type.NE.1.AND.jump_type.NE.2) THEN
         input_error=.TRUE.
-        section='(H)'
+        section='(I)'
 END IF
 IF (tempering_start.LT.0) THEN
         input_error=.TRUE.
-        section='(H)'
+        section='(I)'
 END IF
 IF (input_error) THEN
         WRITE(*,*)

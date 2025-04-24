@@ -50,6 +50,7 @@ DOUBLE PRECISION, SAVE                                  :: sigma_change
 INTEGER, SAVE                                           :: likelihood_type
 DOUBLE PRECISION                                        :: l_change ! needed when changing length of a fracture
 ! Models
+INTEGER, SAVE                                           :: number_of_parameters
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE           :: voronoi_current,voronoi_proposed,voronoi_delayed,voronoi_0
 INTEGER                                                 :: ncell_current,ncell_proposed,cell_number
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: a_current,a_proposed,b_current,b_proposed
@@ -127,8 +128,8 @@ IMPLICIT NONE
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initializing chains ---'
 
-ALLOCATE(voronoi_current(ncell_max,4),voronoi_proposed(ncell_max,4),&
-         voronoi_delayed(ncell_max,4),voronoi_0(ncell_max,4))
+ALLOCATE(voronoi_current(ncell_max,number_of_parameters),voronoi_proposed(ncell_max,number_of_parameters),&
+         voronoi_delayed(ncell_max,number_of_parameters),voronoi_0(ncell_max,number_of_parameters))
 ALLOCATE(a_current(number_of_datasets),a_proposed(number_of_datasets))
 ALLOCATE(b_current(number_of_datasets),b_proposed(number_of_datasets))
 ALLOCATE(lambda_current(number_of_datasets),lambda_proposed(number_of_datasets))
@@ -152,7 +153,7 @@ ALLOCATE(residuals(number_of_measurements,samples_in_run))
 
 ALLOCATE(chain_steps(samples_in_run,2))
  chain_steps=0
-ALLOCATE(chain_values(samples_in_run,4))
+ALLOCATE(chain_values(samples_in_run,number_of_parameters))
  chain_values=0
 ALLOCATE(chain_indices(samples_in_run))
  chain_indices=0
@@ -272,7 +273,6 @@ IF (inside_prior) THEN
         ELSEIF (modelling_method.EQ.2) THEN
 
                 !alpha_component=1/powerrand_k(value_min,value_max)
-                alpha_component=1
                 !write(*,*) 'alpha component (add) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
 
         END IF
@@ -328,7 +328,6 @@ ELSEIF (modelling_method.EQ.2) THEN
         
         ! Calculate term needed to evaluate the acceptance ratio later
         !alpha_component= powerrand_k(value_min,value_max)
-        alpha_component=1
         !write(*,*) 'alpha component (delete) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
 END IF
 

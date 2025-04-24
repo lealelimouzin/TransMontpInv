@@ -110,6 +110,10 @@ Be careful to python version (here, python3.13 was used on the local computer, a
 
 If the compilation fails and an error occurs on the parameters, comment `#include < filesystem>` (write `//` in front of the line) at the beginning of `InputOut/Parameters.cpp`.
 
-### keyError
+### keyError (still unsolved)
 
 A keyError may occur when loading the C++ results in the post-processing python functions using the libraries PERFORM.so and PyBind11. It means that a given data is not found in the dictionnary.
+
+### Alpha delayed set to Infinity (still unsolved)
+
+-/+ Infinity may occur when calculating TT2 or TT3t (`alpha_calculation.f90`) for some delayed steps.

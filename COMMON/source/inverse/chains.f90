@@ -36,9 +36,12 @@ INTEGER, SAVE                                           :: noise_type
 DOUBLE PRECISION, SAVE                                  :: a_min,a_max,b_min,b_max
 DOUBLE PRECISION, SAVE                                  :: lambda_min,lambda_max
 DOUBLE PRECISION, SAVE                                  :: sigma_min,sigma_max
-DOUBLE PRECISION, SAVE                                  :: sigma_mat,rho_mat 
+DOUBLE PRECISION, SAVE                                  :: sigma_mat,rho_mat
+INTEGER,SAVE                                            :: opt_parameters
+DOUBLE PRECISION,SAVE                                   :: opt_min,opt_max 
 ! Proposals
 LOGICAL, SAVE                                           :: use_delayed_value,use_delayed_position
+LOGICAL, SAVE                                           :: use_delayed_opt
 DOUBLE PRECISION, SAVE                                  :: value_change,value_change_delayed
 DOUBLE PRECISION, SAVE                                  :: x_change,x_change_delayed
 DOUBLE PRECISION, SAVE                                  :: y_change,y_change_delayed
@@ -49,6 +52,7 @@ DOUBLE PRECISION, SAVE                                  :: lambda_change
 DOUBLE PRECISION, SAVE                                  :: sigma_change
 INTEGER, SAVE                                           :: likelihood_type
 DOUBLE PRECISION                                        :: l_change ! needed when changing length of a fracture
+DOUBLE PRECISION, SAVE                                  :: opt_change,opt_change_delayed
 ! Models
 INTEGER, SAVE                                           :: number_of_parameters
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE           :: voronoi_current,voronoi_proposed,voronoi_delayed,voronoi_0
@@ -58,7 +62,7 @@ DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: lambda_current,lambda
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: sigma_current,sigma_proposed
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: noise_current,noise_proposed,noise_delayed
 INTEGER                                                 :: dataset_number
-LOGICAL                                                 :: delayed_value,delayed_position
+LOGICAL                                                 :: delayed_value,delayed_position,delayed_opt
 LOGICAL                                                 :: change_a,change_b,change_sigma,change_lambda
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: data_current,data_proposed,data_delayed
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: noise_x_current,noise_x_proposed,noise_x_delayed
@@ -89,7 +93,7 @@ DOUBLE PRECISION                                        :: likelihood_T1,likelih
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: noise_T1,noise_T2
 LOGICAL                                                 :: swap_temperatures
 ! Chain evolution
-LOGICAL                                                 :: birth,death,move,value,noise
+LOGICAL                                                 :: birth,death,move,value,noise,option
 INTEGER, DIMENSION(:,:), ALLOCATABLE                    :: chain_steps
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE           :: chain_values
 INTEGER, DIMENSION(:), ALLOCATABLE                      :: chain_indices
@@ -105,9 +109,12 @@ DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_total
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_birth,acceptance_death,acceptance_move,acceptance_value
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_move_main,acceptance_move_delayed
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_value_main,acceptance_value_delayed
+DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_opt_main,acceptance_opt_delayed
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_noise,acceptance_a,acceptance_b
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_tempering
-DOUBLE PRECISION, DIMENSION(13)                         :: acceptance_all
+DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_opt
+!DOUBLE PRECISION, DIMENSION(13)                         :: acceptance_all
+DOUBLE PRECISION, DIMENSION(16)                         :: acceptance_all
 ! Pi
 DOUBLE PRECISION, PARAMETER                             :: pi=DBLE(4)*ATAN(DBLE(1))
 ! Output files
@@ -168,10 +175,18 @@ ELSE IF (noise_type.EQ.0.OR.noise_type.EQ.3.OR.noise_type.EQ.6) THEN
 END IF
 ALLOCATE(chain_misfits(samples_in_run))
  chain_misfits=0
-IF (parallel_tempering.EQ.0) THEN
-        ALLOCATE(chain_acceptance(samples_in_run,6))
-ELSE IF (parallel_tempering.EQ.1) THEN
-        ALLOCATE(chain_acceptance(samples_in_run,7))
+IF (opt_parameters.EQ.0) THEN 
+        IF (parallel_tempering.EQ.0) THEN
+                ALLOCATE(chain_acceptance(samples_in_run,6))
+        ELSE IF (parallel_tempering.EQ.1) THEN
+                ALLOCATE(chain_acceptance(samples_in_run,7))
+        END IF
+ELSE
+        IF (parallel_tempering.EQ.0) THEN
+                ALLOCATE(chain_acceptance(samples_in_run,7))
+        ELSE IF (parallel_tempering.EQ.1) THEN
+                ALLOCATE(chain_acceptance(samples_in_run,8))
+        END IF
 END IF
  chain_acceptance=0
 
@@ -195,11 +210,13 @@ death=.FALSE.
 move=.FALSE.
 value=.FALSE.
 noise=.FALSE.
+option=.FALSE.
 IF (step.EQ.1) birth=.TRUE.
 IF (step.EQ.2) death=.TRUE.
 IF (step.EQ.3) move=.TRUE.
 IF (step.EQ.4) value=.TRUE.
 IF (step.EQ.5) noise=.TRUE.
+IF (step.EQ.6) option=.TRUE.
 END SUBROUTINE
 
 
@@ -244,6 +261,7 @@ ELSEIF (modelling_method.EQ.2) THEN
         voronoi_proposed(ncell_proposed,4)=powerrand(value_min,value_max)
         
         ! Check if the fracture edge values are in the domain boundaries
+        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': l (bf check) = ', voronoi_proposed(ncell_proposed,4) 
         x1 = voronoi_proposed(ncell_proposed,1) - voronoi_proposed(ncell_proposed,4)/2
         x2 = voronoi_proposed(ncell_proposed,1) + voronoi_proposed(ncell_proposed,4)/2
         IF (x1.LT.x_min) THEN 
@@ -253,8 +271,12 @@ ELSEIF (modelling_method.EQ.2) THEN
                 voronoi_proposed(ncell_proposed,4) = abs(x_max-x1)                                 ! recalculate the length
                 voronoi_proposed(ncell_proposed,1) = x_max - voronoi_proposed(ncell_proposed,4)/2  ! recalculate the centre
         END IF  
+        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': l (after check) = ', voronoi_proposed(ncell_proposed,4) 
 
-        write(*,*) 'Add new frac at chain ', TRIM(int2str(chain_number)), ': length = ', voronoi_proposed(ncell_proposed,4) 
+        IF (opt_parameters.GT.0) THEN 
+                voronoi_proposed(ncell_proposed,5) = opt_min+(opt_max-opt_min)*unirand()
+        END IF
+        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': angle/aperture = ', voronoi_proposed(ncell_proposed,5) 
 
 END IF
 
@@ -270,7 +292,7 @@ IF (inside_prior) THEN
                         +((voronoi_proposed(ncell_proposed,4)-voronoi_current(cell_number,4))**2/(2*birth_change**2))
         
         !---------- If ert_ddp_2_5d ----------
-        ELSEIF (modelling_method.EQ.2) THEN
+        !ELSEIF (modelling_method.EQ.2) THEN
 
                 !alpha_component=1/powerrand_k(value_min,value_max)
                 !write(*,*) 'alpha component (add) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
@@ -356,6 +378,7 @@ voronoi_proposed(cell_number,3)=voronoi_current(cell_number,3)&
 
 IF (modelling_method.EQ.2) THEN
         ! Check if the fracture edge values are in the domain boundaries
+        write(*,*) 'Move frac at chain ', TRIM(int2str(chain_number)), ': l (bf check) = ', voronoi_proposed(ncell_proposed,4) 
         x1 = voronoi_proposed(cell_number,1) - voronoi_proposed(cell_number,4)/2
         x2 = voronoi_proposed(cell_number,1) + voronoi_proposed(cell_number,4)/2
         IF (x1.LT.x_min) THEN 
@@ -365,6 +388,7 @@ IF (modelling_method.EQ.2) THEN
                 voronoi_proposed(cell_number,4) = abs(x_max-x1)                              ! recalculate the length
                 voronoi_proposed(cell_number,1) = x_max - voronoi_proposed(cell_number,4)/2  ! recalculate the centre
         END IF   
+        write(*,*) 'Move frac at chain ', TRIM(int2str(chain_number)), ': l (after check) = ', voronoi_proposed(ncell_proposed,4) 
 END IF
 
 CALL check_inside_prior()
@@ -414,6 +438,7 @@ ELSE IF (modelling_method.EQ.2) THEN
         ! Check if the fracture edge values are in the domain boundaries
         x1 = voronoi_proposed(cell_number,1) - voronoi_proposed(cell_number,4)/2
         x2 = voronoi_proposed(cell_number,1) + voronoi_proposed(cell_number,4)/2
+        write(*,*) 'Change value at chain ', TRIM(int2str(chain_number)), ': l (bf check) = ', voronoi_proposed(ncell_proposed,4) 
         IF (x1.LT.x_min) THEN 
                 voronoi_proposed(cell_number,4) = abs(x2-x_min)                              ! recalculate the length
                 voronoi_proposed(cell_number,1) = x_min + voronoi_proposed(cell_number,4)/2  ! recalculate the centre
@@ -421,6 +446,7 @@ ELSE IF (modelling_method.EQ.2) THEN
                 voronoi_proposed(cell_number,4) = abs(x_max-x1)                              ! recalculate the length
                 voronoi_proposed(cell_number,1) = x_max - voronoi_proposed(cell_number,4)/2  ! recalculate the centre
         END IF    
+        write(*,*) 'Change value at chain ', TRIM(int2str(chain_number)), ': l (after check) = ', voronoi_proposed(ncell_proposed,4) 
 END IF
 
 CALL check_inside_prior()
@@ -466,6 +492,25 @@ END IF
 
 CALL check_inside_prior()
 
+END SUBROUTINE
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Option not imlemented for fw2_5d
+SUBROUTINE change_option()
+        ! Changes data option parameters
+        IMPLICIT NONE
+        DOUBLE PRECISION        :: random_deviate
+
+        write(*,*) 'change optional parameter ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
+        
+        cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to perturb
+        IF (cell_number.EQ.0) cell_number=1
+
+        voronoi_proposed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*opt_change
+        write(*,*)'angle change_option',voronoi_proposed(cell_number,5)
+
+        CALL check_inside_prior()
+        
 END SUBROUTINE
 
 
@@ -546,6 +591,25 @@ CALL check_inside_prior()
 
 END SUBROUTINE
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Option not imlemented for fw2_5d
+SUBROUTINE change_option_delayed()
+        ! Changes data option parameters
+        IMPLICIT NONE
+        DOUBLE PRECISION        :: random_deviate
+
+        delayed_opt=.TRUE.
+
+        write(*,*) 'change optional parameter delayed ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
+        
+        cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to perturb
+        IF (cell_number.EQ.0) cell_number=1
+
+        voronoi_proposed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*opt_change_delayed
+
+        CALL check_inside_prior()
+        
+END SUBROUTINE
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE check_inside_prior()
@@ -599,6 +663,14 @@ ELSE IF (noise) THEN
                 IF (lambda_proposed(dataset_number).LT.lambda_min.OR.&
                     lambda_proposed(dataset_number).GT.lambda_max) inside_prior=.FALSE.
         END IF
+ELSE IF (option) THEN
+        IF (.NOT.delayed_opt) THEN
+                IF (voronoi_proposed(cell_number,5).LT.opt_min.OR.&
+                    voronoi_proposed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+        ELSE IF (delayed_opt) THEN
+                IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
+                    voronoi_delayed(cell_number,5).GT.opt_max) inside_prior_delayed=.FALSE.
+        END IF
 END IF
 END SUBROUTINE
 
@@ -619,6 +691,7 @@ IMPLICIT NONE
  noise_delayed=noise_current
  delayed_position=.FALSE.
  delayed_value=.FALSE.
+ delayed_opt=.FALSE.
  change_sigma=.FALSE.
  change_a=.FALSE.
  change_b=.FALSE.

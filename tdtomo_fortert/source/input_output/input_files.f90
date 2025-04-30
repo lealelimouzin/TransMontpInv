@@ -50,7 +50,8 @@ USE chains, ONLY: number_of_datasets,ncell_min,ncell_max,value_min,value_max,x_m
                   value_change,value_change_delayed,x_change,y_change,z_change,x_change_delayed,y_change_delayed,z_change_delayed,&
                   birth_change,a_change,b_change,lambda_change,sigma_change,likelihood_type,&
                   max_runtime,number_of_samples,max_number_of_samples,display_interval,no_data,&
-                  parallel_tempering,jump_type,tempering_start,sigma_mat,rho_mat,number_of_parameters
+                  parallel_tempering,jump_type,tempering_start,sigma_mat,rho_mat,number_of_parameters,opt_parameters,&
+                  opt_min,opt_max,opt_change,opt_change_delayed
 IMPLICIT NONE
 INTEGER                 :: nn
 CHARACTER(LEN=3)        :: section
@@ -95,6 +96,19 @@ READ(60,*)lambda_min,lambda_max
 READ(60,*)sigma_min,sigma_max
 READ(60,*)sigma_mat
 READ(60,*)rho_mat
+! Lea: option to inverse on either the angle or the aperture of the fractures
+READ(60,*)opt_parameters
+IF (opt_parameters.EQ.1) THEN !angle
+        READ(60,*)opt_min,opt_max
+        opt_max=opt_max*2*DACOS(-1.D0)/360 ! Convert degrees to radians
+        READ(60,*)
+ELSEIF (opt_parameters.EQ.2) THEN !aperture
+        READ(60,*)
+        READ(60,*)opt_min,opt_max
+ELSE
+        READ(60,*)
+        READ(60,*)
+END IF
 READ(60,*)
 READ(60,*)
 READ(60,*)
@@ -107,6 +121,8 @@ READ(60,*)a_change
 READ(60,*)b_change
 READ(60,*)lambda_change
 READ(60,*)sigma_change
+READ(60,*)opt_change
+READ(60,*)opt_change_delayed
 READ(60,*)
 READ(60,*)
 READ(60,*)

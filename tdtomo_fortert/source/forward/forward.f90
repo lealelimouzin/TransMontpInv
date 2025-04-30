@@ -20,7 +20,7 @@
 MODULE forward
 
 USE input_files, ONLY: modelling_method,forward_file,path_fwdFrac
-USE chains, ONLY: rho_mat
+USE chains, ONLY: rho_mat,opt_parameters,x_min,x_max,z_min,z_max
 USE acquisition, ONLY: number_of_measurements
 USE string_conversion
 
@@ -110,28 +110,64 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
         IMPLICIT NONE 
         INTEGER,INTENT(IN)                                      :: number_of_fractures
         DOUBLE PRECISION, DIMENSION(:,:), INTENT(IN)            :: fracture_model
-        DOUBLE PRECISION                                        :: length,x1,y,x2,sigma,b
+        DOUBLE PRECISION                                        :: length,x1,z,x2,sigma,b,z1,z2,angle,aperture
         CHARACTER(200)                                          :: namedir
         CHARACTER(400)                                          :: filenametmp
         DOUBLE PRECISION, DIMENSION(6)                          :: fracture
+        DOUBLE PRECISION, DIMENSION(5) :: bounds
         INTEGER                                                 :: J 
         
         filenametmp = ADJUSTL(ADJUSTR(namedir)//TRIM("/input/testDFN/DFN.txt"))
 
-        open (unit=40, file=filenametmp, status='replace', action='write')
-                write(40,'(A14)') TRIM('DETERMINISTIC1')
-                write(40,*) int2str(number_of_fractures)
-                DO J=1,number_of_fractures
-                        length = fracture_model(J,4)
-                        x1 = fracture_model(J,1) - length/2
-                        y = fracture_model(J,3)
-                        x2 = fracture_model(J,1) + length/2
-                        b = 0.03
-                        sigma = 2
-                        fracture = [x1, y, x2, y, b, sigma]
-                        write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F4.2,1X,F3.1)') fracture
-                END DO
-        close(40)
+        IF (opt_parameters.EQ.0) THEN ! No additional parameter to be inverted
+                open (unit=40, file=filenametmp, status='replace', action='write')
+                        write(40,'(A14)') TRIM('DETERMINISTIC1')
+                        write(40,*) int2str(number_of_fractures)
+                        DO J=1,number_of_fractures
+                                length = fracture_model(J,4)
+                                x1 = fracture_model(J,1) - length/2
+                                z = fracture_model(J,3)
+                                x2 = fracture_model(J,1) + length/2
+                                b = 0.03
+                                sigma = 2
+                                fracture = [x1, z, x2, z, b, sigma]
+                                write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F4.2,1X,F3.1)') fracture
+                        END DO
+                close(40)
+        ELSE ! Add the inversion of either the angle or the aperture
+                open (unit=40, file=filenametmp, status='replace', action='write')
+                        write(40,'(A14)') TRIM('DETERMINISTIC1')
+                        write(40,*) int2str(number_of_fractures)
+                        DO J=1,number_of_fractures
+                                IF (opt_parameters.EQ.1) THEN !angle
+                                        ! Read the parameters determined in chains.f90
+                                        angle = fracture_model(J,5)
+                                        length = fracture_model(J,4)
+                                        x1 = fracture_model(J,1) - COS(angle)*length/2
+                                        z1 = fracture_model(J,3) - SIN(angle)*length/2
+                                        x2 = fracture_model(J,1) + COS(angle)*length/2
+                                        z2 = fracture_model(J,3) + SIN(angle)*length/2
+                                        b = 0.03
+                                        ! Check if the fracture is inside the domain
+                                        bounds = check_edges(x1,x2,z1,z2,angle)
+                                        x1 = bounds(1) ; x2 = bounds(2)
+                                        z1 = bounds(3) ; z2 = bounds(4)
+                                        angle = bounds(5)
+                                ELSE ! aperture
+                                        length = fracture_model(J,4)
+                                        x1 = fracture_model(J,1) - length/2
+                                        z1 = fracture_model(J,3)
+                                        x2 = fracture_model(J,1) + length/2
+                                        z2 = fracture_model(J,3)
+                                        b = fracture_model(J,5)
+                                END IF
+                                sigma = 2
+                                fracture = [x1, z1, x2, z2, b, sigma]
+                                ! Store the DFN in a text file
+                                write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F4.2,1X,F3.1)') fracture
+                        END DO
+                close(40)
+        END IF
 
 END SUBROUTINE
 
@@ -180,6 +216,50 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         info = 0
         
 END SUBROUTINE
+
+RECURSIVE FUNCTION check_edges(x1,x2,z1,z2,angle) result(bounds)
+        DOUBLE PRECISION, INTENT(IN):: x1,x2,z1,z2,angle
+        DOUBLE PRECISION :: x1_new,x2_new,z1_new,z2_new,angle_new
+        DOUBLE PRECISION,DIMENSION(5):: bounds
+        
+        x1_new = x1 ; x2_new = x2 ;z1_new = z1 ; z2_new = z2 ; angle_new = angle 
+
+        IF (x1.LT.x_min) THEN
+                x1_new = x_min 
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (x2.LT.x_min) THEN
+                x2_new = x_min 
+                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (x1.GT.x_max) THEN
+                x1_new = x_max
+                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (x2.GT.x_max) THEN
+                x2_new = x_max 
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)      
+        ELSEIF (z1.LT.z_min) THEN
+                z1_new = z_min
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (z2.LT.z_min) THEN
+                z2_new = z_min
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (z1.GT.z_max) THEN
+                z1_new = z_max
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (z2.GT.z_max) THEN
+                z2_new = z_max
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSE
+                bounds(:) = [x1_new,x2_new,z1_new,z2_new,angle_new]
+        END IF
+END FUNCTION check_edges
 
 
 END MODULE

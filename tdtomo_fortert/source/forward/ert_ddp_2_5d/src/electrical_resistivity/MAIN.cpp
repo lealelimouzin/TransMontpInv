@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
 	// 1.3. Display parameters
 	double min_visu=-1,max_visu=-1;
     // 1.4. Output results
-    std::map<int, Eigen::SparseMatrix<double> > res_map;
+    //std::map<int, Eigen::SparseMatrix<double> > res_map;
 
 	// 2. Simulation
 	// 2.1. DFN generation

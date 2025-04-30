@@ -19,7 +19,7 @@
 
 SUBROUTINE choose_step(iteration,step)
 
-USE chains, ONLY: noise_type
+USE chains, ONLY: noise_type,opt_parameters
 USE random_generator
 IMPLICIT NONE
 INTEGER, INTENT(IN)     :: iteration
@@ -41,18 +41,41 @@ IF (MOD(iteration,2).EQ.0) THEN
                 step=3
         END IF
 ELSE
-        IF (noise_type.NE.4) THEN
-                IF (random_deviate.LT.DBLE(0.500)) THEN
-                        ! VALUE - change the value of a cell
-                        step=4
-                ELSE
-                        ! NOISE - change a data noise parameter
-                        step=5
-                END IF  
-        ELSE IF (noise_type.EQ.4) THEN
-                ! VALUE - change the value of a cell
-                step=4
+        IF (opt_parameters.GT.0) THEN 
+                IF (noise_type.NE.4) THEN
+                        IF (random_deviate.LT.DBLE(0.333)) THEN
+                                ! VALUE - change the value of a cell
+                                step=4
+                        ELSE IF (random_deviate.LT.DBLE(0.666)) THEN
+                                ! NOISE - change a data noise parameter
+                                step=5
+                        ELSE
+                                ! OPTION - change either an angle or an aperture
+                                step=6
+                        END IF  
+                ELSE IF (noise_type.EQ.4) THEN
+                        IF (random_deviate.LT.DBLE(0.5)) THEN
+                                ! VALUE - change the value of a cell
+                                step=4
+                        ELSE
+                                ! OPTION - change either an angle or an aperture
+                                step=6   
+                        END IF
+                END IF
+        ELSE
+                IF (noise_type.NE.4) THEN
+                        IF (random_deviate.LT.DBLE(0.500)) THEN
+                                ! VALUE - change the value of a cell
+                                step=4
+                        ELSE
+                                ! NOISE - change a data noise parameter
+                                step=5
+                        END IF  
+                ELSE IF (noise_type.EQ.4) THEN
+                                ! VALUE - change the value of a cell
+                                step=4
+                END IF
         END IF
 END IF
-
+step=6
 END SUBROUTINE

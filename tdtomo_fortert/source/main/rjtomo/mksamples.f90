@@ -330,6 +330,8 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                 CALL change_value(modelling_method)
         ELSE IF (noise) THEN
                 CALL change_noise()
+        ELSE IF (option) THEN ! only implemented for the fwd ert_ddp_2_5d
+                CALL change_option()
         END IF
         
 
@@ -392,6 +394,7 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                 delayed=.TRUE.
                 IF (move) CALL move_cell_delayed(modelling_method)
                 IF (value) CALL change_value_delayed(modelling_method)
+                IF (option) CALL change_option_delayed()
                 
                 ! Only go through this if we are inside the prior (otherwise model is automatically rejected)
                 IF (inside_prior_delayed) THEN
@@ -511,10 +514,8 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                 ! Check whether the temperatures are swapping
                 IF (chain_number.EQ.1) THEN
                         IF (inside_prior_delayed) THEN 
-                                write(*,*)'temper+delayed'
                                 CALL do_tempering(data_delayed)
                         ELSE
-                                write(*,*)'temper+proposed'
                                 CALL do_tempering(data_proposed)
                         END IF
                         CALL update_temperatures(iteration)

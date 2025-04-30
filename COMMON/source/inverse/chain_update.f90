@@ -92,7 +92,7 @@ IF (accept) THEN
                 IF (noise.AND.change_a) acceptance_a(1)=acceptance_a(1)+1
                 IF (noise.AND.change_b) acceptance_b(1)=acceptance_b(1)+1
         END IF
-        
+        IF (option) acceptance_opt(1)=acceptance_opt(1)+1
 ELSE
         
         acceptance_total(2)=acceptance_total(2)+1
@@ -105,25 +105,29 @@ ELSE
                 IF (noise.AND.change_a) acceptance_a(2)=acceptance_a(2)+1
                 IF (noise.AND.change_b) acceptance_b(2)=acceptance_b(2)+1
         END IF
-        
+        IF (option) acceptance_opt(2)=acceptance_opt(2)+1
 END IF
 
-IF (move.OR.value) THEN
+IF (move.OR.value.OR.option) THEN
         IF (accept_main) THEN
                 IF (move) acceptance_move_main(1)=acceptance_move_main(1)+1
                 IF (value) acceptance_value_main(1)=acceptance_value_main(1)+1
+                IF (option) acceptance_opt_main(1)=acceptance_opt_main(1)+1
         ELSE
                 IF (move) acceptance_move_main(2)=acceptance_move_main(2)+1
                 IF (value) acceptance_value_main(2)=acceptance_value_main(2)+1
+                IF (option) acceptance_opt_main(2)=acceptance_opt_main(2)+1
         END IF
         
-        IF (delayed_position.OR.delayed_value) THEN
+        IF (delayed_position.OR.delayed_value.OR.delayed_opt) THEN
                 IF (accept_delayed) THEN
                         IF (move) acceptance_move_delayed(1)=acceptance_move_delayed(1)+1
                         IF (value) acceptance_value_delayed(1)=acceptance_value_delayed(1)+1
+                        IF (option) acceptance_opt_delayed(1)=acceptance_opt_delayed(1)+1
                 ELSE
                         IF (move) acceptance_move_delayed(2)=acceptance_move_delayed(2)+1
                         IF (value) acceptance_value_delayed(2)=acceptance_value_delayed(2)+1
+                        IF (option) acceptance_opt_delayed(2)=acceptance_opt_delayed(2)+1
                 END IF
         END IF
 END IF
@@ -146,6 +150,11 @@ IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
         IF (noise.AND.SUM(acceptance_a(1:2)).GT.0) acceptance_a(3)=100*acceptance_a(1)/SUM(acceptance_a(1:2))
         IF (noise.AND.SUM(acceptance_b(1:2)).GT.0) acceptance_b(3)=100*acceptance_b(1)/SUM(acceptance_b(1:2))
 END IF
+IF (option.AND.SUM(acceptance_opt(1:2)).GT.0) acceptance_opt(3)=100*acceptance_opt(1)/SUM(acceptance_opt(1:2))
+IF (option.AND.SUM(acceptance_opt_main(1:2)).GT.0) acceptance_opt_main(3)=100*acceptance_opt_main(1)&
+                                                                                /SUM(acceptance_opt_main(1:2))
+IF (option.AND.SUM(acceptance_opt_delayed(1:2)).GT.0) acceptance_opt_delayed(3)=100*acceptance_opt_delayed(1)&
+                                                                                /SUM(acceptance_opt_delayed(1:2))
 
 acceptance_all(1)=acceptance_total(3)
 acceptance_all(2)=acceptance_birth(3)
@@ -159,6 +168,14 @@ acceptance_all(9)=acceptance_value_main(3)
 acceptance_all(10)=acceptance_value_delayed(3)
 acceptance_all(11)=acceptance_a(3)
 acceptance_all(12)=acceptance_b(3)
+!---Lea
+IF (opt_parameters.GT.0) THEN
+        acceptance_all(14)=acceptance_opt(3)
+        acceptance_all(15)=acceptance_opt_main(3)
+        acceptance_all(16)=acceptance_opt_delayed(3)
+END IF
+! acceptance_all(13) is for tempering
+!---
 
 END SUBROUTINE
 
@@ -186,6 +203,10 @@ END IF
  chain_acceptance(sample_number,4)=acceptance_move(3)
  chain_acceptance(sample_number,5)=acceptance_value(3)
  chain_acceptance(sample_number,6)=acceptance_noise(3)
+ IF (opt_parameters.GT.0.AND.parallel_tempering.EQ.1)  chain_acceptance(sample_number,8)=acceptance_opt(3)
+ ! chain_acceptance(sample_number,7) for tempering
+ IF (opt_parameters.GT.0.AND.parallel_tempering.EQ.0)  chain_acceptance(sample_number,7)=acceptance_opt(3)
+
 IF (birth) THEN
         IF (accept) THEN
                 chain_steps(sample_number,2)=1
@@ -194,6 +215,7 @@ IF (birth) THEN
                 chain_values(sample_number,2)=voronoi_current(ncell_current,2)
                 chain_values(sample_number,3)=voronoi_current(ncell_current,3)
                 chain_values(sample_number,4)=voronoi_current(ncell_current,4)
+                IF (opt_parameters.GT.0)  chain_values(sample_number,5)=voronoi_current(ncell_current,5)
         END IF
 ELSE IF (death) THEN
         IF (accept) THEN
@@ -203,6 +225,7 @@ ELSE IF (death) THEN
                 chain_values(sample_number,2)=0
                 chain_values(sample_number,3)=0
                 chain_values(sample_number,4)=0
+                IF (opt_parameters.GT.0)  chain_values(sample_number,5)=0
         END IF
 ELSE IF (move) THEN
         IF (accept) THEN
@@ -212,6 +235,7 @@ ELSE IF (move) THEN
                 chain_values(sample_number,2)=voronoi_current(cell_number,2)
                 chain_values(sample_number,3)=voronoi_current(cell_number,3)
                 chain_values(sample_number,4)=0
+                IF (opt_parameters.GT.0)  chain_values(sample_number,5)=0
         END IF
 ELSE IF (value) THEN
         IF (accept) THEN
@@ -221,6 +245,7 @@ ELSE IF (value) THEN
                 chain_values(sample_number,2)=0
                 chain_values(sample_number,3)=0
                 chain_values(sample_number,4)=voronoi_current(cell_number,4)
+                IF (opt_parameters.GT.0)  chain_values(sample_number,5)=0
         END IF
 ELSE IF (noise) THEN
         IF (accept) THEN
@@ -229,7 +254,8 @@ ELSE IF (noise) THEN
                 chain_values(sample_number,1)=0
                 chain_values(sample_number,2)=0
                 chain_values(sample_number,3)=0
-                chain_values(sample_number,4)=voronoi_current(cell_number,4)
+                chain_values(sample_number,4)=voronoi_current(cell_number,4) ! PAS COMPRIS PQUOI PAS 0
+                IF (opt_parameters.GT.0)  chain_values(sample_number,5)=0
         END IF
 END IF
 DO nn=1,number_of_datasets

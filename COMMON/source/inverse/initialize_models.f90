@@ -82,9 +82,14 @@ IF (run_number.EQ.1) THEN
                                 end do
                         close(15)
                         DO nn=1,ncell_current
-                                voronoi_current(nn,1) = tempo(nn,1) + ABS(tempo(nn,3)-tempo(nn,1))/2 
-                                voronoi_current(nn,3) = tempo(nn,2)
-                                voronoi_current(nn,4) = ABS(tempo(nn,3)-tempo(nn,1))
+                                voronoi_current(nn,1) = tempo(nn,1) + ABS(tempo(nn,3)-tempo(nn,1))/2 ! x centre
+                                voronoi_current(nn,3) = tempo(nn,2) ! z centre
+                                voronoi_current(nn,4) = ABS(tempo(nn,3)-tempo(nn,1)) ! length
+                                IF (opt_parameters.EQ.1) THEN 
+                                        voronoi_current(nn,5) = 0.03 ! aperture: 0.03 by default
+                                ELSEIF (opt_parameters.EQ.2) THEN
+                                        voronoi_current(nn,5) = 0 ! angle
+                                END IF
                         end do
                 END IF
         END IF
@@ -121,6 +126,11 @@ IF (run_number.EQ.1) THEN
                 acceptance_b=0
         END IF
         acceptance_tempering=0
+        IF (opt_parameters.GT.0) THEN
+                acceptance_opt=0
+                acceptance_opt_main=0
+                acceptance_opt_delayed=0
+        END IF
         
         ! Initialise the counter for accepted samples
         accepted_in_run=0
@@ -154,11 +164,20 @@ ELSE IF (run_number.GT.1) THEN
                 ! Read fractures
                 READ(80)ncell_current
                 ncell_proposed=ncell_current
-                DO nn=1,ncell_current
-                        READ(80)voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4)
-                        voronoi_proposed(nn,:)=voronoi_current(nn,:)
-                        voronoi_delayed(nn,:)=voronoi_current(nn,:)
-                END DO
+                IF (opt_parameters.EQ.0) THEN 
+                        DO nn=1,ncell_current
+                                READ(80)voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4)
+                                voronoi_proposed(nn,:)=voronoi_current(nn,:)
+                                voronoi_delayed(nn,:)=voronoi_current(nn,:)
+                        END DO
+                ELSE
+                        DO nn=1,ncell_current
+                                READ(80)voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4),&
+                                voronoi_current(nn,5)
+                                voronoi_proposed(nn,:)=voronoi_current(nn,:)
+                                voronoi_delayed(nn,:)=voronoi_current(nn,:)
+                        END DO
+                END IF
         END IF
         
         ! Read noise parameters
@@ -195,6 +214,11 @@ ELSE IF (run_number.GT.1) THEN
                 READ(80)acceptance_b(1),acceptance_b(2),acceptance_b(3)
         END IF
         READ(80)acceptance_tempering(1),acceptance_tempering(2),acceptance_tempering(3)
+        IF (opt_parameters.GT.0) THEN
+                READ(80)acceptance_opt(1),acceptance_opt(2),acceptance_opt(3) 
+                READ(80)acceptance_opt_main(1),acceptance_opt_main(2),acceptance_opt_main(3)
+                READ(80)acceptance_opt_delayed(1),acceptance_opt_delayed(2),acceptance_opt_delayed(3)
+        END IF
         
         ! Read number of random numbers used so far and update counter
         READ(80)random_so_far

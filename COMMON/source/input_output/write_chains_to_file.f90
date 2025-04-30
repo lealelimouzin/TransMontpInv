@@ -94,19 +94,38 @@ IF (run_number.EQ.1) THEN
                         WRITE(samples_unit)file_type_2
                         WRITE(samples_unit)chain_ncell(pp+1)
                         DO nn=1,chain_ncell(pp+1)
-                                WRITE(samples_unit)voronoi_0(nn,1),&
-                                                   voronoi_0(nn,2),&
-                                                   voronoi_0(nn,3),&
-                                                   voronoi_0(nn,4)
+                                IF (opt_parameters.GT.0) THEN
+                                        WRITE(samples_unit)voronoi_0(nn,1),&
+                                                        voronoi_0(nn,2),&
+                                                        voronoi_0(nn,3),&
+                                                        voronoi_0(nn,4),&
+                                                        voronoi_0(nn,5)
+                                ELSE
+                                        WRITE(samples_unit)voronoi_0(nn,1),&
+                                                        voronoi_0(nn,2),&
+                                                        voronoi_0(nn,3),&
+                                                        voronoi_0(nn,4)
+                                END IF
                         END DO
                 ELSE
-                        WRITE(samples_unit)pp,chain_steps(pp+1,1),&
-                                              chain_steps(pp+1,2),&
-                                              chain_indices(pp+1),&
-                                              chain_values(pp+1,1),&
-                                              chain_values(pp+1,2),&
-                                              chain_values(pp+1,3),&
-                                              chain_values(pp+1,4)
+                        IF (opt_parameters.GT.0) THEN
+                                WRITE(samples_unit)pp,chain_steps(pp+1,1),&
+                                                chain_steps(pp+1,2),&
+                                                chain_indices(pp+1),&
+                                                chain_values(pp+1,1),&
+                                                chain_values(pp+1,2),&
+                                                chain_values(pp+1,3),&
+                                                chain_values(pp+1,4),&
+                                                chain_values(pp+1,5)
+                        ELSE
+                                WRITE(samples_unit)pp,chain_steps(pp+1,1),&
+                                chain_steps(pp+1,2),&
+                                chain_indices(pp+1),&
+                                chain_values(pp+1,1),&
+                                chain_values(pp+1,2),&
+                                chain_values(pp+1,3),&
+                                chain_values(pp+1,4)
+                        END IF
                 END IF
                 
                 ! Residuals
@@ -156,12 +175,22 @@ IF (run_number.EQ.1) THEN
                 
                 ! Acceptance ratios
                 IF (pp.EQ.0) WRITE(acceptance_unit)file_type_5
-                WRITE(acceptance_unit)pp,chain_acceptance(pp+1,1),&
-                                         chain_acceptance(pp+1,2),&
-                                         chain_acceptance(pp+1,3),&
-                                         chain_acceptance(pp+1,4),&
-                                         chain_acceptance(pp+1,5),&
-                                         chain_acceptance(pp+1,6)
+                IF (opt_parameters.EQ.0) THEN 
+                        WRITE(acceptance_unit)pp,chain_acceptance(pp+1,1),&
+                                                chain_acceptance(pp+1,2),&
+                                                chain_acceptance(pp+1,3),&
+                                                chain_acceptance(pp+1,4),&
+                                                chain_acceptance(pp+1,5),&
+                                                chain_acceptance(pp+1,6)
+                ELSE
+                        WRITE(acceptance_unit)pp,chain_acceptance(pp+1,1),&
+                                                chain_acceptance(pp+1,2),&
+                                                chain_acceptance(pp+1,3),&
+                                                chain_acceptance(pp+1,4),&
+                                                chain_acceptance(pp+1,5),&
+                                                chain_acceptance(pp+1,6),&
+                                                chain_acceptance(pp+1,8)
+                END IF
                 
                 ! Temperatures
                 IF (parallel_tempering.EQ.1.AND.chain_number.EQ.1) THEN
@@ -239,13 +268,24 @@ ELSE IF (run_number.GT.1) THEN
                 WRITE(ncell_unit)samples_at_start+pp,chain_ncell(pp)
                 
                 ! Chain steps
-                WRITE(samples_unit)samples_at_start+pp,chain_steps(pp,1),&
+                IF (opt_parameters.GT.0) THEN 
+                        WRITE(samples_unit)samples_at_start+pp,chain_steps(pp,1),&
+                                                        chain_steps(pp,2),&
+                                                        chain_indices(pp),&
+                                                        chain_values(pp,1),&
+                                                        chain_values(pp,2),&
+                                                        chain_values(pp,3),&
+                                                        chain_values(pp,4),&
+                                                        chain_values(pp,5)
+                ELSE
+                        WRITE(samples_unit)samples_at_start+pp,chain_steps(pp,1),&
                                                        chain_steps(pp,2),&
                                                        chain_indices(pp),&
                                                        chain_values(pp,1),&
                                                        chain_values(pp,2),&
                                                        chain_values(pp,3),&
                                                        chain_values(pp,4)
+                END IF
                 
                 ! Residuals
                 IF (save_residuals.EQ.1) THEN
@@ -274,12 +314,22 @@ ELSE IF (run_number.GT.1) THEN
                 WRITE(misfits_unit)samples_at_start+pp,chain_misfits(pp)
                 
                 ! Acceptance ratios
-                WRITE(acceptance_unit)samples_at_start+pp,chain_acceptance(pp,1),&
-                                                          chain_acceptance(pp,2),&
-                                                          chain_acceptance(pp,3),&
-                                                          chain_acceptance(pp,4),&
-                                                          chain_acceptance(pp,5),&
-                                                          chain_acceptance(pp,6)
+                IF (opt_parameters.EQ.0) THEN 
+                        WRITE(acceptance_unit)samples_at_start+pp,chain_acceptance(pp,1),&
+                                                                chain_acceptance(pp,2),&
+                                                                chain_acceptance(pp,3),&
+                                                                chain_acceptance(pp,4),&
+                                                                chain_acceptance(pp,5),&
+                                                                chain_acceptance(pp,6)
+                ELSE
+                        WRITE(acceptance_unit)samples_at_start+pp,chain_acceptance(pp,1),&
+                        chain_acceptance(pp,2),&
+                        chain_acceptance(pp,3),&
+                        chain_acceptance(pp,4),&
+                        chain_acceptance(pp,5),&
+                        chain_acceptance(pp,6),&
+                        chain_acceptance(pp,8)
+                END IF
                 
                 ! Temperatures
                 IF (parallel_tempering.EQ.1.AND.chain_number.EQ.1) THEN

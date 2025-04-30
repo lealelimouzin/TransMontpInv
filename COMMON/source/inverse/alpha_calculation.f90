@@ -19,7 +19,7 @@
 
 MODULE alpha_calculation
 
-USE chains, ONLY: chain_name
+USE chains, ONLY: chain_name,l_change
 USE debug
 USE input_files, ONLY: modelling_method
 IMPLICIT NONE
@@ -32,7 +32,7 @@ SUBROUTINE calculate_alpha(likelihood_current,likelihood_proposed,&
                            likelihood_normalization,temper,alpha)
 
 USE chains, ONLY: alpha_component,birth,death,move,value,noise,value_min,value_max,&
-                  no_data,temperature
+                  no_data,temperature,option
 IMPLICIT NONE
 DOUBLE PRECISION, INTENT(IN)            :: likelihood_current,likelihood_proposed,likelihood_normalization
 LOGICAL, INTENT(IN)                     :: temper
@@ -129,7 +129,7 @@ ELSEIF (modelling_method.EQ.2) THEN
                         alpha=MINVAL([DBLE(0),-LOG(value_max-value_min)])
                 END IF
                 write(*,*) 'alpha (delete) at chain ', TRIM(chain_name), ' is : ', alpha
-        ELSE IF (move.OR.value.OR.noise) THEN
+        ELSE IF (move.OR.value.OR.noise.OR.option) THEN
                 IF (no_data.EQ.0) THEN
                         IF (temper) THEN
                                 alpha=MINVAL([DBLE(0),(-likelihood_proposed+likelihood_current+likelihood_normalization)&
@@ -140,7 +140,7 @@ ELSEIF (modelling_method.EQ.2) THEN
                 ELSE IF (no_data.EQ.1) THEN
                         alpha=DBLE(0)
                 END IF
-                write(*,*) 'alpha (move/value/noise) at chain ', TRIM(chain_name), ' is : ', alpha
+                write(*,*) 'alpha (move/value/noise/opt) at chain ', TRIM(chain_name), ' is : ', alpha
         END IF
 END IF
 
@@ -153,7 +153,8 @@ SUBROUTINE calculate_alpha_delayed(likelihood_current,likelihood_proposed,likeli
 
 USE chains, ONLY: move,value,inside_prior,inside_prior_delayed,no_data,&
                   voronoi_current,voronoi_proposed,voronoi_delayed,cell_number,&
-                  value_change,x_change,y_change,z_change,alpha,temperature
+                  value_change,x_change,y_change,z_change,alpha,temperature,&
+                  option,opt_change
 USE random_generator
 
 IMPLICIT NONE
@@ -162,7 +163,7 @@ LOGICAL, INTENT(IN)             :: temper
 DOUBLE PRECISION, INTENT(OUT)   :: alpha_delayed
 DOUBLE PRECISION                :: value_min,value_max
 DOUBLE PRECISION                :: TT1,TT2,TT3,TT2x,TT2y,TT2z,TT3t,TT3b
-DOUBLE PRECISION                :: l_change
+!DOUBLE PRECISION                :: l_change
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': calculating alpha delayed ---'
 
@@ -172,7 +173,7 @@ IF (no_data.EQ.0) THEN
         ELSE
                 TT1=-likelihood_delayed+likelihood_current+likelihood_normalization
         END IF
-        write(*,*)'DELAYED move/length TT1 chain ',TRIM(chain_name),': ',TT1
+        write(*,*)'DELAYED move/length/opt TT1 chain ',TRIM(chain_name),': ',TT1
 ELSE IF (no_data.EQ.1) THEN
         TT1=DBLE(0)
 END IF
@@ -186,37 +187,61 @@ IF (move) THEN
                 -(voronoi_proposed(cell_number,3)-voronoi_delayed(cell_number,3))**2)/(2*z_change**2)
         TT2=TT2x+TT2y+TT2z
         write(*,*)'DELAYED move TT2 chain ',TRIM(chain_name),': ',TT2
+        write(*,*)'DELAYED move TT2 chain ',TRIM(chain_name),' vor_prop: ',voronoi_proposed(cell_number,1),&
+                                                                                voronoi_proposed(cell_number,2),&
+                                                                                voronoi_proposed(cell_number,3)
+        write(*,*)'DELAYED move TT2 chain ',TRIM(chain_name),' vor_del: ',voronoi_delayed(cell_number,1),&
+                                                                                voronoi_delayed(cell_number,2),&
+                                                                                voronoi_delayed(cell_number,3)
+        write(*,*)'DELAYED move TT2 chain ',TRIM(chain_name),' vor_curr: ',voronoi_current(cell_number,1),&
+                                                                                voronoi_current(cell_number,2),&
+                                                                                voronoi_current(cell_number,3)
 ELSE IF (value) THEN
-        l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
+        !l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
         !TT2=(-(voronoi_proposed(cell_number,4)-voronoi_delayed(cell_number,4))**2&
         !        +(voronoi_proposed(cell_number,4)-voronoi_current(cell_number,4))**2)/(2*value_change**2)
         TT2=(-(voronoi_proposed(cell_number,4)-voronoi_delayed(cell_number,4))**2&
                 +(voronoi_proposed(cell_number,4)-voronoi_current(cell_number,4))**2)/(2*l_change**2)
         write(*,*)'DELAYED length TT2 chain ',TRIM(chain_name),': ',TT2
+        write(*,*)'DELAYED l TT2 chain ',TRIM(chain_name),' vor_prop: ',voronoi_proposed(cell_number,4)
+        write(*,*)'DELAYED l TT2 chain ',TRIM(chain_name),' vor_del: ',voronoi_delayed(cell_number,4)
+        write(*,*)'DELAYED l TT2 chain ',TRIM(chain_name),' vor_curr: ',voronoi_current(cell_number,4)
+ELSE IF (option) THEN
+        TT2=(-(voronoi_proposed(cell_number,5)-voronoi_delayed(cell_number,5))**2&
+                +(voronoi_proposed(cell_number,5)-voronoi_current(cell_number,5))**2)/(2*opt_change**2)
+        write(*,*)'DELAYED opt TT2 chain ',TRIM(chain_name),': ',TT2
+        write(*,*)'DELAYED opt TT2 chain ',TRIM(chain_name),' vor_prop: ',voronoi_proposed(cell_number,5)
+        write(*,*)'DELAYED opt TT2 chain ',TRIM(chain_name),' vor_del: ',voronoi_delayed(cell_number,5)
+        write(*,*)'DELAYED opt TT2 chain ',TRIM(chain_name),' vor_curr: ',voronoi_current(cell_number,5)
 END IF
+
+
 
 IF (.NOT.inside_prior.AND.inside_prior_delayed) THEN ! if the first proposal was rejected because out of bounds, then TT3=0
         TT3=0
         alpha_delayed=MINVAL([DBLE(0),TT1+TT2])
-        write(*,*)'DELAYED move/length if out of bounds TT3 chain ',TRIM(chain_name),': ',TT3
-        write(*,*)'DELAYED move/length if out of bounds alpha_delayed chain ',TRIM(chain_name),': ',alpha_delayed
+        write(*,*)'DELAYED move/length/opt if out of bounds TT3 chain ',TRIM(chain_name),': ',TT3
+        write(*,*)'DELAYED move/length/opt if out of bounds alpha_delayed chain ',TRIM(chain_name),': ',alpha_delayed
 ELSE IF (inside_prior.AND.inside_prior_delayed) THEN ! if both the first and the delayed proposal are within the bounds
         IF (no_data.EQ.0) THEN
                 IF (temper) THEN
                         TT3t=LOG(1-EXP(MINVAL([DBLE(0),&
                                                 (-likelihood_proposed+likelihood_delayed+likelihood_normalization)/temperature])))
+                        WRITE(*,*)'DELAYED TT3t chain ',TRIM(chain_name),' like_prop : ',likelihood_proposed
+                        WRITE(*,*)'DELAYED TT3t chain ',TRIM(chain_name),' like_del : ',likelihood_delayed
+                        WRITE(*,*)'DELAYED TT3t chain ',TRIM(chain_name),' like_norm : ',likelihood_normalization 
                 ELSE
                         TT3t=LOG(1-EXP(MINVAL([DBLE(0),-likelihood_proposed+likelihood_delayed+likelihood_normalization])))
                 END IF
 !         ELSE IF (no_data.EQ.1) THEN ! shouldn't even get to this point because for no data all m' are accepted
 !                 TT3t=LOG(DBLE(0))
         END IF
-        write(*,*)'DELAYED move/length TT3t chain ',TRIM(chain_name),': ',TT3t
+        write(*,*)'DELAYED move/length/opt TT3t chain ',TRIM(chain_name),': ',TT3t
         TT3b=LOG(1-EXP(alpha))
-        write(*,*)'DELAYED move/length TT3b chain ',TRIM(chain_name),': ',TT3b
+        write(*,*)'DELAYED move/length/opt TT3b chain ',TRIM(chain_name),': ',TT3b
         TT3=TT3t-TT3b
         alpha_delayed=MINVAL([DBLE(0),TT1+TT2+TT3])
-        write(*,*)'DELAYED move/length alpha_delayed chain ',TRIM(chain_name),': ',alpha_delayed 
+        write(*,*)'DELAYED move/length/opt alpha_delayed chain ',TRIM(chain_name),': ',alpha_delayed 
 END IF
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': calculated alpha delayed ---'

@@ -36,6 +36,7 @@ INTEGER                                                 :: nn
 CHARACTER(LEN=10)                                       :: tot_acc
 CHARACTER(LEN=10)                                       :: b_acc,d_acc,m_acc,v_acc,n_acc
 CHARACTER(LEN=10)                                       :: mm_acc,md_acc,vm_acc,vd_acc
+CHARACTER(LEN=10)                                       :: o_acc,om_acc,od_acc
 CHARACTER(LEN=13)                                       :: min_unc,max_unc
 CHARACTER(LEN=10)                                       :: t_acc
 CHARACTER(LEN=*), PARAMETER                             :: FMT1="(f9.4)"
@@ -80,8 +81,14 @@ ELSE IF (start_end.EQ.3) THEN
         WRITE(md_acc,FMT1)acceptances(8)
         WRITE(vm_acc,FMT1)acceptances(9)
         WRITE(vd_acc,FMT1)acceptances(10)
+        !----Lea
+        WRITE(o_acc,FMT1)acceptances(14)
+        WRITE(om_acc,FMT1)acceptances(15)
+        WRITE(od_acc,FMT1)acceptances(16)
+        !-------
         WRITE(min_unc,FMT2)MINVAL(noise_current/ABS(data_current)*100)
         WRITE(max_unc,FMT2)MAXVAL(noise_current/ABS(data_current)*100)
+
 
         !--------------------------Modifs-------------------------------------------------
         !DO ii=1,number_of_measurements
@@ -148,6 +155,11 @@ ELSE IF (start_end.EQ.3) THEN
         WRITE(*,*)'      main: ',vm_acc,'%'
         WRITE(*,*)'      delayed: ',vd_acc,'%'
         WRITE(*,*)'NOISE acceptance: ',n_acc,'%'
+        ! --- Lea
+        WRITE(*,*)'OPTION acceptance: ',o_acc,'%'
+        WRITE(*,*)'      main: ',om_acc,'%'
+        WRITE(*,*)'      delayed: ',od_acc,'%'
+        ! ---
         WRITE(*,*)
         WRITE(*,*)'TOTAL acceptance: ',tot_acc,'%'
         WRITE(*,*)'--------------------------------------'

@@ -33,8 +33,15 @@ WRITE(90,*)'Voronoi model'
 WRITE(90,*)ncell_current
 WRITE(80)ncell_current
 DO nn=1,ncell_current
-        WRITE(90,*)nn,voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4)
-        WRITE(80)voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4)
+        IF (opt_parameters.EQ.0) THEN
+                WRITE(90,*)nn,voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4)
+                WRITE(80)voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4)
+        ELSE
+                WRITE(90,*)nn,voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4),&
+                voronoi_current(nn,5)
+                WRITE(80)voronoi_current(nn,1),voronoi_current(nn,2),voronoi_current(nn,3),voronoi_current(nn,4),&
+                voronoi_current(nn,5)
+        END IF
 END DO
 
 ! Write noise parameters
@@ -50,6 +57,7 @@ ELSE IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
                 WRITE(80)a_current(nn),b_current(nn)
         END DO
 ELSE IF (noise_type.EQ.3.OR.noise_type.EQ.6) THEN
+        write(*,*)'I m in write_last_model, noise_type is: ',noise_type
         DO nn=1,number_of_datasets
                 WRITE(90,*)lambda_current(nn)
                 WRITE(80)lambda_current(nn)
@@ -74,6 +82,10 @@ IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
         WRITE(90,*)acceptance_b(1),acceptance_b(2),acceptance_b(3)
 END IF
 WRITE(90,*)acceptance_tempering(1),acceptance_tempering(2),acceptance_tempering(3)
+IF (opt_parameters.GT.0) THEN 
+        WRITE(90,*)acceptance_opt_main(1),acceptance_opt_main(2),acceptance_opt_main(3)
+        WRITE(90,*)acceptance_opt_delayed(1),acceptance_opt_delayed(2),acceptance_opt_delayed(3)
+END IF
 WRITE(80)accepted_so_far+accepted_in_run
 WRITE(80)acceptance_total(1),acceptance_total(2),acceptance_total(3)
 WRITE(80)acceptance_birth(1),acceptance_birth(2),acceptance_birth(3)
@@ -90,6 +102,10 @@ IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
         WRITE(80)acceptance_b(1),acceptance_b(2),acceptance_b(3)
 END IF
 WRITE(80)acceptance_tempering(1),acceptance_tempering(2),acceptance_tempering(3)
+IF (opt_parameters.GT.0) THEN 
+        WRITE(80,*)acceptance_opt_main(1),acceptance_opt_main(2),acceptance_opt_main(3)
+        WRITE(80,*)acceptance_opt_delayed(1),acceptance_opt_delayed(2),acceptance_opt_delayed(3)
+END IF
 
 ! Write number of random numbers used so far
 WRITE(90,*)'Random counter'

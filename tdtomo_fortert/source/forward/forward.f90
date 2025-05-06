@@ -149,10 +149,10 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
                                         z2 = fracture_model(J,3) + SIN(angle)*length/2
                                         b = 0.03
                                         ! Check if the fracture is inside the domain
-                                        bounds = check_edges(x1,x2,z1,z2,angle)
-                                        x1 = bounds(1) ; x2 = bounds(2)
-                                        z1 = bounds(3) ; z2 = bounds(4)
-                                        angle = bounds(5)
+                                        !bounds = check_edges(x1,x2,z1,z2,angle)
+                                        !x1 = bounds(1) ; x2 = bounds(2)
+                                        !z1 = bounds(3) ; z2 = bounds(4)
+                                        !angle = bounds(5)
                                 ELSE ! aperture
                                         length = fracture_model(J,4)
                                         x1 = fracture_model(J,1) - length/2
@@ -165,6 +165,7 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
                                 fracture = [x1, z1, x2, z2, b, sigma]
                                 ! Store the DFN in a text file
                                 write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F4.2,1X,F3.1)') fracture
+                                write(*,*)'in write2DFN, chain ',TRIM(chain_name),' fracture : ',fracture
                         END DO
                 close(40)
         END IF
@@ -217,49 +218,7 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         
 END SUBROUTINE
 
-RECURSIVE FUNCTION check_edges(x1,x2,z1,z2,angle) result(bounds)
-        DOUBLE PRECISION, INTENT(IN):: x1,x2,z1,z2,angle
-        DOUBLE PRECISION :: x1_new,x2_new,z1_new,z2_new,angle_new
-        DOUBLE PRECISION,DIMENSION(5):: bounds
-        
-        x1_new = x1 ; x2_new = x2 ;z1_new = z1 ; z2_new = z2 ; angle_new = angle 
 
-        IF (x1.LT.x_min) THEN
-                x1_new = x_min 
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (x2.LT.x_min) THEN
-                x2_new = x_min 
-                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (x1.GT.x_max) THEN
-                x1_new = x_max
-                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (x2.GT.x_max) THEN
-                x2_new = x_max 
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)      
-        ELSEIF (z1.LT.z_min) THEN
-                z1_new = z_min
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (z2.LT.z_min) THEN
-                z2_new = z_min
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (z1.GT.z_max) THEN
-                z1_new = z_max
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (z2.GT.z_max) THEN
-                z2_new = z_max
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSE
-                bounds(:) = [x1_new,x2_new,z1_new,z2_new,angle_new]
-        END IF
-END FUNCTION check_edges
 
 
 END MODULE

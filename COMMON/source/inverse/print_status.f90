@@ -23,7 +23,8 @@ USE string_conversion
 USE chains, ONLY: noise_type,chain_name,samples_at_start,ncell_current,&
                   misfit_current,max_number_of_samples,number_of_datasets,&
                   noise_current,number_of_measurements,sigma_current,lambda_current,&
-                  a_current,b_current,data_current,number_of_samples
+                  a_current,b_current,data_current,number_of_samples,opt_parameters,&
+                  parallel_tempering
 IMPLICIT NONE
 INTEGER, INTENT(IN)                                     :: start_end
 DOUBLE PRECISION, DIMENSION(:), INTENT(IN), OPTIONAL    :: acceptances
@@ -42,7 +43,7 @@ CHARACTER(LEN=10)                                       :: t_acc
 CHARACTER(LEN=*), PARAMETER                             :: FMT1="(f9.4)"
 CHARACTER(LEN=*), PARAMETER                             :: FMT2="(f12.4)"
 INTEGER                                                 :: ii,k=1
-DOUBLE PRECISION,DIMENSION(SIZE(data_current))                :: data_tempo,noise_tempo
+DOUBLE PRECISION,DIMENSION(SIZE(data_current))          :: data_tempo,noise_tempo
 
 IF (start_end.EQ.1.OR.start_end.EQ.2) THEN
         
@@ -70,7 +71,7 @@ IF (start_end.EQ.1.OR.start_end.EQ.2) THEN
         WRITE(*,*)
         
 ELSE IF (start_end.EQ.3) THEN
-        
+        ! acceptances = acceptance_all
         WRITE(tot_acc,FMT1)acceptances(1)
         WRITE(b_acc,FMT1)acceptances(2)
         WRITE(d_acc,FMT1)acceptances(3)
@@ -81,38 +82,16 @@ ELSE IF (start_end.EQ.3) THEN
         WRITE(md_acc,FMT1)acceptances(8)
         WRITE(vm_acc,FMT1)acceptances(9)
         WRITE(vd_acc,FMT1)acceptances(10)
-        !----Lea
-        WRITE(o_acc,FMT1)acceptances(14)
-        WRITE(om_acc,FMT1)acceptances(15)
-        WRITE(od_acc,FMT1)acceptances(16)
+        !---- Option angle/aperture
+        IF (opt_parameters.GT.0) THEN
+                WRITE(o_acc,FMT1)acceptances(14)
+                WRITE(om_acc,FMT1)acceptances(15)
+                WRITE(od_acc,FMT1)acceptances(16)
+        END IF
         !-------
         WRITE(min_unc,FMT2)MINVAL(noise_current/ABS(data_current)*100)
         WRITE(max_unc,FMT2)MAXVAL(noise_current/ABS(data_current)*100)
-
-
-        !--------------------------Modifs-------------------------------------------------
-        !DO ii=1,number_of_measurements
-        !        IF (data_current(ii).GT.0) THEN
-        !                data_tempo(k) = data_current(ii)
-        !                noise_tempo(k) = noise_current(ii)
-        !                k=k+1
-        !        END IF
-        !END DO
-        !DO ii=1,number_of_measurements
-        !        IF (data_current(ii).LT.0) THEN
-        !                data_current(ii)=0
-        !                noise_current(ii)=0
-        !        END IF
-        !END DO
-
-        !WRITE(min_unc,FMT2)MINVAL(noise_tempo/ABS(data_tempo)*100)
-        !WRITE(max_unc,FMT2)MAXVAL(noise_tempo/ABS(data_tempo)*100)
-
-        !WRITE(*,*)MINVAL(noise_current/ABS(data_current)*100),MINVAL(ABS(noise_current)),MAXVAL(data_current)
-        !WRITE(*,*)MAXVAL(noise_current/ABS(data_current)*100),MAXVAL(noise_current),MINVAL(ABS(data_current))
-        !WRITE(*,*)MINVAL(noise_tempo/ABS(data_tempo)*100),MINVAL(ABS(noise_tempo)),MAXVAL(data_tempo)
-        !WRITE(*,*)MAXVAL(noise_tempo/ABS(data_tempo)*100),MAXVAL(noise_tempo),MINVAL(ABS(data_tempo))
-        !----------------------------------------------------------------------
+        ! WARNING: min_unc and max_unc contain values that are not taken into account when calculating the likelihoods (data<0 filtered out)
 
         WRITE(*,*)'--------------------------------------'
         WRITE(*,*)'Chain number: ',TRIM(chain_name),'/',TRIM(int2str(number_of_chains))
@@ -155,10 +134,12 @@ ELSE IF (start_end.EQ.3) THEN
         WRITE(*,*)'      main: ',vm_acc,'%'
         WRITE(*,*)'      delayed: ',vd_acc,'%'
         WRITE(*,*)'NOISE acceptance: ',n_acc,'%'
-        ! --- Lea
-        WRITE(*,*)'OPTION acceptance: ',o_acc,'%'
-        WRITE(*,*)'      main: ',om_acc,'%'
-        WRITE(*,*)'      delayed: ',od_acc,'%'
+        !---- Option angle/aperture
+        IF (opt_parameters.GT.0) THEN 
+                WRITE(*,*)'OPTION acceptance: ',o_acc,'%'
+                WRITE(*,*)'      main: ',om_acc,'%'
+                WRITE(*,*)'      delayed: ',od_acc,'%'
+        END IF
         ! ---
         WRITE(*,*)
         WRITE(*,*)'TOTAL acceptance: ',tot_acc,'%'

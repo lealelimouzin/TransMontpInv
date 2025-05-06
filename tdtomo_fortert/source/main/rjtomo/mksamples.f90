@@ -132,7 +132,7 @@ END IF
 
 ! Get run number from command line
 CALL getarg(1,run_name) ! intrinsic routine to get command line arguments
-                        ! retrieve the ith argument, here the 1st, "run_name" is achain of character corresponding to the value of the ith argument
+                        ! retrieve the ith argument, here the 1st, "run_name" is a chain of character corresponding to the value of the ith argument
 CALL check_run_number() ! input_files.f90 --> run_number = the n° of the job started 
 
 ! Read mksamples.in

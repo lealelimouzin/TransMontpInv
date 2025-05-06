@@ -51,7 +51,7 @@ DOUBLE PRECISION, SAVE                                  :: a_change,b_change
 DOUBLE PRECISION, SAVE                                  :: lambda_change
 DOUBLE PRECISION, SAVE                                  :: sigma_change
 INTEGER, SAVE                                           :: likelihood_type
-DOUBLE PRECISION                                        :: l_change ! needed when changing length of a fracture
+DOUBLE PRECISION                                        :: l_change
 DOUBLE PRECISION, SAVE                                  :: opt_change,opt_change_delayed
 ! Models
 INTEGER, SAVE                                           :: number_of_parameters
@@ -107,14 +107,15 @@ INTEGER                                                 :: accepted_so_far,accep
 INTEGER, DIMENSION(:), ALLOCATABLE                      :: accepted_so_far_all
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_total
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_birth,acceptance_death,acceptance_move,acceptance_value
+DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_opt
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_move_main,acceptance_move_delayed
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_value_main,acceptance_value_delayed
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_opt_main,acceptance_opt_delayed
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_noise,acceptance_a,acceptance_b
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_tempering
-DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_opt
-!DOUBLE PRECISION, DIMENSION(13)                         :: acceptance_all
-DOUBLE PRECISION, DIMENSION(16)                         :: acceptance_all
+!DOUBLE PRECISION, DIMENSION(13)                         :: acceptance_all !default
+!DOUBLE PRECISION, DIMENSION(16)                         :: acceptance_all
+DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: acceptance_all
 ! Pi
 DOUBLE PRECISION, PARAMETER                             :: pi=DBLE(4)*ATAN(DBLE(1))
 ! Output files
@@ -134,6 +135,12 @@ SUBROUTINE initialize_chains()
 IMPLICIT NONE
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initializing chains ---'
+
+IF (opt_parameters.EQ.0) THEN 
+        ALLOCATE(acceptance_all(13))
+ELSE
+        ALLOCATE(acceptance_all(16))
+END IF
 
 ALLOCATE(voronoi_current(ncell_max,number_of_parameters),voronoi_proposed(ncell_max,number_of_parameters),&
          voronoi_delayed(ncell_max,number_of_parameters),voronoi_0(ncell_max,number_of_parameters))
@@ -261,7 +268,7 @@ ELSEIF (modelling_method.EQ.2) THEN
         voronoi_proposed(ncell_proposed,4)=powerrand(value_min,value_max)
         
         ! Check if the fracture edge values are in the domain boundaries
-        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': l (bf check) = ', voronoi_proposed(ncell_proposed,4) 
+        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': l  = ', voronoi_proposed(ncell_proposed,4) 
         x1 = voronoi_proposed(ncell_proposed,1) - voronoi_proposed(ncell_proposed,4)/2
         x2 = voronoi_proposed(ncell_proposed,1) + voronoi_proposed(ncell_proposed,4)/2
         IF (x1.LT.x_min) THEN 
@@ -499,7 +506,9 @@ END SUBROUTINE
 SUBROUTINE change_option()
         ! Changes data option parameters
         IMPLICIT NONE
-        DOUBLE PRECISION        :: random_deviate
+        DOUBLE PRECISION               :: random_deviate
+        DOUBLE PRECISION               :: length,x1,x2,z1,z2,angle
+        DOUBLE PRECISION, DIMENSION(5) :: bounds
 
         write(*,*) 'change optional parameter ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
         
@@ -508,6 +517,23 @@ SUBROUTINE change_option()
 
         voronoi_proposed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*opt_change
         write(*,*)'angle change_option',voronoi_proposed(cell_number,5)
+
+        ! Calculate fracture bounds
+        angle = voronoi_proposed(cell_number,5)
+        length = voronoi_proposed(cell_number,4)
+        x1 = voronoi_proposed(cell_number,1) - COS(angle)*length/2
+        z1 = voronoi_proposed(cell_number,3) - SIN(angle)*length/2
+        x2 = voronoi_proposed(cell_number,1) + COS(angle)*length/2
+        z2 = voronoi_proposed(cell_number,3) + SIN(angle)*length/2
+        ! Check if the fracture is inside the domain
+        bounds = check_edges(x1,x2,z1,z2,angle)
+        write(*,*)'in change_option, chain: ',TRIM(chain_name),' bounds :', bounds
+        ! Update voronoi_proposed
+        voronoi_proposed(cell_number,1) = (bounds(2)-bounds(1))/2 
+        voronoi_proposed(cell_number,3) = (bounds(4)-bounds(3))/2
+        voronoi_proposed(cell_number,4) = (bounds(4)-bounds(3))/TAN(bounds(5))
+        voronoi_proposed(cell_number,5) = bounds(5)
+
 
         CALL check_inside_prior()
         
@@ -709,5 +735,50 @@ IMPLICIT NONE
         noise_x_delayed=noise_x_current
  END IF
 END SUBROUTINE
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+RECURSIVE FUNCTION check_edges(x1,x2,z1,z2,angle) result(bounds)
+        DOUBLE PRECISION, INTENT(IN):: x1,x2,z1,z2,angle
+        DOUBLE PRECISION :: x1_new,x2_new,z1_new,z2_new,angle_new
+        DOUBLE PRECISION,DIMENSION(5):: bounds
+        
+        x1_new = x1 ; x2_new = x2 ;z1_new = z1 ; z2_new = z2 ; angle_new = angle 
+
+        IF (x1.LT.x_min) THEN
+                x1_new = x_min 
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (x2.LT.x_min) THEN
+                x2_new = x_min 
+                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (x1.GT.x_max) THEN
+                x1_new = x_max
+                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (x2.GT.x_max) THEN
+                x2_new = x_max 
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)      
+        ELSEIF (z1.LT.z_min) THEN
+                z1_new = z_min
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (z2.LT.z_min) THEN
+                z2_new = z_min
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (z1.GT.z_max) THEN
+                z1_new = z_max
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSEIF (z2.GT.z_max) THEN
+                z2_new = z_max
+                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+        ELSE
+                bounds(:) = [x1_new,x2_new,z1_new,z2_new,angle_new]
+        END IF
+END FUNCTION check_edges
 
 END MODULE

@@ -51,7 +51,7 @@ USE chains, ONLY: number_of_datasets,ncell_min,ncell_max,value_min,value_max,x_m
                   birth_change,a_change,b_change,lambda_change,sigma_change,likelihood_type,&
                   max_runtime,number_of_samples,max_number_of_samples,display_interval,no_data,&
                   parallel_tempering,jump_type,tempering_start,sigma_mat,rho_mat,number_of_parameters,opt_parameters,&
-                  opt_min,opt_max,opt_change,opt_change_delayed
+                  opt_min,opt_max,opt_change,opt_change_delayed,pi
 IMPLICIT NONE
 INTEGER                 :: nn
 CHARACTER(LEN=3)        :: section
@@ -96,11 +96,11 @@ READ(60,*)lambda_min,lambda_max
 READ(60,*)sigma_min,sigma_max
 READ(60,*)sigma_mat
 READ(60,*)rho_mat
-! Lea: option to inverse on either the angle or the aperture of the fractures
+! --- Option to inverse also on either the angle or the aperture of the fractures
 READ(60,*)opt_parameters
 IF (opt_parameters.EQ.1) THEN !angle
         READ(60,*)opt_min,opt_max
-        opt_max=opt_max*2*DACOS(-1.D0)/360 ! Convert degrees to radians
+        opt_max=opt_max*2*pi/360 ! Convert degrees to radians
         READ(60,*)
 ELSEIF (opt_parameters.EQ.2) THEN !aperture
         READ(60,*)
@@ -109,6 +109,7 @@ ELSE
         READ(60,*)
         READ(60,*)
 END IF
+! ---
 READ(60,*)
 READ(60,*)
 READ(60,*)
@@ -121,8 +122,10 @@ READ(60,*)a_change
 READ(60,*)b_change
 READ(60,*)lambda_change
 READ(60,*)sigma_change
+! --- Option to inverse also on either the angle or the aperture of the fractures
 READ(60,*)opt_change
 READ(60,*)opt_change_delayed
+! ---
 READ(60,*)
 READ(60,*)
 READ(60,*)
@@ -161,7 +164,6 @@ READ(60,*)
 READ(60,'(a200)')path_fwdFrac
 IF (input_error) section='(J)'
 CLOSE(60)
-
 
 IF (save_residuals.NE.0.AND.save_residuals.NE.1) THEN
         input_error=.TRUE.
@@ -385,7 +387,6 @@ IF (number_of_bad_chains.GT.0) THEN
 END IF
 CLOSE(60)
 
-
 IF (vtx_or_xyz.NE.0.AND.vtx_or_xyz.NE.1) THEN
         input_error=.TRUE.
         section='(C)'
@@ -427,27 +428,27 @@ END IF
 
 END SUBROUTINE
 
-!!!!!!!TEMPERING LEA!!!!
-subroutine linspace(from, to, array)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! --- Subroutine to automatically associate a temperature to each Markov chain
+SUBROUTINE linspace(from, to, array)
         IMPLICIT NONE
-        INTEGER, intent(in) :: from
+        INTEGER, INTENT(IN) :: from
         DOUBLE PRECISION, INTENT(IN) :: to
-        double precision, intent(out) :: array(:)
-        double precision :: range
-        integer :: n, i
+        DOUBLE PRECISION, INTENT(OUT) :: array(:)
+        DOUBLE PRECISION :: range
+        INTEGER :: n, i
 
-        n = size(array)
-        range = to - from
-        if (n == 0) return
+        n=size(array)
+        range=to-from
+        IF (n==0) RETURN 
+        IF (n==1) THEN
+            array(1)=from
+            RETURN
+        END IF
     
-        if (n == 1) then
-            array(1) = from
-            return
-        end if
-    
-        do i=1, n
-            array(i) = from + range * (i - 1) / (n - 1)
-        end do
-end subroutine
+        DO i=1,n
+            array(i)=from+range*(i-1)/(n-1)
+        END DO
+END SUBROUTINE
 
 END MODULE

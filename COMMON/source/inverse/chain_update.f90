@@ -113,10 +113,12 @@ IF (move.OR.value.OR.option) THEN
                 IF (move) acceptance_move_main(1)=acceptance_move_main(1)+1
                 IF (value) acceptance_value_main(1)=acceptance_value_main(1)+1
                 IF (option) acceptance_opt_main(1)=acceptance_opt_main(1)+1
+                write(*,*)'in chain_update, acceptance_opt_main 1 = ',acceptance_opt_main(1)
         ELSE
                 IF (move) acceptance_move_main(2)=acceptance_move_main(2)+1
                 IF (value) acceptance_value_main(2)=acceptance_value_main(2)+1
                 IF (option) acceptance_opt_main(2)=acceptance_opt_main(2)+1
+                write(*,*)'in chain_update, acceptance_opt_main 2 = ',acceptance_opt_main(2)
         END IF
         
         IF (delayed_position.OR.delayed_value.OR.delayed_opt) THEN
@@ -124,10 +126,12 @@ IF (move.OR.value.OR.option) THEN
                         IF (move) acceptance_move_delayed(1)=acceptance_move_delayed(1)+1
                         IF (value) acceptance_value_delayed(1)=acceptance_value_delayed(1)+1
                         IF (option) acceptance_opt_delayed(1)=acceptance_opt_delayed(1)+1
+                        write(*,*)'in chain_update, acceptance_opt_delayed 1 = ',acceptance_opt_delayed(1)
                 ELSE
                         IF (move) acceptance_move_delayed(2)=acceptance_move_delayed(2)+1
                         IF (value) acceptance_value_delayed(2)=acceptance_value_delayed(2)+1
                         IF (option) acceptance_opt_delayed(2)=acceptance_opt_delayed(2)+1
+                        write(*,*)'in chain_update, acceptance_opt_delayed 2 = ',acceptance_opt_delayed(2)
                 END IF
         END IF
 END IF
@@ -151,10 +155,15 @@ IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
         IF (noise.AND.SUM(acceptance_b(1:2)).GT.0) acceptance_b(3)=100*acceptance_b(1)/SUM(acceptance_b(1:2))
 END IF
 IF (option.AND.SUM(acceptance_opt(1:2)).GT.0) acceptance_opt(3)=100*acceptance_opt(1)/SUM(acceptance_opt(1:2))
+write(*,*)'in chain_update, acceptance_opt 3 = ',acceptance_opt(3)
 IF (option.AND.SUM(acceptance_opt_main(1:2)).GT.0) acceptance_opt_main(3)=100*acceptance_opt_main(1)&
                                                                                 /SUM(acceptance_opt_main(1:2))
+
+write(*,*)'in chain_update, acceptance_opt_main 3 = ',acceptance_opt_main(3)
+
 IF (option.AND.SUM(acceptance_opt_delayed(1:2)).GT.0) acceptance_opt_delayed(3)=100*acceptance_opt_delayed(1)&
                                                                                 /SUM(acceptance_opt_delayed(1:2))
+write(*,*)'in chain_update, acceptance_opt_delayed 3 = ',acceptance_opt_delayed(3)
 
 acceptance_all(1)=acceptance_total(3)
 acceptance_all(2)=acceptance_birth(3)
@@ -246,6 +255,16 @@ ELSE IF (value) THEN
                 chain_values(sample_number,3)=0
                 chain_values(sample_number,4)=voronoi_current(cell_number,4)
                 IF (opt_parameters.GT.0)  chain_values(sample_number,5)=0
+        END IF
+ELSE IF (option) THEN
+        IF (accept) THEN
+                chain_steps(sample_number,2)=1
+                chain_indices(sample_number)=cell_number
+                chain_values(sample_number,1)=voronoi_current(cell_number,1)
+                chain_values(sample_number,2)=voronoi_current(cell_number,2)
+                chain_values(sample_number,3)=voronoi_current(cell_number,3)
+                chain_values(sample_number,4)=voronoi_current(cell_number,4)
+                chain_values(sample_number,5)=voronoi_current(ncell_current,5)
         END IF
 ELSE IF (noise) THEN
         IF (accept) THEN

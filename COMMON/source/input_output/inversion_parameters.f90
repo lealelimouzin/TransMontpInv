@@ -22,7 +22,8 @@ SUBROUTINE write_inversion_parameters()
 USE chains, ONLY: number_of_chains,samples_so_far,ncell_min,ncell_max,value_min,value_max,&
                   x_min,x_max,y_min,y_max,z_min,z_max,noise_type,number_of_datasets,&
                   a_min,a_max,b_min,b_max,lambda_min,lambda_max,sigma_min,sigma_max,&
-                  parallel_tempering,tempering_start
+                  parallel_tempering,tempering_start,&
+                  opt_min,opt_max,opt_parameters
 USE input_files, ONLY: modelling_method,forward_file
 USE acquisition, ONLY: number_of_measurements,observed_data,data_noise
 IMPLICIT NONE
@@ -59,6 +60,10 @@ WRITE(90,*)parallel_tempering,tempering_start
 WRITE(90,*)'Forward modelling'
 WRITE(90,*)modelling_method
 WRITE(90,*)forward_file
+IF (opt_parameters.NE.0) THEN 
+        WRITE(90,*)'Option : inversion on angle/aperture allowed'
+        WRITE(90,*)opt_min,opt_max
+END IF
 WRITE(80)ncell_min,ncell_max
 WRITE(80)value_min,value_max
 WRITE(80)x_min,x_max
@@ -72,6 +77,9 @@ WRITE(80)sigma_min,sigma_max
 WRITE(80)parallel_tempering,tempering_start
 WRITE(80)modelling_method
 WRITE(80)forward_file
+IF (opt_parameters.NE.0) THEN 
+        WRITE(80)opt_min,opt_max
+END IF
 
 ! Write observed data
 WRITE(90,*)'Data'
@@ -93,7 +101,8 @@ SUBROUTINE read_inversion_parameters()
 USE chains, ONLY: number_of_chains,samples_so_far,ncell_min,ncell_max,value_min,value_max,&
                   x_min,x_max,y_min,y_max,z_min,z_max,noise_type,number_of_datasets,&
                   a_min,a_max,b_min,b_max,lambda_min,lambda_max,sigma_min,sigma_max,&
-                  parallel_tempering,tempering_start
+                  parallel_tempering,tempering_start,&
+                  opt_min,opt_max,opt_parameters
 USE input_files, ONLY: modelling_method,forward_file,stop_sampling
 USE acquisition, ONLY: number_of_measurements,observed_data,data_noise
 IMPLICIT NONE
@@ -123,6 +132,9 @@ READ(80)sigma_min,sigma_max
 READ(80)parallel_tempering,tempering_start
 READ(80)modelling_method
 READ(80)forward_file
+IF (opt_parameters.NE.0) THEN 
+        READ(80)opt_min,opt_max
+END IF
 
 ! Read observed data
 READ(80)number_of_measurements

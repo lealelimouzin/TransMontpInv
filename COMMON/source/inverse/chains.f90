@@ -113,8 +113,6 @@ DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_value_main
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_opt_main,acceptance_opt_delayed
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_noise,acceptance_a,acceptance_b
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_tempering
-!DOUBLE PRECISION, DIMENSION(13)                         :: acceptance_all !default
-!DOUBLE PRECISION, DIMENSION(16)                         :: acceptance_all
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: acceptance_all
 ! Pi
 DOUBLE PRECISION, PARAMETER                             :: pi=DBLE(4)*ATAN(DBLE(1))
@@ -210,7 +208,8 @@ END SUBROUTINE
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE step_type()
-! Define Markov chain step type (1=cell birth, 2=cell death, 3=cell move, 4=value change, 5=noise change)
+! Define Markov chain step type (1=cell birth, 2=cell death, 3=cell move, 4=value change, 5=noise change,
+! 6=angle or aperture change)
 IMPLICIT NONE
 birth=.FALSE.
 death=.FALSE.
@@ -242,11 +241,10 @@ END IF
 
 ncell_proposed=ncell_current+1 ! number of cells increases by 1
 
-! Create random voronoi_current(cell_location for the new cell nucleus / new fracture centre)
+! Create random voronoi cell or a fracture
 voronoi_proposed(ncell_proposed,1)=x_min+(x_max-x_min)*unirand() ! x centre of the fracture
 voronoi_proposed(ncell_proposed,2)=y_min+(y_max-y_min)*unirand() ! y centre of the fracture (if 3D) 
 voronoi_proposed(ncell_proposed,3)=z_min+(z_max-z_min)*unirand() ! z centre (depth) of the fracture
-
 
 !---------- If fw_2.5d ----------
 IF (modelling_method.EQ.1) THEN
@@ -261,29 +259,16 @@ IF (modelling_method.EQ.1) THEN
                                         +birth_change*gausrand() 
 
 !---------- If ert_ddp_2_5d ----------
-ELSEIF (modelling_method.EQ.2) THEN
-        !voronoi_proposed(ncell_proposed,4)=voronoi_current(cell_number,4)&
-        !                                +birth_change*powerrand(value_min)
-                                        
-        voronoi_proposed(ncell_proposed,4)=powerrand(value_min,value_max)
-        
-        ! Check if the fracture edge values are in the domain boundaries
-        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': l  = ', voronoi_proposed(ncell_proposed,4) 
-        x1 = voronoi_proposed(ncell_proposed,1) - voronoi_proposed(ncell_proposed,4)/2
-        x2 = voronoi_proposed(ncell_proposed,1) + voronoi_proposed(ncell_proposed,4)/2
-        IF (x1.LT.x_min) THEN 
-                voronoi_proposed(ncell_proposed,4) = abs(x2-x_min)                                 ! recalculate the length
-                voronoi_proposed(ncell_proposed,1) = x_min + voronoi_proposed(ncell_proposed,4)/2  ! recalculate the centre
-        ELSE IF (x2.GT.x_max) THEN
-                voronoi_proposed(ncell_proposed,4) = abs(x_max-x1)                                 ! recalculate the length
-                voronoi_proposed(ncell_proposed,1) = x_max - voronoi_proposed(ncell_proposed,4)/2  ! recalculate the centre
-        END IF  
-        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': l (after check) = ', voronoi_proposed(ncell_proposed,4) 
-
-        IF (opt_parameters.GT.0) THEN 
-                voronoi_proposed(ncell_proposed,5) = opt_min+(opt_max-opt_min)*unirand()
+ELSEIF (modelling_method.EQ.2) THEN                            
+        voronoi_proposed(ncell_proposed,4)=powerrand(value_min,value_max) ! length
+        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': l  = ', voronoi_proposed(ncell_proposed,4)
+        IF (opt_parameters.GT.0) THEN
+                voronoi_proposed(ncell_proposed,5)=unirand()*2*pi ! angle
+                ! Check if the fracture is still in the domain
+                write(*,*)"Bf ADD check voronoi_porposed is ", voronoi_proposed(ncell_proposed,:)
+                CALL check_frac_inside_domain(voronoi_proposed(ncell_proposed,:))
+                write(*,*)"Af ADD check voronoi_proposed is ", voronoi_proposed(ncell_proposed,:)    
         END IF
-        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': angle/aperture = ', voronoi_proposed(ncell_proposed,5) 
 
 END IF
 
@@ -291,21 +276,15 @@ CALL check_inside_prior()
 
 IF (inside_prior) THEN
         voronoi_proposed(ncell_proposed+1:ncell_max,:)=0 ! set everything to zero below the proposed number of cells
-        ! Calculate term needed to evaluate the acceptance ratio later
-
         !---------- If fw_2.5d ----------
         IF (modelling_method.EQ.1) THEN
                 alpha_component=LOG(birth_change*SQRT(2*pi))&
                         +((voronoi_proposed(ncell_proposed,4)-voronoi_current(cell_number,4))**2/(2*birth_change**2))
-        
         !---------- If ert_ddp_2_5d ----------
         !ELSEIF (modelling_method.EQ.2) THEN
-
                 !alpha_component=1/powerrand_k(value_min,value_max)
                 !write(*,*) 'alpha component (add) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
-
         END IF
-
 END IF
 
 END SUBROUTINE
@@ -321,20 +300,17 @@ IF (ncell_current.EQ.ncell_min) THEN
         inside_prior=.FALSE.
         RETURN
 END IF
-write(*,*) 'delete a cell at chain ', TRIM(int2str(chain_number))
+write(*,*) 'Delete a cell at chain ', TRIM(int2str(chain_number))
 
 ncell_proposed=ncell_current-1 ! number of cells decreases by 1
 
 cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to delete
 IF (cell_number.EQ.0) cell_number=1
 
-!---------- If fw_2.5d ----------
 IF (modelling_method.EQ.1) THEN
-        ! Replace the deleted cell with the last cell
-        voronoi_proposed(cell_number,:)=voronoi_current(ncell_current,:)
+        !---------- If fw_2.5d ----------
+        voronoi_proposed(cell_number,:)=voronoi_current(ncell_current,:) ! Replace the deleted cell with the last cell
         voronoi_proposed(ncell_current:ncell_max,:)=0 ! set everything to zero below the proposed number of cells
-
-        ! Find the closest nucleus in the new tessellation to the one that was deleted
         CALL find_closest_nucleus(voronoi_current(cell_number,1:3),&
                                 voronoi_proposed(1:ncell_proposed,1:3),&
                                 ncell_proposed,&
@@ -342,10 +318,8 @@ IF (modelling_method.EQ.1) THEN
         ! Calculate term needed to evaluate the acceptance ratio later
         alpha_component=LOG(1/(birth_change*SQRT(2*pi)))&
                 +(-(voronoi_proposed(closest,4)-voronoi_current(cell_number,4))**2/(2*birth_change**2))
-
-!---------- If ert_ddp_2_5d ----------
 ELSEIF (modelling_method.EQ.2) THEN
-        
+        !---------- If ert_ddp_2_5d ----------
         IF (cell_number.EQ.1) THEN
                 voronoi_proposed(1:ncell_proposed,:)=voronoi_current(2:ncell_current,:)
         ELSE IF (cell_number.EQ.ncell_current) THEN
@@ -354,10 +328,10 @@ ELSEIF (modelling_method.EQ.2) THEN
                 voronoi_proposed(1:cell_number-1,:)=voronoi_current(1:cell_number-1,:)
                 voronoi_proposed(cell_number:ncell_proposed,:)=voronoi_current(cell_number+1:ncell_current,:)
         END IF
-        
         ! Calculate term needed to evaluate the acceptance ratio later
         !alpha_component= powerrand_k(value_min,value_max)
         !write(*,*) 'alpha component (delete) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
+        
 END IF
 
 END SUBROUTINE
@@ -365,11 +339,12 @@ END SUBROUTINE
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE move_cell(modelling_method)
-! Moves a Voronoi cell / fracture in the current model to a new location
+! Moves a Voronoi cell / fracture from the current model to a new location
 IMPLICIT NONE
-INTEGER :: modelling_method
-REAL :: x1,x2
-write(*,*) 'move a cell at chain ', TRIM(int2str(chain_number))
+        INTEGER :: modelling_method
+        REAL    :: x1,x2
+
+write(*,*) 'Move a cell at chain ', TRIM(int2str(chain_number))
 
 cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to move
 
@@ -384,18 +359,11 @@ voronoi_proposed(cell_number,3)=voronoi_current(cell_number,3)&
                                 +gausrand()*(z_max-z_min)*z_change/100
 
 IF (modelling_method.EQ.2) THEN
-        ! Check if the fracture edge values are in the domain boundaries
-        write(*,*) 'Move frac at chain ', TRIM(int2str(chain_number)), ': l (bf check) = ', voronoi_proposed(ncell_proposed,4) 
-        x1 = voronoi_proposed(cell_number,1) - voronoi_proposed(cell_number,4)/2
-        x2 = voronoi_proposed(cell_number,1) + voronoi_proposed(cell_number,4)/2
-        IF (x1.LT.x_min) THEN 
-                voronoi_proposed(cell_number,4) = abs(x2-x_min)                              ! recalculate the length
-                voronoi_proposed(cell_number,1) = x_min + voronoi_proposed(cell_number,4)/2  ! recalculate the centre
-        ELSE IF (x2.GT.x_max) THEN
-                voronoi_proposed(cell_number,4) = abs(x_max-x1)                              ! recalculate the length
-                voronoi_proposed(cell_number,1) = x_max - voronoi_proposed(cell_number,4)/2  ! recalculate the centre
-        END IF   
-        write(*,*) 'Move frac at chain ', TRIM(int2str(chain_number)), ': l (after check) = ', voronoi_proposed(ncell_proposed,4) 
+        ! Check if the fracture is still in the domain
+        write(*,*)"Bf MOVE check voronoi_porposed is ", voronoi_proposed(cell_number,:)
+        CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
+        write(*,*)"Af MOVE check voronoi_proposed is ", voronoi_proposed(cell_number,:)  
+
 END IF
 
 CALL check_inside_prior()
@@ -414,46 +382,19 @@ write(*,*) 'change length at chain ', TRIM(int2str(chain_number))
 cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to perturb
 IF (cell_number.EQ.0) cell_number=1
 
-!---------- If fw_2.5d ----------
 IF (modelling_method.EQ.1) THEN
-        ! Perturb the value of the chosen cell
+        !---------- If fw_2.5d ----------
         voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
                                         +gausrand()*value_change
-!---------- If ert_ddp_2_5d ----------
 ELSE IF (modelling_method.EQ.2) THEN
-        !voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
-        !                                +powerrand(value_min)*value_change
-        !l_change=gausrand()*powerrand_std(value_min,value_max)
-        ! proposotion CC 10/04/2025
+        !---------- If ert_ddp_2_5d ----------
         l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
-        ! ou
-        ! l_change=(unirand()-0.5)*2.*powerrand_std(value_min,value_max)*value_change
-        ! WARNING UNIT VALUE CHANGE: %
         voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
-        !IF (voronoi_current(cell_number,4).LE.l_change) THEN
-        !        voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
-        !ELSE
-        !        IF (unirand().LE.0.5) THEN 
-        !                voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)-l_change 
-        !        ELSE
-        !                voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
-        !        END IF
-        !END IF
-        !voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
-        !                                +unirand()*powerrand_std(value_min,value_max)
+        ! Check if the fracture is still in the domain
+        write(*,*)"Bf LENGTH check voronoi_porposed is ", voronoi_proposed(cell_number,:)
+        CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
+        write(*,*)"Af LENGTH check voronoi_proposed is ", voronoi_proposed(cell_number,:)  
 
-        ! Check if the fracture edge values are in the domain boundaries
-        x1 = voronoi_proposed(cell_number,1) - voronoi_proposed(cell_number,4)/2
-        x2 = voronoi_proposed(cell_number,1) + voronoi_proposed(cell_number,4)/2
-        write(*,*) 'Change value at chain ', TRIM(int2str(chain_number)), ': l (bf check) = ', voronoi_proposed(ncell_proposed,4) 
-        IF (x1.LT.x_min) THEN 
-                voronoi_proposed(cell_number,4) = abs(x2-x_min)                              ! recalculate the length
-                voronoi_proposed(cell_number,1) = x_min + voronoi_proposed(cell_number,4)/2  ! recalculate the centre
-        ELSE IF (x2.GT.x_max) THEN
-                voronoi_proposed(cell_number,4) = abs(x_max-x1)                              ! recalculate the length
-                voronoi_proposed(cell_number,1) = x_max - voronoi_proposed(cell_number,4)/2  ! recalculate the centre
-        END IF    
-        write(*,*) 'Change value at chain ', TRIM(int2str(chain_number)), ': l (after check) = ', voronoi_proposed(ncell_proposed,4) 
 END IF
 
 CALL check_inside_prior()
@@ -504,36 +445,28 @@ END SUBROUTINE
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Option not imlemented for fw2_5d
 SUBROUTINE change_option()
-        ! Changes data option parameters
-        IMPLICIT NONE
-        DOUBLE PRECISION               :: random_deviate
-        DOUBLE PRECISION               :: length,x1,x2,z1,z2,angle
-        DOUBLE PRECISION, DIMENSION(5) :: bounds
 
-        write(*,*) 'change optional parameter ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
+        IMPLICIT NONE
+        DOUBLE PRECISION                :: length,x1,x2,z1,z2,angle
+        INTEGER ( kind = 4 ), PARAMETER :: dim_num = 2
+        INTEGER ( kind = 4 )            :: ival
+        REAL ( kind = 8 )               :: p1(dim_num)
+        REAL ( kind = 8 )               :: p2(dim_num)
+        REAL ( kind = 8 )               :: pa(dim_num),pa_old(dim_num)
+        REAL ( kind = 8 )               :: pb(dim_num),pb_old(dim_num)
+
+        write(*,*) 'Change optional parameter ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
         
-        cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to perturb
+        cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to be perturbed
         IF (cell_number.EQ.0) cell_number=1
 
         voronoi_proposed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*opt_change
         write(*,*)'angle change_option',voronoi_proposed(cell_number,5)
 
-        ! Calculate fracture bounds
-        angle = voronoi_proposed(cell_number,5)
-        length = voronoi_proposed(cell_number,4)
-        x1 = voronoi_proposed(cell_number,1) - COS(angle)*length/2
-        z1 = voronoi_proposed(cell_number,3) - SIN(angle)*length/2
-        x2 = voronoi_proposed(cell_number,1) + COS(angle)*length/2
-        z2 = voronoi_proposed(cell_number,3) + SIN(angle)*length/2
-        ! Check if the fracture is inside the domain
-        bounds = check_edges(x1,x2,z1,z2,angle)
-        write(*,*)'in change_option, chain: ',TRIM(chain_name),' bounds :', bounds
-        ! Update voronoi_proposed
-        voronoi_proposed(cell_number,1) = (bounds(2)-bounds(1))/2 
-        voronoi_proposed(cell_number,3) = (bounds(4)-bounds(3))/2
-        voronoi_proposed(cell_number,4) = (bounds(4)-bounds(3))/TAN(bounds(5))
-        voronoi_proposed(cell_number,5) = bounds(5)
-
+        ! Check is the fracture is inside the domain
+        write(*,*)"Bf check voronoi_porposed is ", voronoi_proposed(cell_number,:)
+        CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
+        write(*,*)"Af check voronoi_proposed is ", voronoi_proposed(cell_number,:)
 
         CALL check_inside_prior()
         
@@ -559,16 +492,11 @@ voronoi_delayed(cell_number,3)=voronoi_current(cell_number,3)&
                                +gausrand()*(z_max-z_min)*z_change_delayed/100
 
 IF (modelling_method.EQ.2) THEN
-        ! Check if the fracture edge values are in the domain boundaries
-        x1 = voronoi_delayed(cell_number,1) - voronoi_delayed(cell_number,4)/2
-        x2 = voronoi_delayed(cell_number,1) + voronoi_delayed(cell_number,4)/2
-        IF (x1.LT.x_min) THEN 
-                voronoi_delayed(cell_number,4) = abs(x2-x_min)                             ! recalculate the length
-                voronoi_delayed(cell_number,1) = x_min + voronoi_delayed(cell_number,4)/2  ! recalculate the centre
-        ELSE IF (x2.GT.x_max) THEN
-                voronoi_delayed(cell_number,4) = abs(x_max-x1)                             ! recalculate the length
-                voronoi_delayed(cell_number,1) = x_max - voronoi_delayed(cell_number,4)/2  ! recalculate the centre
-        END IF   
+        ! Check if the fracture is still in the domain
+        write(*,*)"Bf MOVE DELAYED check voronoi_porposed is ", voronoi_delayed(cell_number,:)
+        CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
+        write(*,*)"Af MOVE DELAYED check voronoi_proposed is ", voronoi_delayed(cell_number,:) 
+ 
 END IF
 
 CALL check_inside_prior()
@@ -582,6 +510,7 @@ SUBROUTINE change_value_delayed(modelling_method)
 IMPLICIT NONE
 INTEGER :: modelling_method
 REAL    :: x1,x2
+
 write(*,*) 'change value delayed at chain ', TRIM(int2str(chain_number))
 
 delayed_value=.TRUE.
@@ -597,20 +526,12 @@ ELSE IF (modelling_method.EQ.2) THEN
         !l_change=gausrand()*powerrand_std(value_min,value_max)
         l_change=(gausrand()*value_change_delayed)*powerrand_std(value_min,value_max)
         voronoi_delayed(cell_number,4)=voronoi_delayed(cell_number,4)+l_change
+
+        ! Check if the fracture is still in the domain
+        write(*,*)"Bf LENGHT DELAYED check voronoi_porposed is ", voronoi_delayed(cell_number,:)
+        CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
+        write(*,*)"Af LENGTH DELAYED check voronoi_proposed is ", voronoi_delayed(cell_number,:) 
         
-        !voronoi_delayed(cell_number,4)=voronoi_current(cell_number,4)&
-        !                                +powerrand(value_min,value_max)*value_change_delayed
-                                        
-        ! Check if the fracture edge values are in the domain boundaries
-        x1 = voronoi_delayed(cell_number,1) - voronoi_delayed(cell_number,4)/2
-        x2 = voronoi_delayed(cell_number,1) + voronoi_delayed(cell_number,4)/2
-        IF (x1.LT.x_min) THEN 
-                voronoi_delayed(cell_number,4) = abs(x2-x_min)                             ! recalculate the length
-                voronoi_delayed(cell_number,1) = x_min + voronoi_delayed(cell_number,4)/2  ! recalculate the centre
-        ELSE IF (x2.GT.x_max) THEN
-                voronoi_delayed(cell_number,4) = abs(x_max-x1)                             ! recalculate the length
-                voronoi_delayed(cell_number,1) = x_max - voronoi_delayed(cell_number,4)/2  ! recalculate the centre
-        END IF   
 END IF
 
 CALL check_inside_prior()
@@ -622,7 +543,17 @@ END SUBROUTINE
 SUBROUTINE change_option_delayed()
         ! Changes data option parameters
         IMPLICIT NONE
-        DOUBLE PRECISION        :: random_deviate
+        DOUBLE PRECISION                :: random_deviate
+        DOUBLE PRECISION                :: length,x1,x2,z1,z2,angle
+        INTEGER ( kind = 4 ), PARAMETER :: dim_num = 2
+        INTEGER ( kind = 4 )            :: ival
+        REAL ( kind = 8 )               :: p1(dim_num)
+        REAL ( kind = 8 )               :: p2(dim_num)
+        REAL ( kind = 8 )               :: pa(dim_num),pa_old(dim_num)
+        REAL ( kind = 8 )               :: pb(dim_num), pb_old(dim_num)
+
+        p1 = (/ x_min,z_min /)
+        p2 = (/ x_max,z_max /)
 
         delayed_opt=.TRUE.
 
@@ -631,7 +562,12 @@ SUBROUTINE change_option_delayed()
         cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to perturb
         IF (cell_number.EQ.0) cell_number=1
 
-        voronoi_proposed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*opt_change_delayed
+        voronoi_delayed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*opt_change_delayed
+
+        ! Check is the fracture is inside the domain
+        write(*,*)"Bf check voronoi_delayed is ", voronoi_delayed(cell_number,:)
+        CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
+        write(*,*)"Af check voronoi_delayed is ", voronoi_delayed(cell_number,:)
 
         CALL check_inside_prior()
         
@@ -736,49 +672,268 @@ IMPLICIT NONE
  END IF
 END SUBROUTINE
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-RECURSIVE FUNCTION check_edges(x1,x2,z1,z2,angle) result(bounds)
-        DOUBLE PRECISION, INTENT(IN):: x1,x2,z1,z2,angle
-        DOUBLE PRECISION :: x1_new,x2_new,z1_new,z2_new,angle_new
-        DOUBLE PRECISION,DIMENSION(5):: bounds
-        
-        x1_new = x1 ; x2_new = x2 ;z1_new = z1 ; z2_new = z2 ; angle_new = angle 
 
-        IF (x1.LT.x_min) THEN
-                x1_new = x_min 
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (x2.LT.x_min) THEN
-                x2_new = x_min 
-                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (x1.GT.x_max) THEN
-                x1_new = x_max
-                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (x2.GT.x_max) THEN
-                x2_new = x_max 
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)      
-        ELSEIF (z1.LT.z_min) THEN
-                z1_new = z_min
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (z2.LT.z_min) THEN
-                z2_new = z_min
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (z1.GT.z_max) THEN
-                z1_new = z_max
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSEIF (z2.GT.z_max) THEN
-                z2_new = z_max
-                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-        ELSE
-                bounds(:) = [x1_new,x2_new,z1_new,z2_new,angle_new]
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE check_frac_inside_domain(fracture)
+
+        IMPLICIT NONE
+        DOUBLE PRECISION, DIMENSION(:) :: fracture 
+        DOUBLE PRECISION               :: length,x1,x2,z1,z2,angle
+        INTEGER(KIND=4), PARAMETER     :: dim_num = 2
+        INTEGER(KIND=4)                :: ival
+        REAL(KIND=8)                   :: p1(dim_num)
+        REAL(KIND=8)                   :: p2(dim_num)
+        REAL(KIND=8)                   :: pa(dim_num),pa_old(dim_num)
+        REAL(KIND=8)                   :: pb(dim_num),pb_old(dim_num)
+        
+        ! Define the domain
+        p1 = (/ x_min,z_min /)
+        p2 = (/ x_max,z_max /)
+
+        ! Define fracture bounds
+        angle = fracture(5)
+        length = fracture(4)
+        x1 = fracture(1) - COS(angle)*length/2
+        z1 = fracture(3) - SIN(angle)*length/2
+        x2 = fracture(1) + COS(angle)*length/2
+        z2 = fracture(3) + SIN(angle)*length/2
+
+        ! Check if the fracture is inside the domain
+        pa = (/ x1,z1 /) ; pa_old = pa
+        pb = (/ x2,z2 /) ; pb_old = pb
+
+        CALL box_segment_clip_2d(p1,p2,pa,pb,ival)
+
+        !WRITE ( *, '(2x,4f8.4)' ) pa_old(1:dim_num), pb_old(1:dim_num)
+        IF ( ival == -1 ) THEN
+                WRITE ( *, '(a)' ) '  Line is outside the box.'
+        ELSE IF ( ival == 0 ) THEN
+                WRITE ( *, '(a)' ) '  Line is inside the box.'
+        ELSE IF ( ival == 1 ) THEN
+                WRITE ( *, '(a)' ) '  Line is partly outside the box.'
+                !WRITE ( *, '(2x,2f8.4)' ) pa(1:dim_num)
+        ELSE IF ( ival == 2 ) THEN
+                WRITE ( *, '(a)' ) '  Line is partly outside the box.'
+                !WRITE ( *, '(2x,16x,2f8.4)' ) pb(1:dim_num)
+        ELSE IF ( ival == 3 ) THEN
+                WRITE ( *, '(a)' ) '  Line is partly outside the box.'
+                !WRITE ( *, '(2x,4f8.4)' ) pa(1:dim_num), pb(1:dim_num)
         END IF
-END FUNCTION check_edges
+
+        IF (ival.EQ.1.OR.ival.EQ.2.OR.ival.EQ.3) THEN
+                ! Update fracture
+                IF (pa(1)<pb(1)) THEN 
+                        fracture(1) = pa(1) + abs( (pb(1)-pa(1))/2 ) !x
+                ELSE
+                        fracture(1) = pa(1) - abs( (pb(1)-pa(1))/2 ) !x
+                END IF
+                IF (pa(2)<pb(2)) THEN
+                        fracture(3) = pa(2) + abs( (pb(2)-pa(2))/2 )!z
+                ELSE
+                        fracture(3) = pa(2) - abs( (pb(2)-pa(2))/2 )!z
+                END IF
+                fracture(4) = (pb(1)-pa(1))/COS(angle) !l
+        END IF
+
+END SUBROUTINE
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+SUBROUTINE box_segment_clip_2d ( p1, p2, pa, pb, ival )
+
+!*****************************************************************************80
+!! BOX_SEGMENT_CLIP_2D uses a box to clip a line segment in 2D.
+!
+!  Discussion:
+!
+!    A box in 2D is a rectangle with sides aligned on coordinate
+!    axes.  It can be described by its low and high corners, P1 and P2
+!    as the set of points P satisfying:
+!
+!      P1(1:2) <= P(1:2) <= P2(1:2).
+!
+!    A line segment is the finite portion of a line that lies between
+!    two points.
+!
+!  Licensing:
+!
+!    This code is distributed under the GNU LGPL license. 
+!
+!  Modified:
+!
+!    21 March 2011
+!
+!  Author:
+!
+!    John Burkardt
+!
+!  Parameters:
+!
+!    Input, real ( kind = 8 ) P1(2), P2(2), the low and high corners of the box.
+!
+!    Input/output, real ( kind = 8 ) PA(2), PB(2); on input, the endpoints 
+!    of a line segment.  On output, the endpoints of the portion of the
+!    line segment that lies inside the box.  However, if no part of the
+!    initial line segment lies inside the box, the output value is the
+!    same as the input value.
+!
+!    Output, integer ( kind = 4 ) IVAL:
+!    -1, no part of the line segment is within the box.
+!     0, no clipping was necessary.
+!     1, PA was clipped.
+!     2, PB was clipped.
+!     3, PA and PB were clipped.
+!
+  implicit none
+
+  integer ( kind = 4 ), parameter :: dim_num = 2
+
+  logical ( kind = 4 ) clip_a
+  logical ( kind = 4 ) clip_b
+  integer ( kind = 4 ) ival
+  real ( kind = 8 ) p1(dim_num)
+  real ( kind = 8 ) p2(dim_num)
+  real ( kind = 8 ) pa(dim_num)
+  real ( kind = 8 ) pb(dim_num)
+  real ( kind = 8 ) q(dim_num)
+
+  clip_a = .false.
+  clip_b = .false.
+!
+!  Require that XMIN <= X.
+!
+  if ( pa(1) < p1(1) .and. pb(1) < p1(1) ) then
+    ival = -1
+    return
+  end if
+
+  if ( pa(1) < p1(1) .and. p1(1) <= pb(1) ) then
+    q(1) = p1(1)
+    q(2) = pa(2) + ( pb(2) - pa(2) ) * ( q(1) - pa(1) ) / ( pb(1) - pa(1) )
+    pa(1:2) = q(1:2)
+    clip_a = .true.
+  else if ( p1(1) <= pa(1) .and. pb(1) < p1(1) ) then
+    q(1) = p1(1)
+    q(2) = pa(2) + ( pb(2) - pa(2) ) * ( q(1) - pa(1) ) / ( pb(1) - pa(1) )
+    pb(1:2) = q(1:2)
+    clip_b = .true.
+  end if
+!
+!  Require that X <= XMAX.
+!
+  if ( p2(1) < pa(1) .and. p2(1) < pb(1) ) then
+    ival = -1
+    return
+  end if
+
+  if ( p2(1) < pa(1) .and. pb(1) <= p2(1) ) then
+    q(1) = p2(1)
+    q(2) = pa(2) + ( pb(2) - pa(2) ) * ( q(1) - pa(1) ) / ( pb(1) - pa(1) )
+    pa(1:2) = q(1:2)
+    clip_a = .true.
+  else if ( pa(1) <= p2(1) .and. p2(1) < pb(1) ) then
+    q(1) = p2(1)
+    q(2) = pa(2) + ( pb(2) - pa(2) ) * ( q(1) - pa(1) ) / ( pb(1) - pa(1) )
+    pb(1:2) = q(1:2)
+    clip_b = .true.
+  end if
+!
+!  Require that YMIN <= Y.
+!
+  if ( pa(2) < p1(2) .and. pb(2) < p1(2) ) then
+    ival = -1
+    return
+  end if
+
+  if ( pa(2) < p1(2) .and. p1(2) <= pb(2) ) then
+    q(2) = p1(2)
+    q(1) = pa(1) + ( pb(1) - pa(1) ) * ( q(2) - pa(2) ) / ( pb(2) - pa(2) )
+    pa(1:2) = q(1:2)
+    clip_a = .true.
+  else if ( p1(2) <= pa(2) .and. pb(2) < p1(2) ) then
+    q(2) = p1(2)
+    q(1) = pa(1) + ( pb(1) - pa(1) ) * ( q(2) - pa(2) ) / ( pb(2) - pa(2) )
+    pb(1:2) = q(1:2)
+    clip_b = .true.
+  end if
+!
+!  Require that Y <= YMAX.
+!
+  if ( p2(2) < pa(2) .and. p2(2) < pb(2) ) then
+    ival = -1
+    return
+  end if
+
+  if ( p2(2) < pa(2) .and. pb(2) <= p2(2) ) then
+    q(2) = p2(2)
+    q(1) = pa(1) + ( pb(1) - pa(1) ) * ( q(2) - pa(2) ) / ( pb(2) - pa(2) )
+    pa(1:2) = q(1:2)
+    clip_a = .true.
+  else if ( pa(2) <= p2(2) .and. p2(2) < pb(2) ) then
+    q(2) = p2(2)
+    q(1) = pa(1) + ( pb(1) - pa(1) ) * ( p2(2) - pa(2) ) / ( pb(2) - pa(2) )
+    pb(1:2) = q(1:2)
+    clip_b = .true.
+  end if
+
+  ival = 0
+
+  if ( clip_a ) then
+    ival = ival + 1
+  end if
+
+  if ( clip_b ) then
+    ival = ival + 2
+  end if
+
+  return
+END SUBROUTINE
+
 
 END MODULE
+
+!!!!!!!!!!!!!!!!!!!!!!!! OLD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!RECURSIVE FUNCTION check_edges(x1,x2,z1,z2,angle) result(bounds)
+!        DOUBLE PRECISION, INTENT(IN):: x1,x2,z1,z2,angle
+!        DOUBLE PRECISION :: x1_new,x2_new,z1_new,z2_new,angle_new
+!        DOUBLE PRECISION,DIMENSION(5):: bounds
+        
+!        x1_new = x1 ; x2_new = x2 ;z1_new = z1 ; z2_new = z2 ; angle_new = angle 
+
+!       IF (x1.LT.x_min) THEN
+!               x1_new = x_min 
+!               angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+!               bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+!        ELSEIF (x2.LT.x_min) THEN
+!                x2_new = x_min 
+!                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
+!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+!        ELSEIF (x1.GT.x_max) THEN
+!                x1_new = x_max
+!                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
+!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+!        ELSEIF (x2.GT.x_max) THEN
+!                x2_new = x_max 
+!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)      
+!        ELSEIF (z1.LT.z_min) THEN
+!                z1_new = z_min
+!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+!        ELSEIF (z2.LT.z_min) THEN
+!                z2_new = z_min
+!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+!        ELSEIF (z1.GT.z_max) THEN
+!                z1_new = z_max
+!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+!        ELSEIF (z2.GT.z_max) THEN
+!                z2_new = z_max
+!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
+!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
+!        ELSE
+!                bounds(:) = [x1_new,x2_new,z1_new,z2_new,angle_new]
+!        END IF
+!        write(*,*)'In check_edges from chain ',TRIM(chain_name),' frac : ',bounds
+!END FUNCTION check_edges

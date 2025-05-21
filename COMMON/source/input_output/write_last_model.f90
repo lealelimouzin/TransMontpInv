@@ -103,8 +103,8 @@ IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
 END IF
 WRITE(80)acceptance_tempering(1),acceptance_tempering(2),acceptance_tempering(3)
 IF (opt_parameters.GT.0) THEN 
-        WRITE(80,*)acceptance_opt_main(1),acceptance_opt_main(2),acceptance_opt_main(3)
-        WRITE(80,*)acceptance_opt_delayed(1),acceptance_opt_delayed(2),acceptance_opt_delayed(3)
+        WRITE(80)acceptance_opt_main(1),acceptance_opt_main(2),acceptance_opt_main(3)
+        WRITE(80)acceptance_opt_delayed(1),acceptance_opt_delayed(2),acceptance_opt_delayed(3)
 END IF
 
 ! Write number of random numbers used so far

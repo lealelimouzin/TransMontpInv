@@ -61,6 +61,7 @@ fwd	::
 	ar -r ${lib_dir}/libfwd.a *.o
 	rm *.o
 
+
 tomo	::
 	${F90} ${OPTS} -c ../input_output/acquisition.f90
 	${F90} ${OPTS} -c ../inverse/voronoi_operations.f90
@@ -86,12 +87,12 @@ tomo	::
 
 main	::
 	${CC}  ${OPTS} -O3 -g -DAdd_ -I${inc} -L${lib_dir_local} -c ../tools/superlu/c_fortran_dgssv.c
-	${F90} ${OPTS} -o ${bin_dir}/chain2txt ../main/rjtomo/chain2txt.f90
-	${F90} ${OPTS} -o ${gmt_dir}/value_3D_post ../main/rjtomo/value_3D_post.f90 -L${lib_dir} -ltomo -ltools -lrandom
+	${F90} ${OPTS} -o ${bin_dir}/chain2txt ../main/rjtomo/chain2txt.f90 
+	${F90} ${OPTS} -o ${gmt_dir}/value_3D_post ../main/rjtomo/value_3D_post.f90 -L${lib_dir} -ltomo -ltools -lrandom 
 	${F90} ${OPTS} -o ${gmt_dir}/interpolate_2D ../main/other/interpolate_2D.f90 -L${lib_dir} -ltomo -ltools -lrandom
 	${F90} ${OPTS} -o ${bin_dir}/add_noise ../main/other/add_noise.f90 -L${lib_dir} -ltools -lrandom
-	${F90} ${OPTS} -o ${bin_dir}/forward_2_5d ../main/rjtomo/forward_2_5d.f90 c_fortran_dgssv.o -I${inc} -L${lib_dir_local} -L${lib_dir} -lsuperlu -lfwd -ltomo -ltools  -lblas -llapack	
-	${F90mpi} ${OPTS} -o ${bin_dir}/mksamples ../main/rjtomo/mksamples.f90 c_fortran_dgssv.o -L${lib_dir} -lfwd -ltools -ltomo -lsuperlu -lblas -llapack -lrandom
+	${F90} ${OPTS} -o ${bin_dir}/forward_2_5d ../main/rjtomo/forward_2_5d.f90 c_fortran_dgssv.o -I${inc} -L${lib_dir_local} -L${lib_dir} -lsuperlu -lfwd -ltomo -ltools  -lblas -llapack
+	${F90mpi} ${OPTS} -o ${bin_dir}/mksamples ../main/rjtomo/mksamples.f90 c_fortran_dgssv.o -L${lib_dir} -lfwd -ltools -ltomo -lsuperlu -lblas -llapack -lrandom 
 	${F90} ${OPTS} -o ${bin_dir}/procsamples ../main/rjtomo/procsamples.f90 c_fortran_dgssv.o -I${inc} -L${lib_dir} -L${lib_dir_local} -lfwd -ltomo -ltools -lsuperlu -lblas -llapack -lrandom
 	cp ../main/rjtomo/value_3D_post.in ${gmt_dir}
 	cp ../main/other/interpolate_2D.in ${gmt_dir}
@@ -101,6 +102,6 @@ main	::
 	cp ../main/rjtomo/procsamples.in ${bin_dir}
 	cp ../running/jobsub.sh ${bin_dir}
 	cp ../running/run_tert.sh ${bin_dir}
-	
+
 clean	::
-	rm -f *.mod ${lib_dir}/libfwd.a ${lib_dir}/libtools.a ${lib_dir}/libtomo.a ${lib_dir}/liblapack.a ${lib_dir}/librandom.a
+	rm -f *.mod ${lib_dir}/libfwd.a ${lib_dir}/libtools.a ${lib_dir}/libtomo.a ${lib_dir}/liblapack.a ${lib_dir}/librandom.a 

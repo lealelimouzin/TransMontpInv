@@ -77,5 +77,5 @@ ELSE
                 END IF
         END IF
 END IF
-step=6
+
 END SUBROUTINE

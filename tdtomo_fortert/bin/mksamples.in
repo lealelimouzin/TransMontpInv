@@ -65,7 +65,7 @@ forward.in                    :: File containing forward modelling parameters fo
 * (I) MARKOV CHAIN PARAMETERS                                                                                                  *
 ********************************************************************************************************************************
 0.3                           :: Maximum run time in hours
-2                             :: Number of samples in this run
+3                             :: Number of samples in this run
 3000                          :: Total number of samples per chain including all runs (=0 to switch off this limit)
 1                            :: Sample interval for displaying information in output file
 1                             :: Add 1s sleep time between the display of each chain's information? (1=yes, 0=no)

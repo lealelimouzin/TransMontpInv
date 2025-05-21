@@ -20,7 +20,7 @@
 MODULE forward
 
 USE input_files, ONLY: modelling_method,forward_file,path_fwdFrac
-USE chains, ONLY: rho_mat,opt_parameters,x_min,x_max,z_min,z_max
+USE chains, ONLY: rho_mat,opt_parameters,x_min,x_max,z_min,z_max,chain_name
 USE acquisition, ONLY: number_of_measurements
 USE string_conversion
 

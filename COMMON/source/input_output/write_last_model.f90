@@ -57,7 +57,6 @@ ELSE IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
                 WRITE(80)a_current(nn),b_current(nn)
         END DO
 ELSE IF (noise_type.EQ.3.OR.noise_type.EQ.6) THEN
-        write(*,*)'I m in write_last_model, noise_type is: ',noise_type
         DO nn=1,number_of_datasets
                 WRITE(90,*)lambda_current(nn)
                 WRITE(80)lambda_current(nn)

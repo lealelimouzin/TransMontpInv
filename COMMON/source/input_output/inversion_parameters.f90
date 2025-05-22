@@ -60,7 +60,7 @@ WRITE(90,*)parallel_tempering,tempering_start
 WRITE(90,*)'Forward modelling'
 WRITE(90,*)modelling_method
 WRITE(90,*)forward_file
-IF (opt_parameters.NE.0) THEN 
+IF (opt_parameters.GT.0) THEN 
         WRITE(90,*)'Option : inversion on angle/aperture allowed'
         WRITE(90,*)opt_min,opt_max
 END IF
@@ -77,7 +77,7 @@ WRITE(80)sigma_min,sigma_max
 WRITE(80)parallel_tempering,tempering_start
 WRITE(80)modelling_method
 WRITE(80)forward_file
-IF (opt_parameters.NE.0) THEN 
+IF (opt_parameters.GT.0) THEN 
         WRITE(80)opt_min,opt_max
 END IF
 
@@ -132,7 +132,7 @@ READ(80)sigma_min,sigma_max
 READ(80)parallel_tempering,tempering_start
 READ(80)modelling_method
 READ(80)forward_file
-IF (opt_parameters.NE.0) THEN 
+IF (opt_parameters.GT.0) THEN 
         READ(80)opt_min,opt_max
 END IF
 

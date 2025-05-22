@@ -138,6 +138,7 @@ INTEGER                                                                 :: ii,jj
 DO ii=1,number_of_measurements
         jj=dataset_associations(ii)
         estimated_noise(ii)=lambda(jj)*data_uncertainty(ii)+sigma_mat
+        !estimated_noise(ii)=lambda(jj)*data_uncertainty(ii)
 END DO
 END SUBROUTINE
 

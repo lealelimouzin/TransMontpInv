@@ -165,7 +165,7 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
                                 fracture = [x1, z1, x2, z2, b, sigma]
                                 ! Store the DFN in a text file
                                 write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F4.2,1X,F3.1)') fracture
-                                write(*,*)'in write2DFN, chain ',TRIM(chain_name),' fracture : ',fracture
+                                !write(*,*)'in write2DFN, chain ',TRIM(chain_name),' fracture : ',fracture
                         END DO
                 close(40)
         END IF

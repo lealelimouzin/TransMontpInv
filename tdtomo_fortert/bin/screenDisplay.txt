@@ -1,15 +1,15 @@
 
  ***************************
-  Job started on 21-05-2025
-  at 09:29:47
+  Job started on 22-05-2025
+  at 15:44:50
  ***************************
 
   Hello from rj-McMC tomography and chain 1 on core 0!                 
   Hello from rj-McMC tomography and chain 2 on core 1!                 
-***** Hej från Python initialize_fracmodels.py på res_chain_1! *****
-WARNING: /res_chain_1/ directory already exists! It is removed before starting the new simulation.
 ***** Hej från Python initialize_fracmodels.py på res_chain_2! *****
 WARNING: /res_chain_2/ directory already exists! It is removed before starting the new simulation.
+***** Hej från Python initialize_fracmodels.py på res_chain_1! *****
+WARNING: /res_chain_1/ directory already exists! It is removed before starting the new simulation.
 ***** Demat da Python main.py res_chain_1 ! *****
 ***** Demat da Python main.py res_chain_2 ! *****
 
@@ -20,67 +20,53 @@ WARNING: /res_chain_2/ directory already exists! It is removed before starting t
  Number of measurements: 2008
 
   Initial number of cells on chain 1: 5                                
+  Line is partly outside the box.
+ VALUE at chain 2
+ VALUE voronoi_proposed =    10.098624608397905        0.0000000000000000        10.125000000000000        4.8027507832041874        0.0000000000000000     
   Initial number of cells on chain 2: 5                                
 
-  Initial misfit on chain 1: 4768.3836792855109                        
-  Initial misfit on chain 2: 3563.1252132040950                        
+  Initial misfit on chain 1: 4597.6389784110834                        
+  Initial misfit on chain 2: 3534.5596753868044                        
 
- Change optional parameter 1 at chain 1
- angle change_option  -1.9144542369459481     
- Bf check voronoi_porposed is    8.7666645050048828        0.0000000000000000        9.5823898315429688        7.4666700363159180       -1.9144542369459481     
   Line is inside the box.
- Af check voronoi_proposed is    8.7666645050048828        0.0000000000000000        9.5823898315429688        7.4666700363159180       -1.9144542369459481     
+ OPTION 2 at chain 1
+ OPTION voronoi_proposed =    7.9421701431274414        0.0000000000000000        9.6611499786376953        9.1156597137451172       -1.9250096939126421E-003
  in chain_update, acceptance_opt_main 2 =    1.0000000000000000     
  in chain_update, acceptance_opt 3 =    0.0000000000000000     
  in chain_update, acceptance_opt_main 3 =    0.0000000000000000     
  in chain_update, acceptance_opt_delayed 3 =    0.0000000000000000     
- Tempering : T1 is 1with a temperature of 1.0000000000000000
- Tempering : T2 is 2with a temperature of 8.0000000000000000
- change length at chain 2
- Bf LENGTH check voronoi_porposed is    2.6123600006103516        0.0000000000000000        11.103099822998047        2.3675822358114504        2.9999999329447746E-002
-  Line is partly outside the box.
- Af LENGTH check voronoi_proposed is    2.6478092262442905        0.0000000000000000        11.104163618901200        2.2966518682734347        2.9999999329447746E-002
- in write2DFN, chain 2 fracture :    1.5000000000000000        11.069719008880938        3.7956184524885810        11.138608228921463        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    4.1509581387512053        8.9529848998446138        12.498120230389420        9.2034749085049956        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0481365954514086        9.5132136744829587        12.498322602546638        9.7367863255170413        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    1.5005005244368774        11.069734029120051        3.7242194767838255        11.136465616876043        2.9999999329447746E-002   2.0000000000000000     
+ Tempering : T1 is 1 with a temperature of 1.0000000000000000
+ Tempering : T2 is 2 with a temperature of 8.0000000000000000
 ***** Demat da Python main.py res_chain_2 ! *****
- alpha (move/value/noise/opt) at chain 2 is :   -75.561411987873328     
+ alpha (move/value/noise/opt) at chain 2 is :   -392.92546879041106     
  noise proposed at chain 2 =   6.0873117815648934     
  noise current at chain 2 =   6.0873117815648934     
- likelihood proposed at chain 2 =   2386.0539025050343     
- likelihood current at chain 2 =   1781.5626066020477     
+ likelihood proposed at chain 2 =   4910.6835880166909     
+ likelihood current at chain 2 =   1767.2798376934024     
  likelihood normalization at chain 2 =   0.0000000000000000     
  Metropolis-Hastings acceptance criterion at chain 2 =  -5.3684982651701282E-002
  Is the proposed model accepted at chain 2 ?  F
- change value delayed at chain 2
- Bf LENGHT DELAYED check voronoi_porposed is    2.6123600006103516        0.0000000000000000        11.103099822998047        1.6815843514746072        2.9999999329447746E-002
   Line is inside the box.
- Af LENGTH DELAYED check voronoi_proposed is    2.6123600006103516        0.0000000000000000        11.103099822998047        1.6815843514746072        2.9999999329447746E-002
- in write2DFN, chain 2 fracture :    1.7719461529593339        11.077879841684004        3.4527738482613692        11.128319804312090        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    4.1509581387512053        8.9529848998446138        12.498120230389420        9.2034749085049956        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0481365954514086        9.5132136744829587        12.498322602546638        9.7367863255170413        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    1.5005005244368774        11.069734029120051        3.7242194767838255        11.136465616876043        2.9999999329447746E-002   2.0000000000000000     
+ VALUE DELAYED at chain 2
+ VALUE DELAYED voronoi_proposed is    10.134340286254883        0.0000000000000000        10.125000000000000        4.1881842545812971        0.0000000000000000     
 ***** Demat da Python main.py res_chain_2 ! *****
- DELAYED move/length/opt TT1 chain 2:   -75.410346218475013     
- DELAYED length TT2 chain 2:  -0.63243812496262819     
- DELAYED l TT2 chain 2 vor_prop:    2.2966518682734347     
- DELAYED l TT2 chain 2 vor_del:    1.6815843514746072     
- DELAYED l TT2 chain 2 vor_curr:    2.2247200012207031     
- DELAYED TT3t chain 2 like_prop :    2386.0539025050343     
- DELAYED TT3t chain 2 like_del :    2384.8453763498478     
+ DELAYED move/length/opt TT1 chain 2:   -392.92546879041106     
+ DELAYED length TT2 chain 2:  -0.63151572523399413     
+ DELAYED l TT2 chain 2 vor_prop:    4.8027507832041874     
+ DELAYED l TT2 chain 2 vor_del:    4.1881842545812971     
+ DELAYED l TT2 chain 2 vor_curr:    4.7313199043273926     
+ DELAYED TT3t chain 2 like_prop :    4910.6835880166909     
+ DELAYED TT3t chain 2 like_del :    4910.6835880166909     
  DELAYED TT3t chain 2 like_norm :    0.0000000000000000     
- DELAYED move/length/opt TT3t chain 2:   -1.9646221740852914     
+ DELAYED move/length/opt TT3t chain 2:                  -Infinity
  DELAYED move/length/opt TT3b chain 2:    0.0000000000000000     
- DELAYED move/length/opt alpha_delayed chain 2:   -78.007406517522938     
+ DELAYED move/length/opt alpha_delayed chain 2:                  -Infinity
  noise proposed DELAYED at chain 2=   6.0873117815648934     
  noise current DELAYED at chain 2=   6.0873117815648934     
- likelihood proposed DELAYED at chain 2=   2386.0539025050343     
- likelihood current DELAYED at chain 2=   1781.5626066020477     
+ likelihood proposed DELAYED at chain 2=   4910.6835880166909     
+ likelihood current DELAYED at chain 2=   1767.2798376934024     
  likelihood normalization DELAYED at chain 2=   0.0000000000000000     
- alpha DELAYED at chain 2=  -78.007406517522938     
+ alpha DELAYED at chain 2=                 -Infinity
  Metropolis-Hastings acceptance criterion DELAYED at chain 2= -0.86662523268454705     
  Is the poposed DELAYED model accepted at chain 2?  F
  in chain_update, acceptance_opt_main 2 =    0.0000000000000000     
@@ -96,10 +82,10 @@ WARNING: /res_chain_2/ directory already exists! It is removed before starting t
  Number of cells: 5
 
  Dataset 1, "lambda": 4.1760497653568276
- Minimum uncertainty:       8.2425 %
- Maximum uncertainty:    6301.1114 %
+ Minimum uncertainty:       5.7282 %
+ Maximum uncertainty:    8273.8345 %
 
- Misfit : 4768.3836792855109
+ Misfit : 4597.6389784110834
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -124,10 +110,10 @@ WARNING: /res_chain_2/ directory already exists! It is removed before starting t
  Number of cells: 5
 
  Dataset 1, "lambda": 4.3655890782446569
- Minimum uncertainty:       5.7163 %
- Maximum uncertainty:    3229.1083 %
+ Minimum uncertainty:       7.0364 %
+ Maximum uncertainty:    2151.3267 %
 
- Misfit : 3563.1252132040950
+ Misfit : 3534.5596753868044
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -147,320 +133,17 @@ WARNING: /res_chain_2/ directory already exists! It is removed before starting t
  --------------------------------------
  PARALLEL TEMPERING acceptance:  100.0000 %
  --------------------------------------
- TIME ELAPSED: 0h 16m 36s
+ TIME ELAPSED: 0h 24m 6s
  --------------------------------------
-   1.7489189471144049     
- Add frac at chain 2: l  =    1.7489189471144049     
- Bf ADD check voronoi_porposed is    5.1336830243546707        0.0000000000000000        8.0464863609630815        1.7489189471144049        3.8909942629493264     
- Move a cell at chain 1
-  Line is inside the box.
- Af ADD check voronoi_proposed is    5.1336830243546707        0.0000000000000000        8.0464863609630815        1.7489189471144049        3.8909942629493264     
- Bf MOVE check voronoi_porposed is    8.1786299898301191        0.0000000000000000        8.3579791504177710        8.3509197235107422        2.9999999329447746E-002
-  Line is inside the box.
- Af MOVE check voronoi_proposed is    8.1786299898301191        0.0000000000000000        8.3579791504177710        8.3509197235107422        2.9999999329447746E-002
- in write2DFN, chain 2 fracture :    1.5005005244368774        11.069734029120051        3.7242194767838255        11.136465616876043        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    4.1509581387512053        8.9529848998446138        12.498120230389420        9.2034749085049956        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0481365954514086        9.5132136744829587        12.498322602546638        9.7367863255170413        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    1.5005005244368774        11.069734029120051        3.7242194767838255        11.136465616876043        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.7738718528627500        8.6421688558774381        4.4934941958465915        7.4508038660487239        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    1.5098306503734871        10.765324169224359        5.6003392371692371        10.888076251918219        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    3.3863911557766579        9.5244355952978221        12.497949130478226        9.7978643619775685        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    4.0050489440110120        8.2327341460875800        12.352211035649226        8.4832241547479619        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    7.7697448011834496        10.054040848011423        12.498935771326316        10.195959151988577        2.9999999329447746E-002   2.0000000000000000     
-***** Demat da Python main.py res_chain_2 ! *****
-***** Demat da Python main.py res_chain_1 ! *****
- alpha (add) at chain 2 is :   -715.47926589767849     
- noise proposed at chain 2 =   6.0873117815648934     
- noise current at chain 2 =   6.0873117815648934     
- likelihood proposed at chain 2 =   2497.0418724997262     
- likelihood current at chain 2 =   1781.5626066020477     
- likelihood normalization at chain 2 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 2 =  -2.1206757554493025     
- Is the proposed model accepted at chain 2 ?  F
- in chain_update, acceptance_opt 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_main 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_delayed 3 =    0.0000000000000000     
- alpha (move/value/noise/opt) at chain 1 is :   -41.667756593715751     
- noise proposed at chain 1 =   6.0835209953071363     
- noise current at chain 1 =   6.0835209953071363     
- likelihood proposed at chain 1 =   2717.5338923924819     
- likelihood current at chain 1 =   2384.1918396427559     
- likelihood normalization at chain 1 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 1 = -0.81316369739546979     
- Is the proposed model accepted at chain 1 ?  F
- move cell delayed at chain 1
- Bf MOVE DELAYED check voronoi_porposed is    8.2554511955918173        0.0000000000000000        9.2011870416418855        8.3509197235107422        2.9999999329447746E-002
-  Line is inside the box.
- Af MOVE DELAYED check voronoi_proposed is    8.2554511955918173        0.0000000000000000        9.2011870416418855        8.3509197235107422        2.9999999329447746E-002
- in write2DFN, chain 1 fracture :    1.5098306503734871        10.765324169224359        5.6003392371692371        10.888076251918219        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    3.3863911557766579        9.5244355952978221        12.497949130478226        9.7978643619775685        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    4.0818701497727101        9.0759420373116946        12.429032241410924        9.3264320459720764        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    7.7697448011834496        10.054040848011423        12.498935771326316        10.195959151988577        2.9999999329447746E-002   2.0000000000000000     
-***** Demat da Python main.py res_chain_1 ! *****
- DELAYED move/length/opt TT1 chain 1:   -43.564018576342050     
- DELAYED move TT2 chain 1:   -3.5370080815998492E-003
- DELAYED move TT2 chain 1 vor_prop:    8.1786299898301191        0.0000000000000000        8.3579791504177710     
- DELAYED move TT2 chain 1 vor_del:    8.2554511955918173        0.0000000000000000        9.2011870416418855     
- DELAYED move TT2 chain 1 vor_curr:    8.3245391845703125        0.0000000000000000        9.0782299041748047     
- DELAYED TT3t chain 1 like_prop :    2717.5338923924819     
- DELAYED TT3t chain 1 like_del :    2732.7039882534923     
- DELAYED TT3t chain 1 like_norm :    0.0000000000000000     
- DELAYED move/length/opt TT3t chain 1:                  -Infinity
- DELAYED move/length/opt TT3b chain 1:    0.0000000000000000     
- DELAYED move/length/opt alpha_delayed chain 1:                  -Infinity
- noise proposed DELAYED at chain 1=   6.0835209953071363     
- noise current DELAYED at chain 1=   6.0835209953071363     
- likelihood proposed DELAYED at chain 1=   2717.5338923924819     
- likelihood current DELAYED at chain 1=   2384.1918396427559     
- likelihood normalization DELAYED at chain 1=   0.0000000000000000     
- alpha DELAYED at chain 1=                 -Infinity
- Metropolis-Hastings acceptance criterion DELAYED at chain 1= -0.87393837835971933     
- Is the poposed DELAYED model accepted at chain 1?  F
- in chain_update, acceptance_opt_main 2 =    1.0000000000000000     
- in chain_update, acceptance_opt_delayed 2 =    0.0000000000000000     
- in chain_update, acceptance_opt 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_main 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_delayed 3 =    0.0000000000000000     
- Tempering : T1 is 1with a temperature of 8.0000000000000000
- Tempering : T2 is 2with a temperature of 1.0000000000000000
- --------------------------------------
- Chain number: 1/2
- Sample: 2/3000
- Iteration in this run: 2/3
 
- Number of cells: 5
-
- Dataset 1, "lambda": 4.1760497653568276
- Minimum uncertainty:       8.2425 %
- Maximum uncertainty:    6301.1114 %
-
- Misfit : 4768.3836792855109
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:    0.0000 %
- --------------------------------------
- --------------------------------------
- Chain number: 2/2
- Sample: 2/3000
- Iteration in this run: 2/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 4.3655890782446569
- Minimum uncertainty:       5.7163 %
- Maximum uncertainty:    3229.1083 %
-
- Misfit : 3563.1252132040950
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:    0.0000 %
- --------------------------------------
- --------------------------------------
- PARALLEL TEMPERING acceptance:   50.0000 %
- --------------------------------------
- TIME ELAPSED: 0h 16m 38s
- --------------------------------------
- change length at chain 1
- Bf LENGTH check voronoi_porposed is    10.134340286254883        0.0000000000000000        10.125000000000000        5.7333784840287301        2.9999999329447746E-002
-  Line is partly outside the box.
- Af LENGTH check voronoi_proposed is    9.8844704787969526        0.0000000000000000        10.117501656305823        5.2334139019342816        2.9999999329447746E-002
- in write2DFN, chain 1 fracture :    1.5098306503734871        10.765324169224359        5.6003392371692371        10.888076251918219        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    3.3863911557766579        9.5244355952978221        12.497949130478226        9.7978643619775685        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    4.1509581387512053        8.9529848998446138        12.498120230389420        9.2034749085049956        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    7.2689409575939052        10.039012224182066        12.500000000000000        10.195991088429579        2.9999999329447746E-002   2.0000000000000000     
- change length at chain 2
- Bf LENGTH check voronoi_porposed is    8.3245391845703125        0.0000000000000000        9.0782299041748047        9.6513706713431748        2.9999999329447746E-002
-  Line is partly outside the box.
- Af LENGTH check voronoi_proposed is    8.0005126221703620        0.0000000000000000        9.0685061902309876        9.0030258132511527        2.9999999329447746E-002
- in write2DFN, chain 2 fracture :    1.5005005244368774        11.069734029120051        3.7242194767838255        11.136465616876043        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    3.5010252443407222        8.9334810619459049        12.500000000000002        9.2035313185160703        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0481365954514086        9.5132136744829587        12.498322602546638        9.7367863255170413        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    1.5005005244368774        11.069734029120051        3.7242194767838255        11.136465616876043        2.9999999329447746E-002   2.0000000000000000     
-***** Demat da Python main.py res_chain_1 ! *****
-***** Demat da Python main.py res_chain_2 ! *****
- alpha (move/value/noise/opt) at chain 2 is :   -682.01169053106969     
- noise proposed at chain 2 =   6.0873117815648934     
- noise current at chain 2 =   6.0873117815648934     
- likelihood proposed at chain 2 =   2463.5742971331174     
- likelihood current at chain 2 =   1781.5626066020477     
- likelihood normalization at chain 2 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 2 = -0.47620870764834750     
- Is the proposed model accepted at chain 2 ?  F
- change value delayed at chain 2
- Bf LENGHT DELAYED check voronoi_porposed is    8.3245391845703125        0.0000000000000000        9.0782299041748047        8.4525656475549642        2.9999999329447746E-002
-  Line is partly outside the box.
- Af LENGTH DELAYED check voronoi_proposed is    8.3000790226728789        0.0000000000000000        9.0774958791135614        8.4036233013570474        2.9999999329447746E-002
- in write2DFN, chain 2 fracture :    1.5005005244368774        11.069734029120051        3.7242194767838255        11.136465616876043        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    4.1001580453457578        8.9514604397110524        12.500000000000000        9.2035313185160703        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    5.0481365954514086        9.5132136744829587        12.498322602546638        9.7367863255170413        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 2 fracture :    1.5005005244368774        11.069734029120051        3.7242194767838255        11.136465616876043        2.9999999329447746E-002   2.0000000000000000     
-***** Demat da Python main.py res_chain_2 ! *****
- alpha (move/value/noise/opt) at chain 1 is :   -48.109303545823479     
- noise proposed at chain 1 =   6.0835209953071363     
- noise current at chain 1 =   6.0835209953071363     
- likelihood proposed at chain 1 =   2769.0662680093437     
- likelihood current at chain 1 =   2384.1918396427559     
- likelihood normalization at chain 1 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 1 = -0.22221327596156423     
- Is the proposed model accepted at chain 1 ?  F
- change value delayed at chain 1
- Bf LENGHT DELAYED check voronoi_porposed is    10.134340286254883        0.0000000000000000        10.125000000000000        4.2211728121803169        2.9999999329447746E-002
-  Line is inside the box.
- Af LENGTH DELAYED check voronoi_proposed is    10.134340286254883        0.0000000000000000        10.125000000000000        4.2211728121803169        2.9999999329447746E-002
- in write2DFN, chain 1 fracture :    1.5098306503734871        10.765324169224359        5.6003392371692371        10.888076251918219        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    3.3863911557766579        9.5244355952978221        12.497949130478226        9.7978643619775685        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    4.1509581387512053        8.9529848998446138        12.498120230389420        9.2034749085049956        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    5.0350093615337270        9.4704065827520978        12.498319648476038        9.6943730803338397        2.9999999329447746E-002   2.0000000000000000     
- in write2DFN, chain 1 fracture :    8.0247035727748592        10.061691906443359        12.243976999734906        10.188308093556641        2.9999999329447746E-002   2.0000000000000000     
-***** Demat da Python main.py res_chain_1 ! *****
- DELAYED move/length/opt TT1 chain 2:   -609.04452409164696     
- DELAYED length TT2 chain 2:    3.1920082518665622     
- DELAYED l TT2 chain 2 vor_prop:    9.0030258132511527     
- DELAYED l TT2 chain 2 vor_del:    8.4036233013570474     
- DELAYED l TT2 chain 2 vor_curr:    8.3509197235107422     
- DELAYED TT3t chain 2 like_prop :    2463.5742971331174     
- DELAYED TT3t chain 2 like_del :    2390.6071306936947     
- DELAYED TT3t chain 2 like_norm :    0.0000000000000000     
- DELAYED move/length/opt TT3t chain 2:    0.0000000000000000     
- DELAYED move/length/opt TT3b chain 2:    0.0000000000000000     
- DELAYED move/length/opt alpha_delayed chain 2:   -605.85251583978038     
- noise proposed DELAYED at chain 2=   6.0873117815648934     
- noise current DELAYED at chain 2=   6.0873117815648934     
- likelihood proposed DELAYED at chain 2=   2463.5742971331174     
- likelihood current DELAYED at chain 2=   1781.5626066020477     
- likelihood normalization DELAYED at chain 2=   0.0000000000000000     
- alpha DELAYED at chain 2=  -605.85251583978038     
- Metropolis-Hastings acceptance criterion DELAYED at chain 2= -0.38122235981993213     
- Is the poposed DELAYED model accepted at chain 2?  F
- in chain_update, acceptance_opt_main 2 =    0.0000000000000000     
- in chain_update, acceptance_opt_delayed 2 =    0.0000000000000000     
- in chain_update, acceptance_opt 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_main 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_delayed 3 =    0.0000000000000000     
- DELAYED move/length/opt TT1 chain 1:   -48.527957127172840     
- DELAYED length TT2 chain 1:   -1.4842141714337838     
- DELAYED l TT2 chain 1 vor_prop:    5.2334139019342816     
- DELAYED l TT2 chain 1 vor_del:    4.2211728121803169     
- DELAYED l TT2 chain 1 vor_curr:    4.7313199043273926     
- DELAYED TT3t chain 1 like_prop :    2769.0662680093437     
- DELAYED TT3t chain 1 like_del :    2772.4154966601386     
- DELAYED TT3t chain 1 like_norm :    0.0000000000000000     
- DELAYED move/length/opt TT3t chain 1:                  -Infinity
- DELAYED move/length/opt TT3b chain 1:    0.0000000000000000     
- DELAYED move/length/opt alpha_delayed chain 1:                  -Infinity
- noise proposed DELAYED at chain 1=   6.0835209953071363     
- noise current DELAYED at chain 1=   6.0835209953071363     
- likelihood proposed DELAYED at chain 1=   2769.0662680093437     
- likelihood current DELAYED at chain 1=   2384.1918396427559     
- likelihood normalization DELAYED at chain 1=   0.0000000000000000     
- alpha DELAYED at chain 1=                 -Infinity
- Metropolis-Hastings acceptance criterion DELAYED at chain 1=  -2.3772999080187449     
- Is the poposed DELAYED model accepted at chain 1?  F
- in chain_update, acceptance_opt_main 2 =    1.0000000000000000     
- in chain_update, acceptance_opt_delayed 2 =    0.0000000000000000     
- in chain_update, acceptance_opt 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_main 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_delayed 3 =    0.0000000000000000     
- Tempering : T1 is 2with a temperature of 1.0000000000000000
- Tempering : T2 is 1with a temperature of 8.0000000000000000
- --------------------------------------
- Chain number: 1/2
- Sample: 3/3000
- Iteration in this run: 3/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 4.1760497653568276
- Minimum uncertainty:       8.2425 %
- Maximum uncertainty:    6301.1114 %
-
- Misfit : 4768.3836792855109
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:    0.0000 %
- --------------------------------------
- --------------------------------------
- Chain number: 2/2
- Sample: 3/3000
- Iteration in this run: 3/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 4.3655890782446569
- Minimum uncertainty:       5.7163 %
- Maximum uncertainty:    3229.1083 %
-
- Misfit : 3563.1252132040950
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:    0.0000 %
- --------------------------------------
- --------------------------------------
- PARALLEL TEMPERING acceptance:   33.3333 %
- --------------------------------------
- TIME ELAPSED: 0h 16m 40s
- --------------------------------------
+ TIME IS UP - ITERATION 1/3
  I m in write_last_model, noise_type is:            6
  I m in write_last_model, noise_type is:            6
 
-Elapsed time is   0.28 hours.
+Elapsed time is   0.40 hours.
 
  ****************************
-  Job finished on 21-05-2025
-  at 10:27:50
+  Job finished on 22-05-2025
+  at 16:16:56
  ****************************
 

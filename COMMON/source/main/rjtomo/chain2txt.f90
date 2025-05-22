@@ -91,7 +91,7 @@ ELSE IF (file_type.EQ.3) THEN ! file of noise parameters
                 READ(10)number_of_datasets
                 DO WHILE (IOstatus.EQ.0)
                         DO nn=1,number_of_datasets
-                                IF (noise_type.EQ.0.OR.noise_type.EQ.3) THEN
+                                IF (noise_type.EQ.0.OR.noise_type.EQ.3.OR.noise_type.EQ.6) THEN
                                         READ(10,IOSTAT=IOstatus)iter,dble1
                                         IF (IOstatus.NE.0) EXIT
                                         WRITE(20,*)iter,dble1

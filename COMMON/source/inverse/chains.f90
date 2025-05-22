@@ -15,6 +15,14 @@
 ! You should have received a copy of the GNU General Public License
 ! along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ! ********************************************************************* !
+! ********************************************************************* !
+! The module has been modified to support the inversion of thin
+! preferential pathways such as fractures.
+! Copyrigth (C) 2025 Lea Lelimouzin
+!
+! The same licence as presented above applied to this adaptation of the
+! code.
+! ********************************************************************* ! 
 
 
 MODULE chains
@@ -128,555 +136,510 @@ INTEGER, SAVE                                           :: residuals_unit=56
 CONTAINS
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE initialize_chains()
 ! Initializes the Markov chains by allocating all necessary arrays
-IMPLICIT NONE
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE initialize_chains()
+        IMPLICIT NONE
 
-IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initializing chains ---'
+        IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initializing chains ---'
 
-IF (opt_parameters.EQ.0) THEN 
-        ALLOCATE(acceptance_all(13))
-ELSE
-        ALLOCATE(acceptance_all(16))
-END IF
-
-ALLOCATE(voronoi_current(ncell_max,number_of_parameters),voronoi_proposed(ncell_max,number_of_parameters),&
-         voronoi_delayed(ncell_max,number_of_parameters),voronoi_0(ncell_max,number_of_parameters))
-ALLOCATE(a_current(number_of_datasets),a_proposed(number_of_datasets))
-ALLOCATE(b_current(number_of_datasets),b_proposed(number_of_datasets))
-ALLOCATE(lambda_current(number_of_datasets),lambda_proposed(number_of_datasets))
-ALLOCATE(sigma_current(number_of_datasets),sigma_proposed(number_of_datasets))
-ALLOCATE(noise_current(number_of_measurements),noise_proposed(number_of_measurements),noise_delayed(number_of_measurements))
-
-ALLOCATE(data_current(number_of_measurements),data_proposed(number_of_measurements),data_delayed(number_of_measurements))
-IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
-        ALLOCATE(noise_x_current(number_of_measurements),&
-                 noise_x_proposed(number_of_measurements),&
-                 noise_x_delayed(number_of_measurements))
-END IF
-
-IF (run_number.EQ.1) THEN
-        samples_in_run=number_of_samples+1
-ELSE IF (run_number.GT.1) THEN
-        samples_in_run=number_of_samples
-END IF
-
-ALLOCATE(residuals(number_of_measurements,samples_in_run))
-
-ALLOCATE(chain_steps(samples_in_run,2))
- chain_steps=0
-ALLOCATE(chain_values(samples_in_run,number_of_parameters))
- chain_values=0
-ALLOCATE(chain_indices(samples_in_run))
- chain_indices=0
-ALLOCATE(chain_ncell(samples_in_run))
- chain_ncell=0
-IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
-        ALLOCATE(chain_noise(samples_in_run,2*number_of_datasets))
-        chain_noise=0
-ELSE IF (noise_type.EQ.0.OR.noise_type.EQ.3.OR.noise_type.EQ.6) THEN
-        ALLOCATE(chain_noise(samples_in_run,number_of_datasets))
-        chain_noise=0
-END IF
-ALLOCATE(chain_misfits(samples_in_run))
- chain_misfits=0
-IF (opt_parameters.EQ.0) THEN 
-        IF (parallel_tempering.EQ.0) THEN
-                ALLOCATE(chain_acceptance(samples_in_run,6))
-        ELSE IF (parallel_tempering.EQ.1) THEN
-                ALLOCATE(chain_acceptance(samples_in_run,7))
+        IF (opt_parameters.EQ.0) THEN 
+                ALLOCATE(acceptance_all(13))
+        ELSE
+                ALLOCATE(acceptance_all(16))
         END IF
-ELSE
-        IF (parallel_tempering.EQ.0) THEN
-                ALLOCATE(chain_acceptance(samples_in_run,7))
-        ELSE IF (parallel_tempering.EQ.1) THEN
-                ALLOCATE(chain_acceptance(samples_in_run,8))
+
+        ALLOCATE(voronoi_current(ncell_max,number_of_parameters),voronoi_proposed(ncell_max,number_of_parameters),&
+                voronoi_delayed(ncell_max,number_of_parameters),voronoi_0(ncell_max,number_of_parameters))
+        ALLOCATE(a_current(number_of_datasets),a_proposed(number_of_datasets))
+        ALLOCATE(b_current(number_of_datasets),b_proposed(number_of_datasets))
+        ALLOCATE(lambda_current(number_of_datasets),lambda_proposed(number_of_datasets))
+        ALLOCATE(sigma_current(number_of_datasets),sigma_proposed(number_of_datasets))
+        ALLOCATE(noise_current(number_of_measurements),noise_proposed(number_of_measurements),noise_delayed(number_of_measurements))
+
+        ALLOCATE(data_current(number_of_measurements),data_proposed(number_of_measurements),data_delayed(number_of_measurements))
+        IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
+                ALLOCATE(noise_x_current(number_of_measurements),&
+                        noise_x_proposed(number_of_measurements),&
+                        noise_x_delayed(number_of_measurements))
         END IF
-END IF
- chain_acceptance=0
 
-ALLOCATE(accepted_so_far_all(number_of_chains))
+        IF (run_number.EQ.1) THEN
+                samples_in_run=number_of_samples+1
+        ELSE IF (run_number.GT.1) THEN
+                samples_in_run=number_of_samples
+        END IF
 
-! Name of file containing last model of run
-last_model_file='last.tmp'
-last_tmp=TRIM(last_model_file) // TRIM(chain_name)
+        ALLOCATE(residuals(number_of_measurements,samples_in_run))
 
-IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initialized chains ---'
+        ALLOCATE(chain_steps(samples_in_run,2))
+        chain_steps=0
+        ALLOCATE(chain_values(samples_in_run,number_of_parameters))
+        chain_values=0
+        ALLOCATE(chain_indices(samples_in_run))
+        chain_indices=0
+        ALLOCATE(chain_ncell(samples_in_run))
+        chain_ncell=0
+        IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
+                ALLOCATE(chain_noise(samples_in_run,2*number_of_datasets))
+                chain_noise=0
+        ELSE IF (noise_type.EQ.0.OR.noise_type.EQ.3.OR.noise_type.EQ.6) THEN
+                ALLOCATE(chain_noise(samples_in_run,number_of_datasets))
+                chain_noise=0
+        END IF
+        ALLOCATE(chain_misfits(samples_in_run))
+        chain_misfits=0
+        IF (opt_parameters.EQ.0) THEN 
+                IF (parallel_tempering.EQ.0) THEN
+                        ALLOCATE(chain_acceptance(samples_in_run,6))
+                ELSE IF (parallel_tempering.EQ.1) THEN
+                        ALLOCATE(chain_acceptance(samples_in_run,7))
+                END IF
+        ELSE
+                IF (parallel_tempering.EQ.0) THEN
+                        ALLOCATE(chain_acceptance(samples_in_run,7))
+                ELSE IF (parallel_tempering.EQ.1) THEN
+                        ALLOCATE(chain_acceptance(samples_in_run,8))
+                END IF
+        END IF
+        chain_acceptance=0
 
+        ALLOCATE(accepted_so_far_all(number_of_chains))
+
+        ! Name of file containing last model of run
+        last_model_file='last.tmp'
+        last_tmp=TRIM(last_model_file) // TRIM(chain_name)
+
+        IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initialized chains ---'
 END SUBROUTINE
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE step_type()
 ! Define Markov chain step type (1=cell birth, 2=cell death, 3=cell move, 4=value change, 5=noise change,
 ! 6=angle or aperture change)
-IMPLICIT NONE
-birth=.FALSE.
-death=.FALSE.
-move=.FALSE.
-value=.FALSE.
-noise=.FALSE.
-option=.FALSE.
-IF (step.EQ.1) birth=.TRUE.
-IF (step.EQ.2) death=.TRUE.
-IF (step.EQ.3) move=.TRUE.
-IF (step.EQ.4) value=.TRUE.
-IF (step.EQ.5) noise=.TRUE.
-IF (step.EQ.6) option=.TRUE.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE step_type()
+        IMPLICIT NONE
+        birth=.FALSE.
+        death=.FALSE.
+        move=.FALSE.
+        value=.FALSE.
+        noise=.FALSE.
+        option=.FALSE.
+        IF (step.EQ.1) birth=.TRUE.
+        IF (step.EQ.2) death=.TRUE.
+        IF (step.EQ.3) move=.TRUE.
+        IF (step.EQ.4) value=.TRUE.
+        IF (step.EQ.5) noise=.TRUE.
+        IF (step.EQ.6) option=.TRUE.
 END SUBROUTINE
 
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Adds a Voronoi cell to the current model
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE add_cell(modelling_method)
-! Adds a Voronoi cell to the current model
-IMPLICIT NONE
-INTEGER          :: modelling_method
-REAL             :: x1,x2
-DOUBLE PRECISION :: mean_currentlength
+        IMPLICIT NONE
+        INTEGER          :: modelling_method
+        REAL             :: x1,x2
 
-IF (ncell_current.EQ.ncell_max) THEN
-        inside_prior=.FALSE.
-        RETURN
-END IF
+        IF (ncell_current.EQ.ncell_max) THEN
+                inside_prior=.FALSE.
+                RETURN
+        END IF
 
-ncell_proposed=ncell_current+1 ! number of cells increases by 1
+        ncell_proposed=ncell_current+1 ! number of cells increases by 1
 
-! Create random voronoi cell or a fracture
-voronoi_proposed(ncell_proposed,1)=x_min+(x_max-x_min)*unirand() ! x centre of the fracture
-voronoi_proposed(ncell_proposed,2)=y_min+(y_max-y_min)*unirand() ! y centre of the fracture (if 3D) 
-voronoi_proposed(ncell_proposed,3)=z_min+(z_max-z_min)*unirand() ! z centre (depth) of the fracture
-
-!---------- If fw_2.5d ----------
-IF (modelling_method.EQ.1) THEN
-        ! Create velocity for the new cell by finding the velocity at the location of the new
-        ! nucleus in the previous tessellation and perturbing it
-        CALL find_closest_nucleus(voronoi_proposed(ncell_proposed,1:3),&
-                                voronoi_current(1:ncell_current,1:3),&
-                                ncell_current,&
-                                cell_number)
-
-        voronoi_proposed(ncell_proposed,4)=voronoi_current(cell_number,4)&
-                                        +birth_change*gausrand() 
-
-!---------- If ert_ddp_2_5d ----------
-ELSEIF (modelling_method.EQ.2) THEN                            
-        voronoi_proposed(ncell_proposed,4)=powerrand(value_min,value_max) ! length
-        write(*,*) 'Add frac at chain ', TRIM(int2str(chain_number)), ': l  = ', voronoi_proposed(ncell_proposed,4)
-        IF (opt_parameters.GT.0) THEN
-                voronoi_proposed(ncell_proposed,5)=unirand()*2*pi ! angle
+        ! Create random voronoi cell or a fracture
+        voronoi_proposed(ncell_proposed,1)=x_min+(x_max-x_min)*unirand() ! x centre of the fracture
+        voronoi_proposed(ncell_proposed,2)=y_min+(y_max-y_min)*unirand() ! y centre of the fracture (if 3D) 
+        voronoi_proposed(ncell_proposed,3)=z_min+(z_max-z_min)*unirand() ! z centre (depth) of the fracture
+        
+        ! Set the other parameters
+        IF (modelling_method.EQ.1) THEN ! If fw_2_5d
+                CALL find_closest_nucleus(voronoi_proposed(ncell_proposed,1:3),&
+                                        voronoi_current(1:ncell_current,1:3),&
+                                        ncell_current,&
+                                        cell_number)
+                voronoi_proposed(ncell_proposed,4)=voronoi_current(cell_number,4)&
+                                                +birth_change*gausrand() 
+        ELSEIF (modelling_method.EQ.2) THEN ! If ert_ddp_2_5d
+                ! Length                            
+                voronoi_proposed(ncell_proposed,4)=powerrand(value_min,value_max) 
+                ! Option
+                IF (opt_parameters.GT.0) THEN
+                        voronoi_proposed(ncell_proposed,5) = opt_min + unirand()*(opt_max-opt_min)  
+                END IF
                 ! Check if the fracture is still in the domain
-                write(*,*)"Bf ADD check voronoi_porposed is ", voronoi_proposed(ncell_proposed,:)
                 CALL check_frac_inside_domain(voronoi_proposed(ncell_proposed,:))
-                write(*,*)"Af ADD check voronoi_proposed is ", voronoi_proposed(ncell_proposed,:)    
         END IF
 
-END IF
+        CALL check_inside_prior()
 
-CALL check_inside_prior()
-
-IF (inside_prior) THEN
-        voronoi_proposed(ncell_proposed+1:ncell_max,:)=0 ! set everything to zero below the proposed number of cells
-        !---------- If fw_2.5d ----------
-        IF (modelling_method.EQ.1) THEN
-                alpha_component=LOG(birth_change*SQRT(2*pi))&
-                        +((voronoi_proposed(ncell_proposed,4)-voronoi_current(cell_number,4))**2/(2*birth_change**2))
-        !---------- If ert_ddp_2_5d ----------
-        !ELSEIF (modelling_method.EQ.2) THEN
-                !alpha_component=1/powerrand_k(value_min,value_max)
-                !write(*,*) 'alpha component (add) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
+        IF (inside_prior) THEN
+                voronoi_proposed(ncell_proposed+1:ncell_max,:)=0
+                IF (modelling_method.EQ.1) THEN ! If fw_2_5d
+                        alpha_component=LOG(birth_change*SQRT(2*pi))&
+                                +((voronoi_proposed(ncell_proposed,4)-voronoi_current(cell_number,4))**2/(2*birth_change**2))
+                END IF
         END IF
-END IF
+
+        write(*,*)'ADD at chain ', TRIM(int2str(chain_number))
+        write(*,*)'ADD voronoi_proposed = ', voronoi_proposed(ncell_proposed,:) 
 
 END SUBROUTINE
 
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Delete a Voronoi cell / fracture from the current model
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE delete_cell(modelling_method)
-! Delete a Voronoi cell from the current model
-IMPLICIT NONE
-INTEGER         :: closest,modelling_method
+        IMPLICIT NONE
+        INTEGER         :: closest,modelling_method
 
-IF (ncell_current.EQ.ncell_min) THEN
-        inside_prior=.FALSE.
-        RETURN
-END IF
-write(*,*) 'Delete a cell at chain ', TRIM(int2str(chain_number))
-
-ncell_proposed=ncell_current-1 ! number of cells decreases by 1
-
-cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to delete
-IF (cell_number.EQ.0) cell_number=1
-
-IF (modelling_method.EQ.1) THEN
-        !---------- If fw_2.5d ----------
-        voronoi_proposed(cell_number,:)=voronoi_current(ncell_current,:) ! Replace the deleted cell with the last cell
-        voronoi_proposed(ncell_current:ncell_max,:)=0 ! set everything to zero below the proposed number of cells
-        CALL find_closest_nucleus(voronoi_current(cell_number,1:3),&
-                                voronoi_proposed(1:ncell_proposed,1:3),&
-                                ncell_proposed,&
-                                closest)
-        ! Calculate term needed to evaluate the acceptance ratio later
-        alpha_component=LOG(1/(birth_change*SQRT(2*pi)))&
-                +(-(voronoi_proposed(closest,4)-voronoi_current(cell_number,4))**2/(2*birth_change**2))
-ELSEIF (modelling_method.EQ.2) THEN
-        !---------- If ert_ddp_2_5d ----------
-        IF (cell_number.EQ.1) THEN
-                voronoi_proposed(1:ncell_proposed,:)=voronoi_current(2:ncell_current,:)
-        ELSE IF (cell_number.EQ.ncell_current) THEN
-                voronoi_proposed(1:ncell_proposed,:)=voronoi_current(1:ncell_proposed,:)
-        ELSE
-                voronoi_proposed(1:cell_number-1,:)=voronoi_current(1:cell_number-1,:)
-                voronoi_proposed(cell_number:ncell_proposed,:)=voronoi_current(cell_number+1:ncell_current,:)
+        IF (ncell_current.EQ.ncell_min) THEN
+                inside_prior=.FALSE.
+                RETURN
         END IF
-        ! Calculate term needed to evaluate the acceptance ratio later
-        !alpha_component= powerrand_k(value_min,value_max)
-        !write(*,*) 'alpha component (delete) at chain ', TRIM(int2str(chain_number)), '= ', alpha_component
-        
-END IF
+
+        ncell_proposed=ncell_current-1
+
+        ! Randomly choose a cell to delete
+        cell_number=CEILING(unirand()*ncell_current) 
+        IF (cell_number.EQ.0) cell_number=1
+
+        ! Delete the cell
+        voronoi_proposed(cell_number,:)=voronoi_current(ncell_current,:) ! Replace the deleted cell with the last cell
+        voronoi_proposed(ncell_current:ncell_max,:)=0                    ! set everything to zero below the proposed number of cells
+
+        ! Additional component to alpha calculation if fw_2_5d
+        IF (modelling_method.EQ.1) THEN
+                CALL find_closest_nucleus(voronoi_current(cell_number,1:3),&
+                                        voronoi_proposed(1:ncell_proposed,1:3),&
+                                        ncell_proposed,&
+                                        closest)
+                alpha_component=LOG(1/(birth_change*SQRT(2*pi)))&
+                        +(-(voronoi_proposed(closest,4)-voronoi_current(cell_number,4))**2/(2*birth_change**2))     
+        END IF
+
+        write(*,*)'DELETE at chain ', TRIM(int2str(chain_number))
 
 END SUBROUTINE
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE move_cell(modelling_method)
 ! Moves a Voronoi cell / fracture from the current model to a new location
-IMPLICIT NONE
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE move_cell(modelling_method)
+        IMPLICIT NONE
         INTEGER :: modelling_method
         REAL    :: x1,x2
 
-write(*,*) 'Move a cell at chain ', TRIM(int2str(chain_number))
-
-cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to move
-
-IF (cell_number.EQ.0) cell_number=1
-
-! Perturb the location of the chosen cell nucleus
-voronoi_proposed(cell_number,1)=voronoi_current(cell_number,1)&
-                                +gausrand()*(x_max-x_min)*x_change/100
-voronoi_proposed(cell_number,2)=voronoi_current(cell_number,2)&
-                                +gausrand()*(y_max-y_min)*y_change/100
-voronoi_proposed(cell_number,3)=voronoi_current(cell_number,3)&
-                                +gausrand()*(z_max-z_min)*z_change/100
-
-IF (modelling_method.EQ.2) THEN
-        ! Check if the fracture is still in the domain
-        write(*,*)"Bf MOVE check voronoi_porposed is ", voronoi_proposed(cell_number,:)
-        CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
-        write(*,*)"Af MOVE check voronoi_proposed is ", voronoi_proposed(cell_number,:)  
-
-END IF
-
-CALL check_inside_prior()
-
-END SUBROUTINE
-
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE change_value(modelling_method)
-
-IMPLICIT NONE
-INTEGER :: modelling_method
-REAL    :: x1,x2
-write(*,*) 'change length at chain ', TRIM(int2str(chain_number))
-
-cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to perturb
-IF (cell_number.EQ.0) cell_number=1
-
-IF (modelling_method.EQ.1) THEN
-        !---------- If fw_2.5d ----------
-        voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
-                                        +gausrand()*value_change
-ELSE IF (modelling_method.EQ.2) THEN
-        !---------- If ert_ddp_2_5d ----------
-        l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
-        voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
-        ! Check if the fracture is still in the domain
-        write(*,*)"Bf LENGTH check voronoi_porposed is ", voronoi_proposed(cell_number,:)
-        CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
-        write(*,*)"Af LENGTH check voronoi_proposed is ", voronoi_proposed(cell_number,:)  
-
-END IF
-
-CALL check_inside_prior()
-
-END SUBROUTINE
-
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE change_noise()
-! Changes data noise parameters
-IMPLICIT NONE
-DOUBLE PRECISION        :: random_deviate
-write(*,*) 'change noise at chain ', TRIM(int2str(chain_number))
-
-IF (number_of_datasets.GT.1) THEN
-        dataset_number=CEILING(unirand()*number_of_datasets) ! randomly choose a dataset to perturb
-        IF (dataset_number.EQ.0) dataset_number=1
-        IF (dataset_number.GT.number_of_datasets) dataset_number=number_of_datasets
-ELSE
-        dataset_number=1
-END IF
-
-IF (noise_type.EQ.0) THEN
-        change_sigma=.TRUE.
-        sigma_proposed(dataset_number)=sigma_current(dataset_number)&
-                                       +gausrand()*sigma_change
-ELSE IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
-        random_deviate=unirand()
-        IF (random_deviate.LT.0.5) THEN
-                change_a=.TRUE.
-                a_proposed(dataset_number)=a_current(dataset_number)&
-                                           +gausrand()*a_change
-        ELSE
-                change_b=.TRUE.
-                b_proposed(dataset_number)=b_current(dataset_number)&
-                                           +gausrand()*b_change
-        END IF
-ELSE IF (noise_type.EQ.3.OR.noise_type.EQ.6) THEN
-        change_lambda=.TRUE.
-        lambda_proposed(dataset_number)=lambda_current(dataset_number)&
-                                        +gausrand()*lambda_change
-END IF
-
-CALL check_inside_prior()
-
-END SUBROUTINE
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! Option not imlemented for fw2_5d
-SUBROUTINE change_option()
-
-        IMPLICIT NONE
-        DOUBLE PRECISION                :: length,x1,x2,z1,z2,angle
-        INTEGER ( kind = 4 ), PARAMETER :: dim_num = 2
-        INTEGER ( kind = 4 )            :: ival
-        REAL ( kind = 8 )               :: p1(dim_num)
-        REAL ( kind = 8 )               :: p2(dim_num)
-        REAL ( kind = 8 )               :: pa(dim_num),pa_old(dim_num)
-        REAL ( kind = 8 )               :: pb(dim_num),pb_old(dim_num)
-
-        write(*,*) 'Change optional parameter ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
-        
-        cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to be perturbed
+        ! Randomly choose a cell to move
+        cell_number=CEILING(unirand()*ncell_current) 
         IF (cell_number.EQ.0) cell_number=1
 
-        voronoi_proposed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*opt_change
-        write(*,*)'angle change_option',voronoi_proposed(cell_number,5)
+        ! Perturb the location of the chosen cell nucleus
+        voronoi_proposed(cell_number,1)=voronoi_current(cell_number,1)&
+                                        +gausrand()*(x_max-x_min)*x_change/100
+        voronoi_proposed(cell_number,2)=voronoi_current(cell_number,2)&
+                                        +gausrand()*(y_max-y_min)*y_change/100
+        voronoi_proposed(cell_number,3)=voronoi_current(cell_number,3)&
+                                        +gausrand()*(z_max-z_min)*z_change/100
 
-        ! Check is the fracture is inside the domain
-        write(*,*)"Bf check voronoi_porposed is ", voronoi_proposed(cell_number,:)
-        CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
-        write(*,*)"Af check voronoi_proposed is ", voronoi_proposed(cell_number,:)
+        ! If ert_ddp_2_5d: check if the fracture is still in the domain
+        IF (modelling_method.EQ.2) THEN
+                CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))  
+        END IF
+
+        write(*,*) 'MOVE at chain ', TRIM(int2str(chain_number))
+        write(*,*) 'MOVE voronoi_proposed = ', voronoi_proposed(cell_number,:) 
 
         CALL check_inside_prior()
-        
 END SUBROUTINE
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE move_cell_delayed(modelling_method)
-! Moves a Voronoi cell in the current model to a new location
-IMPLICIT NONE
-INTEGER :: modelling_method
-REAL :: x1,x2
-write(*,*) 'move cell delayed at chain ', TRIM(int2str(chain_number))
-
-delayed_position=.TRUE.
-
-! Perturb the location of the chosen cell nucleus
-voronoi_delayed(cell_number,1)=voronoi_current(cell_number,1)&
-                               +gausrand()*(x_max-x_min)*x_change_delayed/100
-voronoi_delayed(cell_number,2)=voronoi_current(cell_number,2)&
-                               +gausrand()*(y_max-y_min)*y_change_delayed/100
-voronoi_delayed(cell_number,3)=voronoi_current(cell_number,3)&
-                               +gausrand()*(z_max-z_min)*z_change_delayed/100
-
-IF (modelling_method.EQ.2) THEN
-        ! Check if the fracture is still in the domain
-        write(*,*)"Bf MOVE DELAYED check voronoi_porposed is ", voronoi_delayed(cell_number,:)
-        CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
-        write(*,*)"Af MOVE DELAYED check voronoi_proposed is ", voronoi_delayed(cell_number,:) 
- 
-END IF
-
-CALL check_inside_prior()
-
-END SUBROUTINE
-
-
+! Change the resistivity value (voronoi cell) / length value (fracture)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-SUBROUTINE change_value_delayed(modelling_method)
-
-IMPLICIT NONE
-INTEGER :: modelling_method
-REAL    :: x1,x2
-
-write(*,*) 'change value delayed at chain ', TRIM(int2str(chain_number))
-
-delayed_value=.TRUE.
-
-!---------- If fw_2.5d ----------
-IF (modelling_method.EQ.1) THEN
-        ! Perturb the value of the chosen cell
-        voronoi_delayed(cell_number,4)=voronoi_current(cell_number,4)&
-                                        +gausrand()*value_change_delayed
-!---------- If ert_ddp_2_5d ----------
-ELSE IF (modelling_method.EQ.2) THEN
-
-        !l_change=gausrand()*powerrand_std(value_min,value_max)
-        l_change=(gausrand()*value_change_delayed)*powerrand_std(value_min,value_max)
-        voronoi_delayed(cell_number,4)=voronoi_delayed(cell_number,4)+l_change
-
-        ! Check if the fracture is still in the domain
-        write(*,*)"Bf LENGHT DELAYED check voronoi_porposed is ", voronoi_delayed(cell_number,:)
-        CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
-        write(*,*)"Af LENGTH DELAYED check voronoi_proposed is ", voronoi_delayed(cell_number,:) 
-        
-END IF
-
-CALL check_inside_prior()
-
-END SUBROUTINE
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! Option not imlemented for fw2_5d
-SUBROUTINE change_option_delayed()
-        ! Changes data option parameters
+SUBROUTINE change_value(modelling_method)
         IMPLICIT NONE
-        DOUBLE PRECISION                :: random_deviate
-        DOUBLE PRECISION                :: length,x1,x2,z1,z2,angle
-        INTEGER ( kind = 4 ), PARAMETER :: dim_num = 2
-        INTEGER ( kind = 4 )            :: ival
-        REAL ( kind = 8 )               :: p1(dim_num)
-        REAL ( kind = 8 )               :: p2(dim_num)
-        REAL ( kind = 8 )               :: pa(dim_num),pa_old(dim_num)
-        REAL ( kind = 8 )               :: pb(dim_num), pb_old(dim_num)
+        INTEGER :: modelling_method
+        REAL    :: x1,x2
 
-        p1 = (/ x_min,z_min /)
-        p2 = (/ x_max,z_max /)
-
-        delayed_opt=.TRUE.
-
-        write(*,*) 'change optional parameter delayed ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
-        
         cell_number=CEILING(unirand()*ncell_current) ! randomly choose a cell to perturb
         IF (cell_number.EQ.0) cell_number=1
 
-        voronoi_delayed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*opt_change_delayed
+        IF (modelling_method.EQ.1) THEN ! If fw_2_5d
+                voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
+                                                +gausrand()*value_change
+        ELSE IF (modelling_method.EQ.2) THEN ! If ert_ddp_2_5d
+                l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
+                voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
+                ! Check if the fracture is still in the domain
+                CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
+        END IF
 
-        ! Check is the fracture is inside the domain
-        write(*,*)"Bf check voronoi_delayed is ", voronoi_delayed(cell_number,:)
-        CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
-        write(*,*)"Af check voronoi_delayed is ", voronoi_delayed(cell_number,:)
+        write(*,*) 'VALUE at chain ', TRIM(int2str(chain_number))
+        write(*,*) 'VALUE voronoi_proposed = ', voronoi_proposed(cell_number,:) 
 
         CALL check_inside_prior()
-        
 END SUBROUTINE
 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Change data noise parameters
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE change_noise()
+        IMPLICIT NONE
+        DOUBLE PRECISION        :: random_deviate
+        
+        IF (number_of_datasets.GT.1) THEN
+                dataset_number=CEILING(unirand()*number_of_datasets)
+                IF (dataset_number.EQ.0) dataset_number=1
+                IF (dataset_number.GT.number_of_datasets) dataset_number=number_of_datasets
+        ELSE
+                dataset_number=1
+        END IF
+
+        IF (noise_type.EQ.0) THEN
+                change_sigma=.TRUE.
+                sigma_proposed(dataset_number)=sigma_current(dataset_number)&
+                                        +gausrand()*sigma_change
+        ELSE IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
+                random_deviate=unirand()
+                IF (random_deviate.LT.0.5) THEN
+                        change_a=.TRUE.
+                        a_proposed(dataset_number)=a_current(dataset_number)&
+                                                +gausrand()*a_change
+                ELSE
+                        change_b=.TRUE.
+                        b_proposed(dataset_number)=b_current(dataset_number)&
+                                                +gausrand()*b_change
+                END IF
+        ELSE IF (noise_type.EQ.3.OR.noise_type.EQ.6) THEN
+                change_lambda=.TRUE.
+                lambda_proposed(dataset_number)=lambda_current(dataset_number)&
+                                                +gausrand()*lambda_change
+        END IF
+
+        write(*,*) 'NOISE at chain ', TRIM(int2str(chain_number))
+
+        CALL check_inside_prior()
+END SUBROUTINE
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Option: change the angle or aperture of a fracture, only if ert_ddp_2_5d
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE change_option()
+        IMPLICIT NONE
+        
+        ! Randomly choose a cell to be perturbed
+        cell_number=CEILING(unirand()*ncell_current) 
+        IF (cell_number.EQ.0) cell_number=1
+
+        ! Change option
+        voronoi_proposed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*(opt_max-opt_min)*opt_change/100.
+
+        ! Check is the fracture is inside the domain
+        CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
+
+        write(*,*)'OPTION ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
+        write(*,*)'OPTION voronoi_proposed = ', voronoi_proposed(cell_number,:)
+
+        CALL check_inside_prior()
+END SUBROUTINE
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! DELAYED: move a Voronoi cell / fracture in the current model to a new location
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE move_cell_delayed(modelling_method)
+        IMPLICIT NONE
+        INTEGER :: modelling_method
+
+        delayed_position=.TRUE.
+
+        ! Perturb the location of the chosen cell nucleus
+        voronoi_delayed(cell_number,1)=voronoi_current(cell_number,1)&
+                                +gausrand()*(x_max-x_min)*x_change_delayed/100
+        voronoi_delayed(cell_number,2)=voronoi_current(cell_number,2)&
+                                +gausrand()*(y_max-y_min)*y_change_delayed/100
+        voronoi_delayed(cell_number,3)=voronoi_current(cell_number,3)&
+                                +gausrand()*(z_max-z_min)*z_change_delayed/100
+
+        ! If ert_ddp_2_5d: check if the fracture is still in the domain
+        IF (modelling_method.EQ.2) THEN 
+                CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
+        END IF
+
+        write(*,*)'MOVE DELAYED at chain ', TRIM(int2str(chain_number))
+        write(*,*)'MOVE DELAYED voronoi_proposed is ', voronoi_delayed(cell_number,:) 
+
+        CALL check_inside_prior()
+END SUBROUTINE
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! DELAYED: electrical resistivity value (voronoi cell) or length (fracture)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE change_value_delayed(modelling_method)
+        IMPLICIT NONE
+        INTEGER :: modelling_method
+
+        delayed_value=.TRUE.
+
+        IF (modelling_method.EQ.1) THEN ! If fw_2_5d
+                voronoi_delayed(cell_number,4)=voronoi_current(cell_number,4)&
+                                                +gausrand()*value_change_delayed
+        ELSE IF (modelling_method.EQ.2) THEN ! If ert_ddp_2_5d
+                ! Change length
+                l_change=(gausrand()*value_change_delayed)*powerrand_std(value_min,value_max)
+                voronoi_delayed(cell_number,4)=voronoi_delayed(cell_number,4)+l_change
+                ! Check if the fracture is still in the domain
+                CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
+        END IF
+
+        write(*,*)'VALUE DELAYED at chain ', TRIM(int2str(chain_number))
+        write(*,*)'VALUE DELAYED voronoi_proposed is ', voronoi_delayed(cell_number,:) 
+
+        CALL check_inside_prior()
+END SUBROUTINE
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! DELAYED: change the angle or aperture of a fracture, only if ert_ddp_2_5d
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE change_option_delayed()
+        IMPLICIT NONE
+
+        delayed_opt=.TRUE.
+        
+        ! Randomly choose a cell to perturb
+        cell_number=CEILING(unirand()*ncell_current) 
+        IF (cell_number.EQ.0) cell_number=1
+        
+        ! Change option value
+        voronoi_delayed(cell_number,5)=voronoi_current(cell_number,5)+gausrand()*(opt_max-opt_min)*opt_change_delayed/100.
+
+        ! Check is the fracture is inside the domain
+        CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))
+
+        write(*,*)'OPTION DELAYED ', TRIM(int2str(opt_parameters)), ' at chain ', TRIM(int2str(chain_number))
+        write(*,*)'OPTION DELAYED voronoi_delayed = ', voronoi_delayed(cell_number,1:4), voronoi_delayed(cell_number,5)*180./pi 
+
+        CALL check_inside_prior()       
+END SUBROUTINE
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Check if the model parameters respect the prior limits
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE check_inside_prior()
-! Check that the proposed model falls inside the prior
-IMPLICIT NONE
+        IMPLICIT NONE
 
-IF (birth) THEN
-        IF (voronoi_proposed(ncell_proposed,1).LT.x_min.OR.&
-            voronoi_proposed(ncell_proposed,1).GT.x_max) inside_prior=.FALSE.
-        IF (voronoi_proposed(ncell_proposed,2).LT.y_min.OR.&
-            voronoi_proposed(ncell_proposed,2).GT.y_max) inside_prior=.FALSE.
-        IF (voronoi_proposed(ncell_proposed,3).LT.z_min.OR.&
-            voronoi_proposed(ncell_proposed,3).GT.z_max) inside_prior=.FALSE.
-        IF (voronoi_proposed(ncell_proposed,4).LT.value_min.OR.&
-            voronoi_proposed(ncell_proposed,4).GT.value_max) inside_prior=.FALSE.
-ELSE IF (move) THEN
-        IF (.NOT.delayed_position) THEN
-                IF (voronoi_proposed(cell_number,1).LT.x_min.OR.&
-                    voronoi_proposed(cell_number,1).GT.x_max) inside_prior=.FALSE.
-                IF (voronoi_proposed(cell_number,2).LT.y_min.OR.&
-                    voronoi_proposed(cell_number,2).GT.y_max) inside_prior=.FALSE.
-                IF (voronoi_proposed(cell_number,3).LT.z_min.OR.&
-                    voronoi_proposed(cell_number,3).GT.z_max) inside_prior=.FALSE.
-        ELSE IF (delayed_position) THEN
-                IF (voronoi_delayed(cell_number,1).LT.x_min.OR.&
-                    voronoi_delayed(cell_number,1).GT.x_max) inside_prior_delayed=.FALSE.
-                IF (voronoi_delayed(cell_number,2).LT.y_min.OR.&
-                    voronoi_delayed(cell_number,2).GT.y_max) inside_prior_delayed=.FALSE.
-                IF (voronoi_delayed(cell_number,3).LT.z_min.OR.&
-                    voronoi_delayed(cell_number,3).GT.z_max) inside_prior_delayed=.FALSE.
+        IF (birth) THEN
+                IF (voronoi_proposed(ncell_proposed,1).LT.x_min.OR.&
+                voronoi_proposed(ncell_proposed,1).GT.x_max) inside_prior=.FALSE.
+                IF (voronoi_proposed(ncell_proposed,2).LT.y_min.OR.&
+                voronoi_proposed(ncell_proposed,2).GT.y_max) inside_prior=.FALSE.
+                IF (voronoi_proposed(ncell_proposed,3).LT.z_min.OR.&
+                voronoi_proposed(ncell_proposed,3).GT.z_max) inside_prior=.FALSE.
+                IF (voronoi_proposed(ncell_proposed,4).LT.value_min.OR.&
+                voronoi_proposed(ncell_proposed,4).GT.value_max) inside_prior=.FALSE.
+        ELSE IF (move) THEN
+                IF (.NOT.delayed_position) THEN
+                        IF (voronoi_proposed(cell_number,1).LT.x_min.OR.&
+                        voronoi_proposed(cell_number,1).GT.x_max) inside_prior=.FALSE.
+                        IF (voronoi_proposed(cell_number,2).LT.y_min.OR.&
+                        voronoi_proposed(cell_number,2).GT.y_max) inside_prior=.FALSE.
+                        IF (voronoi_proposed(cell_number,3).LT.z_min.OR.&
+                        voronoi_proposed(cell_number,3).GT.z_max) inside_prior=.FALSE.
+                ELSE IF (delayed_position) THEN
+                        IF (voronoi_delayed(cell_number,1).LT.x_min.OR.&
+                        voronoi_delayed(cell_number,1).GT.x_max) inside_prior_delayed=.FALSE.
+                        IF (voronoi_delayed(cell_number,2).LT.y_min.OR.&
+                        voronoi_delayed(cell_number,2).GT.y_max) inside_prior_delayed=.FALSE.
+                        IF (voronoi_delayed(cell_number,3).LT.z_min.OR.&
+                        voronoi_delayed(cell_number,3).GT.z_max) inside_prior_delayed=.FALSE.
+                END IF
+        ELSE IF (value) THEN
+                IF (.NOT.delayed_value) THEN
+                        IF (voronoi_proposed(cell_number,4).LT.value_min.OR.&
+                        voronoi_proposed(cell_number,4).GT.value_max) inside_prior=.FALSE.
+                ELSE IF (delayed_value) THEN
+                        IF (voronoi_delayed(cell_number,4).LT.value_min.OR.&
+                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior_delayed=.FALSE.
+                END IF
+        ELSE IF (noise) THEN
+                IF (change_sigma) THEN
+                        IF (sigma_proposed(dataset_number).LT.sigma_min.OR.&
+                        sigma_proposed(dataset_number).GT.sigma_max) inside_prior=.FALSE.
+                ELSE IF (change_a) THEN
+                        IF (a_proposed(dataset_number).LT.a_min.OR.&
+                        a_proposed(dataset_number).GT.a_max) inside_prior=.FALSE.
+                ELSE IF (change_b) THEN
+                        IF (b_proposed(dataset_number).LT.b_min.OR.&
+                        b_proposed(dataset_number).GT.b_max) inside_prior=.FALSE.
+                ELSE IF (change_lambda) THEN
+                        IF (lambda_proposed(dataset_number).LT.lambda_min.OR.&
+                        lambda_proposed(dataset_number).GT.lambda_max) inside_prior=.FALSE.
+                END IF
+        ELSE IF (option) THEN
+                IF (.NOT.delayed_opt) THEN
+                        IF (voronoi_proposed(cell_number,5).LT.opt_min.OR.&
+                        voronoi_proposed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+                ELSE IF (delayed_opt) THEN
+                        IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
+                        voronoi_delayed(cell_number,5).GT.opt_max) inside_prior_delayed=.FALSE.
+                END IF
         END IF
-ELSE IF (value) THEN
-        IF (.NOT.delayed_value) THEN
-                IF (voronoi_proposed(cell_number,4).LT.value_min.OR.&
-                    voronoi_proposed(cell_number,4).GT.value_max) inside_prior=.FALSE.
-        ELSE IF (delayed_value) THEN
-                IF (voronoi_delayed(cell_number,4).LT.value_min.OR.&
-                    voronoi_delayed(cell_number,4).GT.value_max) inside_prior_delayed=.FALSE.
-        END IF
-ELSE IF (noise) THEN
-        IF (change_sigma) THEN
-                IF (sigma_proposed(dataset_number).LT.sigma_min.OR.&
-                    sigma_proposed(dataset_number).GT.sigma_max) inside_prior=.FALSE.
-        ELSE IF (change_a) THEN
-                IF (a_proposed(dataset_number).LT.a_min.OR.&
-                    a_proposed(dataset_number).GT.a_max) inside_prior=.FALSE.
-        ELSE IF (change_b) THEN
-                IF (b_proposed(dataset_number).LT.b_min.OR.&
-                    b_proposed(dataset_number).GT.b_max) inside_prior=.FALSE.
-        ELSE IF (change_lambda) THEN
-                IF (lambda_proposed(dataset_number).LT.lambda_min.OR.&
-                    lambda_proposed(dataset_number).GT.lambda_max) inside_prior=.FALSE.
-        END IF
-ELSE IF (option) THEN
-        IF (.NOT.delayed_opt) THEN
-                IF (voronoi_proposed(cell_number,5).LT.opt_min.OR.&
-                    voronoi_proposed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
-        ELSE IF (delayed_opt) THEN
-                IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
-                    voronoi_delayed(cell_number,5).GT.opt_max) inside_prior_delayed=.FALSE.
-        END IF
-END IF
 END SUBROUTINE
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Re-initialize the models
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE reset_proposed_models()
-IMPLICIT NONE
- inside_prior=.TRUE.
- inside_prior_delayed=.TRUE.
- ncell_proposed=ncell_current
- voronoi_proposed=voronoi_current
- voronoi_delayed=voronoi_current
- a_proposed=a_current
- b_proposed=b_current
- lambda_proposed=lambda_current
- sigma_proposed=sigma_current
- noise_proposed=noise_current
- noise_delayed=noise_current
- delayed_position=.FALSE.
- delayed_value=.FALSE.
- delayed_opt=.FALSE.
- change_sigma=.FALSE.
- change_a=.FALSE.
- change_b=.FALSE.
- change_lambda=.FALSE.
- alpha_component=0
- cell_number=0
- data_proposed=data_current
- data_delayed=data_current
- likelihood_proposed=likelihood_current
- likelihood_delayed=likelihood_current
- misfit_proposed=misfit_current
- misfit_delayed=misfit_current
- IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
-        noise_x_proposed=noise_x_current
-        noise_x_delayed=noise_x_current
- END IF
+        IMPLICIT NONE
+        inside_prior=.TRUE.
+        inside_prior_delayed=.TRUE.
+        ncell_proposed=ncell_current
+        voronoi_proposed=voronoi_current
+        voronoi_delayed=voronoi_current
+        a_proposed=a_current
+        b_proposed=b_current
+        lambda_proposed=lambda_current
+        sigma_proposed=sigma_current
+        noise_proposed=noise_current
+        noise_delayed=noise_current
+        delayed_position=.FALSE.
+        delayed_value=.FALSE.
+        delayed_opt=.FALSE.
+        change_sigma=.FALSE.
+        change_a=.FALSE.
+        change_b=.FALSE.
+        change_lambda=.FALSE.
+        alpha_component=0
+        cell_number=0
+        data_proposed=data_current
+        data_delayed=data_current
+        likelihood_proposed=likelihood_current
+        likelihood_delayed=likelihood_current
+        misfit_proposed=misfit_current
+        misfit_delayed=misfit_current
+        IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
+                noise_x_proposed=noise_x_current
+                noise_x_delayed=noise_x_current
+        END IF
 END SUBROUTINE
 
 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Subroutine to check if the proposed fracture is inside the boundaries of the domain
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE check_frac_inside_domain(fracture)
-
         IMPLICIT NONE
         DOUBLE PRECISION, DIMENSION(:) :: fracture 
         DOUBLE PRECISION               :: length,x1,x2,z1,z2,angle
@@ -734,11 +697,16 @@ SUBROUTINE check_frac_inside_domain(fracture)
                         fracture(3) = pa(2) - abs( (pb(2)-pa(2))/2 )!z
                 END IF
                 fracture(4) = (pb(1)-pa(1))/COS(angle) !l
+                if (fracture(4).LT.0.) THEN
+                        WRITE(*,*)"WARNING: negative length"
+                END IF
         END IF
-
 END SUBROUTINE
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Subroutine to clip a line according to a rectangular domain
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE box_segment_clip_2d ( p1, p2, pa, pb, ival )
 
 !*****************************************************************************80
@@ -889,51 +857,4 @@ SUBROUTINE box_segment_clip_2d ( p1, p2, pa, pb, ival )
   return
 END SUBROUTINE
 
-
 END MODULE
-
-!!!!!!!!!!!!!!!!!!!!!!!! OLD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!RECURSIVE FUNCTION check_edges(x1,x2,z1,z2,angle) result(bounds)
-!        DOUBLE PRECISION, INTENT(IN):: x1,x2,z1,z2,angle
-!        DOUBLE PRECISION :: x1_new,x2_new,z1_new,z2_new,angle_new
-!        DOUBLE PRECISION,DIMENSION(5):: bounds
-        
-!        x1_new = x1 ; x2_new = x2 ;z1_new = z1 ; z2_new = z2 ; angle_new = angle 
-
-!       IF (x1.LT.x_min) THEN
-!               x1_new = x_min 
-!               angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-!               bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-!        ELSEIF (x2.LT.x_min) THEN
-!                x2_new = x_min 
-!                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
-!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-!        ELSEIF (x1.GT.x_max) THEN
-!                x1_new = x_max
-!                angle_new = ATAN( (z1_new-z2_new) / (x1_new-x2_new))
-!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-!        ELSEIF (x2.GT.x_max) THEN
-!                x2_new = x_max 
-!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)      
-!        ELSEIF (z1.LT.z_min) THEN
-!                z1_new = z_min
-!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-!        ELSEIF (z2.LT.z_min) THEN
-!                z2_new = z_min
-!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-!        ELSEIF (z1.GT.z_max) THEN
-!                z1_new = z_max
-!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-!        ELSEIF (z2.GT.z_max) THEN
-!                z2_new = z_max
-!                angle_new = ATAN( (z2_new-z1_new) / (x2_new-x1_new))
-!                bounds(:) = check_edges(x1_new,x2_new,z1_new,z2_new,angle_new)
-!        ELSE
-!                bounds(:) = [x1_new,x2_new,z1_new,z2_new,angle_new]
-!        END IF
-!        write(*,*)'In check_edges from chain ',TRIM(chain_name),' frac : ',bounds
-!END FUNCTION check_edges

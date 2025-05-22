@@ -66,7 +66,7 @@ END DO
 T1_value=temperature_values(T1_chain)
 T1_index=temperature_indices(T1_chain)
 
-write(*,*) 'Tempering : T1 is ', TRIM(int2str(T1_chain)), 'with a temperature of ', TRIM(dble2str(T1_value))
+write(*,*) 'Tempering : T1 is ', TRIM(int2str(T1_chain)), ' with a temperature of ', TRIM(dble2str(T1_value))
 
 IF (debug_mode) WRITE(debug_unit,*)'----- T1: chain=',TRIM(int2str(T1_chain)),&
                           ', index=',TRIM(int2str(T1_index)),&
@@ -120,7 +120,7 @@ ELSE IF (jump_type.EQ.2) THEN ! choose the nearest temperature to T1
         T2_chain=MINLOC(ABS(temperature_indices-T2_index),1)
 END IF
 
-write(*,*) 'Tempering : T2 is ', TRIM(int2str(T2_chain)), 'with a temperature of ', TRIM(dble2str(T2_value))
+write(*,*) 'Tempering : T2 is ', TRIM(int2str(T2_chain)), ' with a temperature of ', TRIM(dble2str(T2_value))
 
 IF (debug_mode) WRITE(debug_unit,*)'----- T2: chain=',TRIM(int2str(T2_chain)),&
                           ', index=',TRIM(int2str(T2_index)),&

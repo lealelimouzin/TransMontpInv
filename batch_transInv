@@ -1,5 +1,5 @@
 #!/bin/sh
-#SBATCH -J tertCompile
+#SBATCH -J tert
 #SBATCH --mail-type=END
 #SBATCH --mail-user=lea.lelimouzin@umontpellier.fr
 #SBATCH --partition=gm_hydro
@@ -12,13 +12,6 @@
 
 echo "Running on $SLURM_NODELIST" 
 
-cd /home/lelimouzinl/scratch/TransMontpInv/tdtomo_fortert/source/compile
-make clean
-make
-cd ../forward/ert_ddp_2_5d/src/electrical_resistivity/Release
-make clean
-make shared -j 28
-cd /home/lelimouzinl/scratch/TransMontpInv
-
-
-
+cd /home/lelimouzinl/scratch/TransMontpInv/tdtomo_fortert/bin
+mpiexec -np 6 ./mksamples 1
+cd ../..

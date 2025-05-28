@@ -377,6 +377,7 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                 
                 IF (move.AND.accepted) accepted_main=.TRUE.
                 IF (value.AND.accepted) accepted_main=.TRUE.
+                IF (option.AND.accepted) accepted_main=.TRUE.
                 write(*,*) 'Is the proposed model accepted at chain ', TRIM(chain_name), ' ? ', accepted
         END IF
         

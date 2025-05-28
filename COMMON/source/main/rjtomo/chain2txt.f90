@@ -28,14 +28,19 @@ INTEGER                                 :: save_residuals
 INTEGER                                 :: nn,iter,ii,IOstatus
 INTEGER                                 :: ncell
 DOUBLE PRECISION                        :: dble1,dble2,dble3,dble4,dble5,dble6,dble7
-DOUBLE PRECISION, DIMENSION(4)          :: dbles
+DOUBLE PRECISION                        :: dble8
+!DOUBLE PRECISION, DIMENSION(4)          :: dbles
+DOUBLE PRECISION, DIMENSION(5)          :: dbles
 INTEGER                                 :: int1,int2,int3
 CHARACTER(LEN=*), PARAMETER             :: FMT51="(1I10,1I8)"
-CHARACTER(LEN=*), PARAMETER             :: FMT50v="(4F22.10)"
+!CHARACTER(LEN=*), PARAMETER             :: FMT50v="(4F22.10)"
+CHARACTER(LEN=*), PARAMETER             :: FMT50v="(5F22.10)" !opt
 CHARACTER(LEN=*), PARAMETER             :: FMT50s="(1I10,2I2,1I8)"
 CHARACTER(LEN=*), PARAMETER             :: FMT50d="(1F22.10)"
-CHARACTER(LEN=*), PARAMETER             :: FMT50i="(1I4)"
-CHARACTER(LEN=*), PARAMETER             :: FMT54="(1I10,6F14.6)"
+!CHARACTER(LEN=*), PARAMETER             :: FMT50i="(1I4)"
+CHARACTER(LEN=*), PARAMETER             :: FMT50i="(1I5)" !opt
+!CHARACTER(LEN=*), PARAMETER             :: FMT54="(1I10,6F14.6)"
+CHARACTER(LEN=*), PARAMETER             :: FMT54="(1I10,7F14.6)" !opt
 CHARACTER(LEN=*), PARAMETER             :: FMT55="(4I10,1F14.6)"
 CHARACTER(LEN=3)                        :: adv
 
@@ -61,16 +66,23 @@ IF (file_type.EQ.1) THEN ! file of number of cells
 ELSE IF (file_type.EQ.2) THEN ! file of chain steps
         READ(10)ncell
         DO nn=1,ncell
-                READ(10)dble1,dble2,dble3,dble4
-                WRITE(20,FMT50v)dble1,dble2,dble3,dble4
+                READ(10)dble1,dble2,dble3,dble4,dble5
+                WRITE(20,FMT50v)dble1,dble2,dble3,dble4,dble5
         END DO
         DO WHILE (IOstatus.EQ.0)
-                READ(10,IOSTAT=IOstatus)iter,int1,int2,int3,dbles(1),dbles(2),dbles(3),dbles(4)
+                READ(10,IOSTAT=IOstatus)iter,int1,int2,int3,dbles(1),dbles(2),dbles(3),dbles(4),dbles(5)
                 IF (IOstatus.NE.0) EXIT
                 WRITE(20,FMT50s,ADVANCE='NO')iter,int1,int2,int3
-                DO nn=1,4
-                        IF (nn.LT.4) adv="NO"
-                        IF (nn.EQ.4) adv="YES"
+                DO nn=1,5 !4
+                        !IF (nn.LT.4) adv="NO"
+                        !IF (nn.EQ.4) adv="YES"
+                        !IF (dbles(nn).NE.0) THEN
+                        !        WRITE(20,FMT50d,ADVANCE=adv)dbles(nn)
+                        !ELSE
+                        !        WRITE(20,FMT50i,ADVANCE=adv)0
+                        !END IF
+                        IF (nn.LT.5) adv="NO"
+                        IF (nn.EQ.5) adv="YES"
                         IF (dbles(nn).NE.0) THEN
                                 WRITE(20,FMT50d,ADVANCE=adv)dbles(nn)
                         ELSE
@@ -112,9 +124,9 @@ ELSE IF (file_type.EQ.4) THEN ! file of misfits
         END DO
 ELSE IF (file_type.EQ.5) THEN ! file of acceptance ratios
         DO WHILE (IOstatus.EQ.0)
-                READ(10,IOSTAT=IOstatus)iter,dble1,dble2,dble3,dble4,dble5,dble6
+                READ(10,IOSTAT=IOstatus)iter,dble1,dble2,dble3,dble4,dble5,dble6,dble8
                 IF (IOstatus.NE.0) EXIT
-                WRITE(20,FMT54)iter,dble1,dble2,dble3,dble4,dble5,dble6
+                WRITE(20,FMT54)iter,dble1,dble2,dble3,dble4,dble5,dble6,dble8
         END DO
 ELSE IF (file_type.EQ.6) THEN ! file of temperatures
         READ(10)number_of_temperatures

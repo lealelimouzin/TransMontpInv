@@ -1,15 +1,19 @@
 
  ***************************
-  Job started on 22-05-2025
-  at 15:44:50
+  Job started on 28-05-2025
+  at 13:30:15
  ***************************
 
   Hello from rj-McMC tomography and chain 1 on core 0!                 
   Hello from rj-McMC tomography and chain 2 on core 1!                 
-***** Hej från Python initialize_fracmodels.py på res_chain_2! *****
-WARNING: /res_chain_2/ directory already exists! It is removed before starting the new simulation.
+ Shape of the chain_acceptance array in initialize_chains =            2           8
+ Shape of the chain_acceptance array in initialize_chains =            2           8
+ Chain_acceptance in initialize_chains =    0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ Chain_acceptance in initialize_chains =    0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
 ***** Hej från Python initialize_fracmodels.py på res_chain_1! *****
 WARNING: /res_chain_1/ directory already exists! It is removed before starting the new simulation.
+***** Hej från Python initialize_fracmodels.py på res_chain_2! *****
+WARNING: /res_chain_2/ directory already exists! It is removed before starting the new simulation.
 ***** Demat da Python main.py res_chain_1 ! *****
 ***** Demat da Python main.py res_chain_2 ! *****
 
@@ -20,72 +24,53 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
  Number of measurements: 2008
 
   Initial number of cells on chain 1: 5                                
-  Line is partly outside the box.
- VALUE at chain 2
- VALUE voronoi_proposed =    10.098624608397905        0.0000000000000000        10.125000000000000        4.8027507832041874        0.0000000000000000     
   Initial number of cells on chain 2: 5                                
 
-  Initial misfit on chain 1: 4597.6389784110834                        
-  Initial misfit on chain 2: 3534.5596753868044                        
+  Initial misfit on chain 1: 3508.5290414815813                        
+  Initial misfit on chain 2: 4668.1813495241595                        
 
-  Line is inside the box.
- OPTION 2 at chain 1
- OPTION voronoi_proposed =    7.9421701431274414        0.0000000000000000        9.6611499786376953        9.1156597137451172       -1.9250096939126421E-003
- in chain_update, acceptance_opt_main 2 =    1.0000000000000000     
- in chain_update, acceptance_opt 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_main 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_delayed 3 =    0.0000000000000000     
+ OPTION 1 at chain 1
+ OPTION voronoi_proposed =    10.029970169067383        0.0000000000000000        10.154899597167969        4.9400601387023926      -0.12217366287848669     
+ VALUE at chain 2
+ VALUE voronoi_proposed =    7.9064545844797545        0.0000000000000000        9.6611499786376953        9.1870908310404911        0.0000000000000000     
+ chain_acceptance shape in chain_update =            2           8
+ chain_values shape in chain_update =            2           5
  Tempering : T1 is 1 with a temperature of 1.0000000000000000
  Tempering : T2 is 2 with a temperature of 8.0000000000000000
 ***** Demat da Python main.py res_chain_2 ! *****
- alpha (move/value/noise/opt) at chain 2 is :   -392.92546879041106     
+ alpha (move/value/noise/opt) at chain 2 is :  -0.15471213098595626     
  noise proposed at chain 2 =   6.0873117815648934     
  noise current at chain 2 =   6.0873117815648934     
- likelihood proposed at chain 2 =   4910.6835880166909     
- likelihood current at chain 2 =   1767.2798376934024     
+ likelihood proposed at chain 2 =   2335.3283718099678     
+ likelihood current at chain 2 =   2334.0906747620802     
  likelihood normalization at chain 2 =   0.0000000000000000     
  Metropolis-Hastings acceptance criterion at chain 2 =  -5.3684982651701282E-002
  Is the proposed model accepted at chain 2 ?  F
-  Line is inside the box.
  VALUE DELAYED at chain 2
- VALUE DELAYED voronoi_proposed is    10.134340286254883        0.0000000000000000        10.125000000000000        4.1881842545812971        0.0000000000000000     
+ VALUE DELAYED voronoi_proposed is    7.9421701431274414        0.0000000000000000        9.6611499786376953        8.5725240639990208        0.0000000000000000     
 ***** Demat da Python main.py res_chain_2 ! *****
- DELAYED move/length/opt TT1 chain 2:   -392.92546879041106     
- DELAYED length TT2 chain 2:  -0.63151572523399413     
- DELAYED l TT2 chain 2 vor_prop:    4.8027507832041874     
- DELAYED l TT2 chain 2 vor_del:    4.1881842545812971     
- DELAYED l TT2 chain 2 vor_curr:    4.7313199043273926     
- DELAYED TT3t chain 2 like_prop :    4910.6835880166909     
- DELAYED TT3t chain 2 like_del :    4910.6835880166909     
- DELAYED TT3t chain 2 like_norm :    0.0000000000000000     
- DELAYED move/length/opt TT3t chain 2:                  -Infinity
- DELAYED move/length/opt TT3b chain 2:    0.0000000000000000     
- DELAYED move/length/opt alpha_delayed chain 2:                  -Infinity
  noise proposed DELAYED at chain 2=   6.0873117815648934     
  noise current DELAYED at chain 2=   6.0873117815648934     
- likelihood proposed DELAYED at chain 2=   4910.6835880166909     
- likelihood current DELAYED at chain 2=   1767.2798376934024     
+ likelihood proposed DELAYED at chain 2=   2335.3283718099678     
+ likelihood current DELAYED at chain 2=   2334.0906747620802     
  likelihood normalization DELAYED at chain 2=   0.0000000000000000     
  alpha DELAYED at chain 2=                 -Infinity
  Metropolis-Hastings acceptance criterion DELAYED at chain 2= -0.86662523268454705     
  Is the poposed DELAYED model accepted at chain 2?  F
- in chain_update, acceptance_opt_main 2 =    0.0000000000000000     
- in chain_update, acceptance_opt_delayed 2 =    0.0000000000000000     
- in chain_update, acceptance_opt 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_main 3 =    0.0000000000000000     
- in chain_update, acceptance_opt_delayed 3 =    0.0000000000000000     
+ chain_acceptance shape in chain_update =            2           8
+ chain_values shape in chain_update =            2           5
  --------------------------------------
  Chain number: 1/2
  Sample: 1/3000
- Iteration in this run: 1/3
+ Iteration in this run: 1/1
 
  Number of cells: 5
 
  Dataset 1, "lambda": 4.1760497653568276
- Minimum uncertainty:       5.7282 %
- Maximum uncertainty:    8273.8345 %
+ Minimum uncertainty:       5.1500 %
+ Maximum uncertainty:    7247.0681 %
 
- Misfit : 4597.6389784110834
+ Misfit : 3508.5290414815813
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -105,15 +90,15 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
  --------------------------------------
  Chain number: 2/2
  Sample: 1/3000
- Iteration in this run: 1/3
+ Iteration in this run: 1/1
 
  Number of cells: 5
 
  Dataset 1, "lambda": 4.3655890782446569
- Minimum uncertainty:       7.0364 %
- Maximum uncertainty:    2151.3267 %
+ Minimum uncertainty:       9.4048 %
+ Maximum uncertainty:    4049.1966 %
 
- Misfit : 3534.5596753868044
+ Misfit : 4668.1813495241595
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -131,19 +116,47 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
  TOTAL acceptance:    0.0000 %
  --------------------------------------
  --------------------------------------
- PARALLEL TEMPERING acceptance:  100.0000 %
+ PARALLEL TEMPERING acceptance:    0.0000 %
  --------------------------------------
- TIME ELAPSED: 0h 24m 6s
+ TIME ELAPSED: 0h 17m 40s
  --------------------------------------
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    7.9421701431274414        0.0000000000000000        9.6611499786376953        9.1156597137451172        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    6.5358505249023438        0.0000000000000000        8.8107995986938477        6.3643007278442383        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    8.7666645050048828        0.0000000000000000        9.5823898315429688        7.4666700363159180        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    3.5550849437713623        0.0000000000000000        10.826700210571289        4.0923500061035156        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    10.029970169067383        0.0000000000000000        10.154899597167969        4.9400601387023926        0.0000000000000000     
+ I m in the good place write_chains to file chain_acceptance
+ chain_acceptance stored =    0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps
+ chain_values stored =    0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ I m in the good place write_chains to file chain_acceptance
+ chain_acceptance stored =    0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    2.5688550472259521        0.0000000000000000        12.380900382995605        1.8898301124572754        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    8.7666645050048828        0.0000000000000000        9.5823898315429688        7.4666700363159180        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    8.3245391845703125        0.0000000000000000        9.0782299041748047        8.3509197235107422        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    10.029970169067383        0.0000000000000000        10.154899597167969        4.9400601387023926        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps (initialization)
+ voronoi_0 stored =    8.7666645050048828        0.0000000000000000        9.5823898315429688        7.4666700363159180        0.0000000000000000     
+ I m in the good place write_chains to file chain_acceptance
+ chain_acceptance stored =    0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ I m in the good place writre_chains to file chain steps
+ chain_values stored =    0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
+ I m in the good place write_chains to file chain_acceptance
+ chain_acceptance stored =    0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000        0.0000000000000000     
 
- TIME IS UP - ITERATION 1/3
- I m in write_last_model, noise_type is:            6
- I m in write_last_model, noise_type is:            6
-
-Elapsed time is   0.40 hours.
+Elapsed time is   0.29 hours.
 
  ****************************
-  Job finished on 22-05-2025
-  at 16:16:56
+  Job finished on 28-05-2025
+  at 13:56:52
  ****************************
 

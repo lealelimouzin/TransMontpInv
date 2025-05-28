@@ -1,0 +1,24 @@
+#!/bin/sh
+#SBATCH -J tertCompile
+#SBATCH --mail-type=END
+#SBATCH --mail-user=lea.lelimouzin@umontpellier.fr
+#SBATCH --partition=gm_hydro
+#SBATCH --account=ert_ddp
+#SBATCH --nodes=1 # number of nodes
+#SBATCH --ntasks=28 #number of core used -> 28
+#SBATCH --ntasks-per-node=28 #number of core par nodes 28
+#SBATCH -o compile_info.out # STDOUT
+#SBATCH -e compile_error.err # STDERR
+
+echo "Running on $SLURM_NODELIST" 
+
+cd /home/lelimouzinl/scratch/TransMontpInv/tdtomo_fortert/source/compile
+make clean
+make
+cd ../forward/ert_ddp_2_5d/src/electrical_resistivity/Release
+make clean
+make shared -j 28
+cd /home/lelimouzinl/scratch/TransMontpInv
+
+
+

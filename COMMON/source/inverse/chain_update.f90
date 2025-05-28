@@ -113,12 +113,10 @@ IF (move.OR.value.OR.option) THEN
                 IF (move) acceptance_move_main(1)=acceptance_move_main(1)+1
                 IF (value) acceptance_value_main(1)=acceptance_value_main(1)+1
                 IF (option) acceptance_opt_main(1)=acceptance_opt_main(1)+1
-                write(*,*)'in chain_update, acceptance_opt_main 1 = ',acceptance_opt_main(1)
         ELSE
                 IF (move) acceptance_move_main(2)=acceptance_move_main(2)+1
                 IF (value) acceptance_value_main(2)=acceptance_value_main(2)+1
                 IF (option) acceptance_opt_main(2)=acceptance_opt_main(2)+1
-                write(*,*)'in chain_update, acceptance_opt_main 2 = ',acceptance_opt_main(2)
         END IF
         
         IF (delayed_position.OR.delayed_value.OR.delayed_opt) THEN
@@ -126,12 +124,10 @@ IF (move.OR.value.OR.option) THEN
                         IF (move) acceptance_move_delayed(1)=acceptance_move_delayed(1)+1
                         IF (value) acceptance_value_delayed(1)=acceptance_value_delayed(1)+1
                         IF (option) acceptance_opt_delayed(1)=acceptance_opt_delayed(1)+1
-                        write(*,*)'in chain_update, acceptance_opt_delayed 1 = ',acceptance_opt_delayed(1)
                 ELSE
                         IF (move) acceptance_move_delayed(2)=acceptance_move_delayed(2)+1
                         IF (value) acceptance_value_delayed(2)=acceptance_value_delayed(2)+1
                         IF (option) acceptance_opt_delayed(2)=acceptance_opt_delayed(2)+1
-                        write(*,*)'in chain_update, acceptance_opt_delayed 2 = ',acceptance_opt_delayed(2)
                 END IF
         END IF
 END IF
@@ -154,17 +150,13 @@ IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
         IF (noise.AND.SUM(acceptance_a(1:2)).GT.0) acceptance_a(3)=100*acceptance_a(1)/SUM(acceptance_a(1:2))
         IF (noise.AND.SUM(acceptance_b(1:2)).GT.0) acceptance_b(3)=100*acceptance_b(1)/SUM(acceptance_b(1:2))
 END IF
+! ----- Option -----
 IF (option.AND.SUM(acceptance_opt(1:2)).GT.0) acceptance_opt(3)=100*acceptance_opt(1)/SUM(acceptance_opt(1:2))
-write(*,*)'in chain_update, acceptance_opt 3 = ',acceptance_opt(3)
 IF (option.AND.SUM(acceptance_opt_main(1:2)).GT.0) acceptance_opt_main(3)=100*acceptance_opt_main(1)&
                                                                                 /SUM(acceptance_opt_main(1:2))
-
-write(*,*)'in chain_update, acceptance_opt_main 3 = ',acceptance_opt_main(3)
-
 IF (option.AND.SUM(acceptance_opt_delayed(1:2)).GT.0) acceptance_opt_delayed(3)=100*acceptance_opt_delayed(1)&
                                                                                 /SUM(acceptance_opt_delayed(1:2))
-write(*,*)'in chain_update, acceptance_opt_delayed 3 = ',acceptance_opt_delayed(3)
-
+! ----------
 acceptance_all(1)=acceptance_total(3)
 acceptance_all(2)=acceptance_birth(3)
 acceptance_all(3)=acceptance_death(3)
@@ -179,11 +171,11 @@ acceptance_all(11)=acceptance_a(3)
 acceptance_all(12)=acceptance_b(3)
 !---Lea
 IF (opt_parameters.GT.0) THEN
-        acceptance_all(14)=acceptance_opt(3)
-        acceptance_all(15)=acceptance_opt_main(3)
-        acceptance_all(16)=acceptance_opt_delayed(3)
+                acceptance_all(14)=acceptance_opt(3)
+                acceptance_all(15)=acceptance_opt_main(3)
+                acceptance_all(16)=acceptance_opt_delayed(3)
+                ! acceptance_all(13) is for tempering
 END IF
-! acceptance_all(13) is for tempering
 !---
 
 END SUBROUTINE
@@ -212,9 +204,10 @@ END IF
  chain_acceptance(sample_number,4)=acceptance_move(3)
  chain_acceptance(sample_number,5)=acceptance_value(3)
  chain_acceptance(sample_number,6)=acceptance_noise(3)
- IF (opt_parameters.GT.0.AND.parallel_tempering.EQ.1)  chain_acceptance(sample_number,8)=acceptance_opt(3)
+ IF (opt_parameters.GT.0)  chain_acceptance(sample_number,8)=acceptance_opt(3)
  ! chain_acceptance(sample_number,7) for tempering
- IF (opt_parameters.GT.0.AND.parallel_tempering.EQ.0)  chain_acceptance(sample_number,7)=acceptance_opt(3)
+ !IF (opt_parameters.GT.0.AND.parallel_tempering.EQ.0)  chain_acceptance(sample_number,7)=acceptance_opt(3)
+ write(*,*)'chain_acceptance shape in chain_update = ', SHAPE(chain_acceptance)
 
 IF (birth) THEN
         IF (accept) THEN
@@ -243,7 +236,7 @@ ELSE IF (move) THEN
                 chain_values(sample_number,1)=voronoi_current(cell_number,1)
                 chain_values(sample_number,2)=voronoi_current(cell_number,2)
                 chain_values(sample_number,3)=voronoi_current(cell_number,3)
-                chain_values(sample_number,4)=0
+                chain_values(sample_number,4)=voronoi_current(cell_number,4)
                 IF (opt_parameters.GT.0)  chain_values(sample_number,5)=0
         END IF
 ELSE IF (value) THEN
@@ -287,8 +280,11 @@ DO nn=1,number_of_datasets
                 chain_noise(sample_number,nn)=lambda_current(nn)
         END IF
 END DO
+write(*,*)'chain_values shape in chain_update = ', SHAPE(chain_values)
 
-IF (accept.AND..NOT.noise) residuals(:,sample_number)=observed_data-LOG(data_current)
+!IF (accept.AND..NOT.noise) residuals(:,sample_number)=observed_data-LOG(data_current)
+
+IF (accept.AND..NOT.noise) residuals(:,sample_number)=observed_data-data_current
 
 END SUBROUTINE
 

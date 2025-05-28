@@ -174,12 +174,16 @@ SUBROUTINE initialize_chains()
 
         ALLOCATE(chain_steps(samples_in_run,2))
         chain_steps=0
+
         ALLOCATE(chain_values(samples_in_run,number_of_parameters))
         chain_values=0
+
         ALLOCATE(chain_indices(samples_in_run))
         chain_indices=0
+
         ALLOCATE(chain_ncell(samples_in_run))
         chain_ncell=0
+
         IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
                 ALLOCATE(chain_noise(samples_in_run,2*number_of_datasets))
                 chain_noise=0
@@ -187,6 +191,7 @@ SUBROUTINE initialize_chains()
                 ALLOCATE(chain_noise(samples_in_run,number_of_datasets))
                 chain_noise=0
         END IF
+        
         ALLOCATE(chain_misfits(samples_in_run))
         chain_misfits=0
         IF (opt_parameters.EQ.0) THEN 
@@ -202,7 +207,9 @@ SUBROUTINE initialize_chains()
                         ALLOCATE(chain_acceptance(samples_in_run,8))
                 END IF
         END IF
+        write(*,*)'Shape of the chain_acceptance array in initialize_chains = ',SHAPE(chain_acceptance)
         chain_acceptance=0
+        write(*,*)'Chain_acceptance in initialize_chains = ',chain_acceptance
 
         ALLOCATE(accepted_so_far_all(number_of_chains))
 
@@ -671,16 +678,16 @@ SUBROUTINE check_frac_inside_domain(fracture)
         !WRITE ( *, '(2x,4f8.4)' ) pa_old(1:dim_num), pb_old(1:dim_num)
         IF ( ival == -1 ) THEN
                 WRITE ( *, '(a)' ) '  Line is outside the box.'
-        ELSE IF ( ival == 0 ) THEN
-                WRITE ( *, '(a)' ) '  Line is inside the box.'
-        ELSE IF ( ival == 1 ) THEN
-                WRITE ( *, '(a)' ) '  Line is partly outside the box.'
+        !ELSE IF ( ival == 0 ) THEN
+        !        WRITE ( *, '(a)' ) '  Line is inside the box.'
+        !ELSE IF ( ival == 1 ) THEN
+        !        WRITE ( *, '(a)' ) '  Line is partly outside the box.'
                 !WRITE ( *, '(2x,2f8.4)' ) pa(1:dim_num)
-        ELSE IF ( ival == 2 ) THEN
-                WRITE ( *, '(a)' ) '  Line is partly outside the box.'
+        !ELSE IF ( ival == 2 ) THEN
+        !        WRITE ( *, '(a)' ) '  Line is partly outside the box.'
                 !WRITE ( *, '(2x,16x,2f8.4)' ) pb(1:dim_num)
-        ELSE IF ( ival == 3 ) THEN
-                WRITE ( *, '(a)' ) '  Line is partly outside the box.'
+        !ELSE IF ( ival == 3 ) THEN
+        !        WRITE ( *, '(a)' ) '  Line is partly outside the box.'
                 !WRITE ( *, '(2x,4f8.4)' ) pa(1:dim_num), pb(1:dim_num)
         END IF
 

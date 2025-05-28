@@ -86,9 +86,9 @@ IF (run_number.EQ.1) THEN
                                 voronoi_current(nn,3) = tempo(nn,2) ! z centre
                                 voronoi_current(nn,4) = ABS(tempo(nn,3)-tempo(nn,1)) ! length
                                 IF (opt_parameters.EQ.1) THEN 
-                                        voronoi_current(nn,5) = 0.03 ! aperture: 0.03 by default
-                                ELSEIF (opt_parameters.EQ.2) THEN
                                         voronoi_current(nn,5) = 0 ! angle
+                                ELSEIF (opt_parameters.EQ.2) THEN
+                                        voronoi_current(nn,5) = 0.03 ! aperture
                                 END IF
                         end do
                 END IF

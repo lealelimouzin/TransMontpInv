@@ -207,7 +207,7 @@ END IF
  IF (opt_parameters.GT.0)  chain_acceptance(sample_number,8)=acceptance_opt(3)
  ! chain_acceptance(sample_number,7) for tempering
  !IF (opt_parameters.GT.0.AND.parallel_tempering.EQ.0)  chain_acceptance(sample_number,7)=acceptance_opt(3)
- write(*,*)'chain_acceptance shape in chain_update = ', SHAPE(chain_acceptance)
+ !write(*,*)'chain_acceptance shape in chain_update = ', SHAPE(chain_acceptance)
 
 IF (birth) THEN
         IF (accept) THEN
@@ -243,9 +243,9 @@ ELSE IF (value) THEN
         IF (accept) THEN
                 chain_steps(sample_number,2)=1
                 chain_indices(sample_number)=cell_number
-                chain_values(sample_number,1)=0
-                chain_values(sample_number,2)=0
-                chain_values(sample_number,3)=0
+                chain_values(sample_number,1)=voronoi_current(cell_number,1) !0
+                chain_values(sample_number,2)=voronoi_current(cell_number,2) !0
+                chain_values(sample_number,3)=voronoi_current(cell_number,3) !0
                 chain_values(sample_number,4)=voronoi_current(cell_number,4)
                 IF (opt_parameters.GT.0)  chain_values(sample_number,5)=0
         END IF
@@ -280,7 +280,7 @@ DO nn=1,number_of_datasets
                 chain_noise(sample_number,nn)=lambda_current(nn)
         END IF
 END DO
-write(*,*)'chain_values shape in chain_update = ', SHAPE(chain_values)
+!write(*,*)'chain_values shape in chain_update = ', SHAPE(chain_values)
 
 !IF (accept.AND..NOT.noise) residuals(:,sample_number)=observed_data-LOG(data_current)
 

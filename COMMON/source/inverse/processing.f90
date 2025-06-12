@@ -44,7 +44,7 @@ DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: value_pixels
 DOUBLE PRECISION, SAVE                                  :: value_pixel_width
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE, SAVE     :: temperatures
 INTEGER, SAVE                                           :: accept
-DOUBLE PRECISION, SAVE                                  :: x_new,y_new,z_new,value_new
+DOUBLE PRECISION, SAVE                                  :: x_new,y_new,z_new,value_new,opt_new
 DOUBLE PRECISION, DIMENSION(:,:,:), ALLOCATABLE, SAVE   :: xyz_model
 
 
@@ -360,6 +360,7 @@ IF (step.EQ.1.AND.accept.EQ.1) THEN
         voronoi_current(ncell_current,2)=y_new
         voronoi_current(ncell_current,3)=z_new
         voronoi_current(ncell_current,4)=value_new
+        IF (opt_parameters.GT.0) voronoi_current(ncell_current,5)=opt_new
         voronoi_current(ncell_current+1:ncell_max,:)=0
 ELSE IF (step.EQ.2.AND.accept.EQ.1) THEN
         voronoi_current(cell_number,:)=voronoi_current(ncell_current+1,:)
@@ -372,6 +373,13 @@ ELSE IF (step.EQ.4.AND.accept.EQ.1) THEN
         voronoi_current(cell_number,4)=value_new
 ELSE IF (step.EQ.5.AND.accept.EQ.1) THEN
         voronoi_current=voronoi_current
+ELSE IF (step.EQ.6.AND.accept.EQ.1) THEN
+        voronoi_current(ncell_current,1)=x_new
+        voronoi_current(ncell_current,2)=y_new
+        voronoi_current(ncell_current,3)=z_new
+        voronoi_current(ncell_current,4)=value_new
+        voronoi_current(ncell_current,5)=opt_new
+        voronoi_current(ncell_current+1:ncell_max,:)=0
 ELSE
         voronoi_current=voronoi_current
 END IF

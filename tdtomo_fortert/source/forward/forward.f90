@@ -153,13 +153,20 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
                                         !x1 = bounds(1) ; x2 = bounds(2)
                                         !z1 = bounds(3) ; z2 = bounds(4)
                                         !angle = bounds(5)
-                                ELSE ! aperture
+                                ELSEIF (opt_parameters.EQ.2) THEN ! aperture
                                         length = fracture_model(J,4)
                                         x1 = fracture_model(J,1) - length/2
                                         z1 = fracture_model(J,3)
                                         x2 = fracture_model(J,1) + length/2
                                         z2 = fracture_model(J,3)
                                         b = fracture_model(J,5)
+                                ELSE
+                                        length = fracture_model(J,4)
+                                        x1 = fracture_model(J,1) - length/2
+                                        z1 = fracture_model(J,3)
+                                        x2 = fracture_model(J,1) + length/2
+                                        z2 = fracture_model(J,3)
+                                        b = 0.03
                                 END IF
                                 sigma = 2
                                 fracture = [x1, z1, x2, z2, b, sigma]

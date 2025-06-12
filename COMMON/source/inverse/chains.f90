@@ -207,9 +207,7 @@ SUBROUTINE initialize_chains()
                         ALLOCATE(chain_acceptance(samples_in_run,8))
                 END IF
         END IF
-        write(*,*)'Shape of the chain_acceptance array in initialize_chains = ',SHAPE(chain_acceptance)
         chain_acceptance=0
-        write(*,*)'Chain_acceptance in initialize_chains = ',chain_acceptance
 
         ALLOCATE(accepted_so_far_all(number_of_chains))
 
@@ -662,7 +660,11 @@ SUBROUTINE check_frac_inside_domain(fracture)
         p2 = (/ x_max,z_max /)
 
         ! Define fracture bounds
-        angle = fracture(5)
+        IF (opt_parameters.EQ.1) THEN 
+                angle = fracture(5)
+        ELSE
+                angle = 0
+        END IF
         length = fracture(4)
         x1 = fracture(1) - COS(angle)*length/2
         z1 = fracture(3) - SIN(angle)*length/2

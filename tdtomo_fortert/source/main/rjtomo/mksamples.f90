@@ -580,9 +580,10 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
         !CALL MPI_BARRIER(MPI_COMM_WORLD,ierror)
 
         ! Write chains content to file every 10 iterations
-        IF (MOD(iteration,2).EQ.0) THEN
+        IF (MOD(iteration,1).EQ.0) THEN
                 CALL CHDIR("tempo/")
                 CALL write_chains_to_file()
+                CALL write_last_model()
         END IF
 
         

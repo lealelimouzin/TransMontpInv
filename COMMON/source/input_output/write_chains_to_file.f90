@@ -95,13 +95,11 @@ IF (run_number.EQ.1) THEN
                         WRITE(samples_unit)chain_ncell(pp+1)
                         DO nn=1,chain_ncell(pp+1)
                                 IF (opt_parameters.GT.0) THEN
-                                        write(*,*)"I m in the good place writre_chains to file chain steps (initialization)"
                                         WRITE(samples_unit)voronoi_0(nn,1),& !x
                                                         voronoi_0(nn,2),& !y
                                                         voronoi_0(nn,3),& !z
                                                         voronoi_0(nn,4),& !l
                                                         voronoi_0(nn,5) !opt
-                                        write(*,*)"voronoi_0 stored = ",voronoi_0(nn,:)
                                 ELSE
                                         WRITE(samples_unit)voronoi_0(nn,1),& !x
                                                         voronoi_0(nn,2),& !y
@@ -111,7 +109,6 @@ IF (run_number.EQ.1) THEN
                         END DO
                 ELSE
                         IF (opt_parameters.GT.0) THEN
-                                write(*,*)"I m in the good place writre_chains to file chain steps"
                                 WRITE(samples_unit)pp,chain_steps(pp+1,1),& 
                                                 chain_steps(pp+1,2),& 
                                                 chain_indices(pp+1),& !nb_cell
@@ -120,7 +117,6 @@ IF (run_number.EQ.1) THEN
                                                 chain_values(pp+1,3),& !z
                                                 chain_values(pp+1,4),& !l
                                                 chain_values(pp+1,5) !opt
-                                write(*,*)"chain_values stored = ",chain_values(pp+1,:)
                         ELSE
                                 WRITE(samples_unit)pp,chain_steps(pp+1,1),&
                                 chain_steps(pp+1,2),&
@@ -187,7 +183,6 @@ IF (run_number.EQ.1) THEN
                                                 chain_acceptance(pp+1,5),&  !value
                                                 chain_acceptance(pp+1,6) !noise
                 ELSE
-                        write(*,*)"I m in the good place write_chains to file chain_acceptance"
                         WRITE(acceptance_unit)pp,chain_acceptance(pp+1,1),& !total
                                                 chain_acceptance(pp+1,2),& !birth
                                                 chain_acceptance(pp+1,3),& !death
@@ -195,7 +190,6 @@ IF (run_number.EQ.1) THEN
                                                 chain_acceptance(pp+1,5),& !value
                                                 chain_acceptance(pp+1,6),& !noise
                                                 chain_acceptance(pp+1,8) !opt
-                        write(*,*)"chain_acceptance stored = ",chain_acceptance(pp+1,:)
                 END IF
                 
                 ! Temperatures
@@ -283,7 +277,6 @@ ELSE IF (run_number.GT.1) THEN
                                                         chain_values(pp,3),&
                                                         chain_values(pp,4),&
                                                         chain_values(pp,5)
-                        write(*,*)"chain_values stored = ",chain_values(pp,:)
                 ELSE
                         WRITE(samples_unit)samples_at_start+pp,chain_steps(pp,1),&
                                                        chain_steps(pp,2),&
@@ -336,7 +329,6 @@ ELSE IF (run_number.GT.1) THEN
                         chain_acceptance(pp,5),&
                         chain_acceptance(pp,6),&
                         chain_acceptance(pp,8)
-                        write(*,*)"chain_acceptance stored = ",chain_acceptance(pp,:)
                 END IF
                 
                 ! Temperatures

@@ -215,8 +215,8 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
                 end do
         close(89)
         
-        modelled_data = modelled_data_dfn-(modelled_data_epm-rho_mat) ! ratio of simulated data
-
+        modelled_data = modelled_data_dfn-(modelled_data_epm-rho_mat) 
+        
         ! Go back to the bin directory
         cdtmp = "../../../../../bin/"
         CALL CHDIR (TRIM(cdtmp))

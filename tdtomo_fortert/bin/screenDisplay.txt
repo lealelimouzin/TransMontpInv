@@ -1,7 +1,7 @@
 
  ***************************
-  Job started on 12-06-2025
-  at 12:46:01
+  Job started on 07-07-2025
+  at 14:11:07
  ***************************
 
   Hello from rj-McMC tomography and chain 1 on core 0!                 
@@ -15,8 +15,6 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
 
  STARTING CHAINS FROM SAMPLE 0
 
- VALUE at chain 2
- VALUE voronoi_proposed =    8.2888241027597829        0.0000000000000000        9.0782299041748047        8.4223517944804325        2.9999999329447746E-002
  Max run time is: 0.29999999999999999 hr (1080.0000000000000 sec)
 
  Number of measurements: 2008
@@ -24,38 +22,38 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
   Initial number of cells on chain 1: 5                                
   Initial number of cells on chain 2: 5                                
 
-  Initial misfit on chain 1: 6398.5890106516490                        
-  Initial misfit on chain 2: 5128.2084650189463                        
+  Initial misfit on chain 1: 288845.13025150541                        
+  Initial misfit on chain 2: 362991.45274316403                        
 
- OPTION 2 at chain 1
- OPTION voronoi_proposed =    7.9421701431274414        0.0000000000000000        9.6611499786376953        9.1156597137451172        2.8844993513100162E-002
+ NOISE at chain 1
+ alpha (move/value/noise/opt) at chain 1 is :    0.0000000000000000     
+ noise proposed at chain 1 =  0.38474659334487954     
+ noise current at chain 1 =  0.38352099530713657     
+ likelihood proposed at chain 1 =   143646.03953949892     
+ likelihood current at chain 1 =   144422.56512575274     
+ likelihood normalization at chain 1 =  -2.9715327810114700     
+ Metropolis-Hastings acceptance criterion at chain 1 =  -9.0759748727656273     
+ Is the proposed model accepted at chain 1 ?  T
+ Tempering : T1 is 1 with a temperature of 1.0000000000000000
+ Tempering : T2 is 2 with a temperature of 8.0000000000000000
+ VALUE at chain 2
+ VALUE voronoi_proposed =    6.5358505249023438        0.0000000000000000        8.8107995986938477        6.5071629624349852        0.0000000000000000     
 ***** Demat da Python main.py res_chain_2 ! *****
-***** Demat da Python main.py res_chain_1 ! *****
- alpha (move/value/noise/opt) at chain 2 is :  -0.83119056459446483     
- noise proposed at chain 2 =   6.0873117815648934     
- noise current at chain 2 =   6.0873117815648934     
- likelihood proposed at chain 2 =   2570.7537570262289     
- likelihood current at chain 2 =   2564.1042325094731     
+ alpha (move/value/noise/opt) at chain 2 is :   -35.622479922745697     
+ noise proposed at chain 2 =  0.38731178156489310     
+ noise current at chain 2 =  0.38731178156489310     
+ likelihood proposed at chain 2 =   181780.70621096398     
+ likelihood current at chain 2 =   181495.72637158202     
  likelihood normalization at chain 2 =   0.0000000000000000     
  Metropolis-Hastings acceptance criterion at chain 2 =  -5.3684982651701282E-002
  Is the proposed model accepted at chain 2 ?  F
  VALUE DELAYED at chain 2
- VALUE DELAYED voronoi_proposed is    8.3245391845703125        0.0000000000000000        9.0782299041748047        7.8077840737646467        2.9999999329447746E-002
+ VALUE DELAYED voronoi_proposed is    6.5358505249023438        0.0000000000000000        8.8107995986938477        5.8211650780981428        0.0000000000000000     
 ***** Demat da Python main.py res_chain_2 ! *****
- alpha (move/value/noise/opt) at chain 1 is :    0.0000000000000000     
- noise proposed at chain 1 =   6.0835209953071363     
- noise current at chain 1 =   6.0835209953071363     
- likelihood proposed at chain 1 =   3199.1822388483324     
- likelihood current at chain 1 =   3199.2945053258254     
- likelihood normalization at chain 1 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 1 =  -9.5994497229100878E-004
- Is the proposed model accepted at chain 1 ?  T
- Tempering : T1 is 1 with a temperature of 1.0000000000000000
- Tempering : T2 is 2 with a temperature of 8.0000000000000000
- noise proposed DELAYED at chain 2=   6.0873117815648934     
- noise current DELAYED at chain 2=   6.0873117815648934     
- likelihood proposed DELAYED at chain 2=   2570.7537570262289     
- likelihood current DELAYED at chain 2=   2564.1042325094731     
+ noise proposed DELAYED at chain 2=  0.38731178156489310     
+ noise current DELAYED at chain 2=  0.38731178156489310     
+ likelihood proposed DELAYED at chain 2=   181780.70621096398     
+ likelihood current DELAYED at chain 2=   181495.72637158202     
  likelihood normalization DELAYED at chain 2=   0.0000000000000000     
  alpha DELAYED at chain 2=   0.0000000000000000     
  Metropolis-Hastings acceptance criterion DELAYED at chain 2= -0.86662523268454705     
@@ -67,11 +65,11 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
 
  Number of cells: 5
 
- Dataset 1, "lambda": 4.1760497653568276
- Minimum uncertainty:      13.6781 %
- Maximum uncertainty:     542.6095 %
+ Dataset 1, "lambda": 4.2373296672439782
+ Minimum uncertainty:       0.6131 %
+ Maximum uncertainty:      98.7810 %
 
- Misfit : 6398.3644776966648
+ Misfit : 287292.07907899783
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -81,10 +79,7 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
  VALUE acceptance:    0.0000 %
        main:    0.0000 %
        delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:  100.0000 %
-       main:  100.0000 %
-       delayed:    0.0000 %
+ NOISE acceptance:  100.0000 %
 
  TOTAL acceptance:  100.0000 %
  --------------------------------------
@@ -96,10 +91,10 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
  Number of cells: 5
 
  Dataset 1, "lambda": 4.3655890782446569
- Minimum uncertainty:       9.7343 %
- Maximum uncertainty:   44327.2078 %
+ Minimum uncertainty:       0.7126 %
+ Maximum uncertainty:     427.2950 %
 
- Misfit : 5077.0605930092570
+ Misfit : 361287.20169916772
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -110,204 +105,18 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
        main:    0.0000 %
        delayed:  100.0000 %
  NOISE acceptance:    0.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
 
  TOTAL acceptance:  100.0000 %
  --------------------------------------
  --------------------------------------
- PARALLEL TEMPERING acceptance:  100.0000 %
+ PARALLEL TEMPERING acceptance:    0.0000 %
  --------------------------------------
- TIME ELAPSED: 0h 7m 2s
+ TIME ELAPSED: 0h 17m 14s
  --------------------------------------
    1.7489189471144049     
  ADD at chain 2
- ADD voronoi_proposed =    5.1336830243546707        0.0000000000000000        8.0464863609630815        1.7489189471144049        6.2307826078568544E-002
+ ADD voronoi_proposed =    5.1336830243546707        0.0000000000000000        8.0464863609630815        1.7489189471144049        0.0000000000000000     
  MOVE at chain 1
- MOVE voronoi_proposed =    8.6273204042588301        0.0000000000000000        8.9047492462429663        7.4535398483276367        2.9999999329447746E-002
-***** Demat da Python main.py res_chain_2 ! *****
+ MOVE voronoi_proposed =    6.3899413301621513        0.0000000000000000        8.0905488449368139        6.3643007278442383        0.0000000000000000     
 ***** Demat da Python main.py res_chain_1 ! *****
- alpha (add) at chain 2 is :   -104.21242388273595     
- noise proposed at chain 2 =   6.0873117815648934     
- noise current at chain 2 =   6.0873117815648934     
- likelihood proposed at chain 2 =   2642.7427203873644     
- likelihood current at chain 2 =   2538.5302965046285     
- likelihood normalization at chain 2 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 2 =  -2.1206757554493025     
- Is the proposed model accepted at chain 2 ?  F
- alpha (move/value/noise/opt) at chain 1 is :    0.0000000000000000     
- noise proposed at chain 1 =   6.0835209953071363     
- noise current at chain 1 =   6.0835209953071363     
- likelihood proposed at chain 1 =   2475.3323046790306     
- likelihood current at chain 1 =   3199.1822388483324     
- likelihood normalization at chain 1 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 1 = -0.81316369739546979     
- Is the proposed model accepted at chain 1 ?  T
- Tempering : T1 is 1 with a temperature of 8.0000000000000000
- Tempering : T2 is 2 with a temperature of 1.0000000000000000
- --------------------------------------
- Chain number: 1/2
- Sample: 2/3000
- Iteration in this run: 2/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 4.1760497653568276
- Minimum uncertainty:      13.8957 %
- Maximum uncertainty:    1109.7924 %
-
- Misfit : 4950.6646093580612
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:  100.0000 %
-       main:  100.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:  100.0000 %
-       main:  100.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:  100.0000 %
- --------------------------------------
- --------------------------------------
- Chain number: 2/2
- Sample: 2/3000
- Iteration in this run: 2/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 4.3655890782446569
- Minimum uncertainty:       9.7343 %
- Maximum uncertainty:   44327.2078 %
-
- Misfit : 5077.0605930092570
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:  100.0000 %
-       main:    0.0000 %
-       delayed:  100.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:   50.0000 %
- --------------------------------------
- --------------------------------------
- PARALLEL TEMPERING acceptance:  100.0000 %
- --------------------------------------
- TIME ELAPSED: 0h 7m 4s
- --------------------------------------
- VALUE at chain 2
- VALUE voronoi_proposed =    4.6872501373291016        0.0000000000000000        8.5784997940063477        2.0895511179679302        2.9999999329447746E-002
- OPTION 2 at chain 1
- OPTION voronoi_proposed =    8.6273204042588301        0.0000000000000000        8.9047492462429663        7.4535398483276367        3.6666277005241291E-002
 ***** Demat da Python main.py res_chain_2 ! *****
-***** Demat da Python main.py res_chain_1 ! *****
- alpha (move/value/noise/opt) at chain 2 is :   -3.5698219266570277     
- noise proposed at chain 2 =   6.0873117815648934     
- noise current at chain 2 =   6.0873117815648934     
- likelihood proposed at chain 2 =   2567.0888719178847     
- likelihood current at chain 2 =   2538.5302965046285     
- likelihood normalization at chain 2 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 2 = -0.47620870764834750     
- Is the proposed model accepted at chain 2 ?  F
- VALUE DELAYED at chain 2
- VALUE DELAYED voronoi_proposed is    4.6872501373291016        0.0000000000000000        8.5784997940063477       0.89074609417971928        2.9999999329447746E-002
-***** Demat da Python main.py res_chain_2 ! *****
- alpha (move/value/noise/opt) at chain 1 is :   -18.795233986116273     
- noise proposed at chain 1 =   6.0835209953071363     
- noise current at chain 1 =   6.0835209953071363     
- likelihood proposed at chain 1 =   2494.1275386651469     
- likelihood current at chain 1 =   2475.3323046790306     
- likelihood normalization at chain 1 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 1 = -0.84234680664630746     
- Is the proposed model accepted at chain 1 ?  F
- Tempering : T1 is 1 with a temperature of 1.0000000000000000
- Tempering : T2 is 2 with a temperature of 8.0000000000000000
- noise proposed DELAYED at chain 2=   6.0873117815648934     
- noise current DELAYED at chain 2=   6.0873117815648934     
- likelihood proposed DELAYED at chain 2=   2567.0888719178847     
- likelihood current DELAYED at chain 2=   2538.5302965046285     
- likelihood normalization DELAYED at chain 2=   0.0000000000000000     
- alpha DELAYED at chain 2=   0.0000000000000000     
- Metropolis-Hastings acceptance criterion DELAYED at chain 2= -0.38122235981993213     
- Is the poposed DELAYED model accepted at chain 2?  T
- --------------------------------------
- Chain number: 1/2
- Sample: 3/3000
- Iteration in this run: 3/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 4.1760497653568276
- Minimum uncertainty:      13.8957 %
- Maximum uncertainty:    1109.7924 %
-
- Misfit : 4950.6646093580612
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:  100.0000 %
-       main:  100.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:   50.0000 %
-       main:   50.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:   66.6667 %
- --------------------------------------
- --------------------------------------
- Chain number: 2/2
- Sample: 3/3000
- Iteration in this run: 3/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 4.3655890782446569
- Minimum uncertainty:       9.7284 %
- Maximum uncertainty:   44399.5975 %
-
- Misfit : 5085.1241003612022
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:  100.0000 %
-       main:    0.0000 %
-       delayed:  100.0000 %
- NOISE acceptance:    0.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:   66.6667 %
- --------------------------------------
- --------------------------------------
- PARALLEL TEMPERING acceptance:   66.6667 %
- --------------------------------------
- TIME ELAPSED: 0h 14m 19s
- --------------------------------------
-
-Elapsed time is   0.24 hours.
-
- ****************************
-  Job finished on 12-06-2025
-  at 13:35:20
- ****************************
-

@@ -120,11 +120,17 @@ In source/compile/Makefile, change:
 
 Make a link to libsuperlu: ln -s /usr/lib64/libsuperlu.so.5.1 libsuperlu.so
 
+## Convert unformatted files to text files
+
+To convert the results files from .out to .txt, use the function `chain2txt.f90` which executable is in the `bin` directory. If the optimisation of the angle or aperture is selected, dimension of some variables need to be changed in the code. To do so, uncomment all the lines having the note "! Inversion of angle/aperture" and comment all the lines with the note "! NO inversion of angle/aperture".
+
 ## Common errors and how to handle them
 
 ### "PERFORM" not found
 
-Be careful to python version (here, python3.13 was used on the local computer, and 3.10 on the cluster). Depending on the version, some errors may occur with python thread state. Check the file "PERFORM.d", the version should be the same as the one used in your Anaconda environment or the version installed on your computer. To check python version, use the command: `python3 -V` (ubuntu).
+First, check if the library `PERFORM.so` has been genrated in the folder `tdtomo_fortert/source/forward/ert_ddp_2_5d/src/electrical_resistivty/Release`. If not, follow the steps of the next item `Error in "Parameters.cpp"`. Then try to compile again.
+
+If the error still appears check python version (here, python3.13 was used on the local computer, and 3.10 on the cluster). Depending on the version, some errors may occur with python thread state. Check the file "PERFORM.d", the version should be the same as the one used in your Anaconda environment or the version installed on your computer. To check python version, use the command: `python3 -V` (ubuntu).
 
 ### Error in "Parameters.cpp"
 

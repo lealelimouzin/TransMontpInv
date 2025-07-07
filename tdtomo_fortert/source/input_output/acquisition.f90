@@ -21,11 +21,13 @@ MODULE acquisition
 
 IMPLICIT NONE
 CHARACTER (LEN=30), SAVE                                :: electrode_file,data_file,datasets_file
+CHARACTER (LEN=30), SAVE                                :: deltaMN_file ! 07/07/25
 INTEGER, SAVE                                           :: number_of_electrodes,number_of_measurements,number_of_datasets
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE, SAVE     :: electrodes
 INTEGER, DIMENSION(:,:), ALLOCATABLE, SAVE              :: quadrupoles
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: observed_data,data_noise
 INTEGER, DIMENSION(:), ALLOCATABLE, SAVE                :: dataset_associations
+DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: deltaMN ! 07/07/25
 
 
 CONTAINS
@@ -39,6 +41,7 @@ INTEGER :: problem_type
 
 CALL read_electrodes()
 CALL read_measurements(problem_type)
+CALL read_distances()
 
 END SUBROUTINE
 
@@ -180,5 +183,55 @@ IF (valid_count.LT.number_of_measurements) THEN
 END IF
 
 END SUBROUTINE
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+SUBROUTINE read_distances()
+! Reads the file containing electrode coordinatesdistances between electrodes of a same quadrupole. This file is structured as follows:
+!
+!       line 1          number of electrodes in array
+!       line 2-end      distances 
+
+IMPLICIT NONE
+INTEGER                 :: electrode_number
+DOUBLE PRECISION        :: delta
+INTEGER                 :: nn,IOstatus
+LOGICAL                 :: verbose=.FALSE.
+
+IF (ALLOCATED(deltaMN)) DEALLOCATE(deltaMN)
+
+
+OPEN(UNIT=10,FILE=deltaMN_file,STATUS='OLD')
+READ(10,*)number_of_electrodes
+
+ALLOCATE(deltaMN(number_of_electrodes))
+
+DO nn=1,number_of_electrodes
+        READ(10,*,IOSTAT=IOstatus)delta
+        deltaMN(nn)=delta
+END DO
+IF (verbose) WRITE(*,*)'IOstatus=',IOstatus
+
+!IF (IOstatus.EQ.0) THEN ! if no error was encountered, a y coordinate is given (file has 4 columns)
+!        IF (verbose) WRITE(*,*)'Coordinates given for electrodes: x, y, z'
+!ELSEIF (IOstatus.NE.0) THEN ! in this case a y coordinate is not given (file has 3 columns)
+!        IF (verbose) WRITE(*,*)'Coordinates given for electrodes: x, z'
+!        REWIND(10)
+!        READ(10,*)
+!        DEALLOCATE(electrodes)
+!        ALLOCATE(electrodes(number_of_electrodes,2))
+!        DO nn=1,number_of_electrodes
+!                READ(10,*)electrode_number,x_electrode,z_electrode
+!                electrodes(electrode_number,:)=[x_electrode,z_electrode]
+!        END DO
+!END IF
+IF (verbose) WRITE(*,*)'IOstatus=',IOstatus
+CLOSE(10)
+
+END SUBROUTINE
+
+
+
+
+
 
 END MODULE

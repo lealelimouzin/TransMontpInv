@@ -35,7 +35,7 @@ residuals.out                 :: File containing residuals (gets renamed to e.g.
 0.05   0.2                    :: Noise type 0: minimum and maximum noise parameter "sigma"
 6                             :: Noise type 6: standard deviation associated to the homogeneous matrix (no fracture) "sigma_mat"
 12.5                          :: Targetted electrical resisitivty of the homegeneous matrix
-2                             :: Add a model parameter: 0 no option, 1 for fracture angle, 2 for fracture aperture
+0                             :: Add a model parameter (0=no option, 1=fracture angle, 2=fracture aperture)
 0   360                       :: Minimum and maximum angle (degree): required even if previous line eqaul 0 (no option)
 0.001   0.1                   :: Minimum and maximum aperture (meter): required even if previous line eqaul 0 (no option)
 ********************************************************************************************************************************
@@ -50,8 +50,8 @@ residuals.out                 :: File containing residuals (gets renamed to e.g.
 0.2                           :: Perturbation of noise parameter "b"
 0.2                           :: Perturbation of noise parameter "lambda"
 0.5                           :: Perturbation of noise parameter "sigma"
-3                             :: Perturbation of the optional parameter (percentage): required even if previous line eqaul 0 (no option)
-1                             :: Perturbation of the optional parameter (percentage) for delayed rejections: required even if previous line eqaul 0 (no option)
+5                             :: Perturbation of the optional parameter (percentage): required even if previous line eqaul 0 (no option)
+2                             :: Perturbation of the optional parameter (percentage) for delayed rejections: required even if previous line eqaul 0 (no option)
 ********************************************************************************************************************************
 * (G) LIKELIHOOD PARAMETERS                                                                                                    *
 ********************************************************************************************************************************
@@ -83,3 +83,7 @@ forward.in                    :: File containing forward modelling parameters fo
 * (K) PATH TO ert_ddp_2_5d REPOSITORY                                                                                          *
 ********************************************************************************************************************************
 /home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/
+********************************************************************************************************************************
+* (L) TEMPORARY                                                                                         *
+********************************************************************************************************************************
+delta_MN.dat                :: File of distances between electrodes M and N

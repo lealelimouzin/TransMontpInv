@@ -19,11 +19,16 @@
 
 
 import math
+import sys
 import numpy as np
 import pandas as pd
 from os.path import join as pjoin
 from post_processing.Farum_elecConfig import Farum_elecConfig
 from post_processing.InverseFourierPotential import InverseFourierPotential
+# 28/07/25
+#from fwdFunctions import fwdEPM
+#from fwdFunctions import fwdDFN
+
 
 
 def mainEPM(tabVar,res_cxx):
@@ -67,7 +72,7 @@ def mainEPM(tabVar,res_cxx):
     for i in range(0, nb_electrodes):
         if res_cxx == 0: # If the executable version of the C++ code is used
             AllResultsEPM[i, :, :] = np.loadtxt(pjoin(path_results_EPM, f'{file_name_EPM}{i+1}.txt'))
-        else:
+        else: # If the library version of the C++ code is used
             AllResultsEPM[i, :, :] = res_cxx[i+1].toarray(order='C')
 
     for i in range(nb_exp):

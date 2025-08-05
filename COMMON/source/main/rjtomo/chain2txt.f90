@@ -32,14 +32,14 @@ DOUBLE PRECISION                        :: dble8
 DOUBLE PRECISION, DIMENSION(5)          :: dbles
 INTEGER                                 :: int1,int2,int3
 CHARACTER(LEN=*), PARAMETER             :: FMT51="(1I10,1I8)"
-CHARACTER(LEN=*), PARAMETER             :: FMT50v="(4F22.10)"    ! NO inversion of angle/aperture
-!CHARACTER(LEN=*), PARAMETER             :: FMT50v="(5F22.10)"     ! Inversion of angle/aperture
+!CHARACTER(LEN=*), PARAMETER             :: FMT50v="(4F22.10)"    ! NO inversion of angle/aperture
+CHARACTER(LEN=*), PARAMETER             :: FMT50v="(5F22.10)"     ! Inversion of angle/aperture
 CHARACTER(LEN=*), PARAMETER             :: FMT50s="(1I10,2I2,1I8)"
 CHARACTER(LEN=*), PARAMETER             :: FMT50d="(1F22.10)"
-CHARACTER(LEN=*), PARAMETER             :: FMT50i="(1I4)"        ! NO inversion of angle/aperture
-!CHARACTER(LEN=*), PARAMETER             :: FMT50i="(1I5)"         ! Inversion of angle/aperture
-CHARACTER(LEN=*), PARAMETER             :: FMT54="(1I10,6F14.6)" ! NO inversion of angle/aperture
-!CHARACTER(LEN=*), PARAMETER             :: FMT54="(1I10,7F14.6)"  ! Inversion of angle/aperture
+!CHARACTER(LEN=*), PARAMETER             :: FMT50i="(1I4)"        ! NO inversion of angle/aperture
+CHARACTER(LEN=*), PARAMETER             :: FMT50i="(1I5)"         ! Inversion of angle/aperture
+!CHARACTER(LEN=*), PARAMETER             :: FMT54="(1I10,6F14.6)" ! NO inversion of angle/aperture
+CHARACTER(LEN=*), PARAMETER             :: FMT54="(1I10,7F14.6)"  ! Inversion of angle/aperture
 CHARACTER(LEN=*), PARAMETER             :: FMT55="(4I10,1F14.6)"
 CHARACTER(LEN=3)                        :: adv
 
@@ -65,33 +65,32 @@ IF (file_type.EQ.1) THEN ! file of number of cells
 ELSE IF (file_type.EQ.2) THEN ! file of chain steps
         READ(10)ncell
         DO nn=1,ncell
-                READ(10)dble1,dble2,dble3,dble4                ! NO inversion of angle/aperture
-                write(*,*)dble1,dble2,dble3,dble4              ! NO inversion of angle/aperture
-                WRITE(20,FMT50v)dble1,dble2,dble3,dble4        ! NO inversion of angle/aperture
-                !READ(10)dble1,dble2,dble3,dble4,dble5         ! Inversion of angle/aperture
+                !READ(10)dble1,dble2,dble3,dble4                ! NO inversion of angle/aperture
+                !WRITE(20,FMT50v)dble1,dble2,dble3,dble4        ! NO inversion of angle/aperture
+                READ(10)dble1,dble2,dble3,dble4,dble5         ! Inversion of angle/aperture
                 !write(*,*)dble1,dble2,dble3,dble4,dble5       ! Inversion of angle/aperture
-                !WRITE(20,FMT50v)dble1,dble2,dble3,dble4,dble5 ! Inversion of angle/aperture
+                WRITE(20,FMT50v)dble1,dble2,dble3,dble4,dble5 ! Inversion of angle/aperture
         END DO
         DO WHILE (IOstatus.EQ.0)
-                READ(10,IOSTAT=IOstatus)iter,int1,int2,int3,dbles(1),dbles(2),dbles(3),dbles(4) ! Inversion of angle/aperture
-                !READ(10,IOSTAT=IOstatus)iter,int1,int2,int3,dbles(1),dbles(2),dbles(3),dbles(4),dbles(5) ! NO inversion of angle/aperture
+                !READ(10,IOSTAT=IOstatus)iter,int1,int2,int3,dbles(1),dbles(2),dbles(3),dbles(4) ! No inversion of angle/aperture
+                READ(10,IOSTAT=IOstatus)iter,int1,int2,int3,dbles(1),dbles(2),dbles(3),dbles(4),dbles(5) ! Inversion of angle/aperture
                 IF (IOstatus.NE.0) EXIT
                 WRITE(20,FMT50s,ADVANCE='NO')iter,int1,int2,int3
-                DO nn=1,4                                             ! If NO inversion of angle/aperture, change 5 to 4, and conversely
-                        IF (nn.LT.4) adv="NO"                         ! NO inversion of angle/aperture
-                        IF (nn.EQ.4) adv="YES"                        ! NO inversion of angle/aperture
-                        IF (dbles(nn).NE.0) THEN                      ! NO inversion of angle/aperture
-                                WRITE(20,FMT50d,ADVANCE=adv)dbles(nn) ! NO inversion of angle/aperture
-                        ELSE                                          ! NO inversion of angle/aperture
-                                WRITE(20,FMT50i,ADVANCE=adv)0         ! NO inversion of angle/aperture
-                        END IF                                        ! NO inversion of angle/aperture
-                        !IF (nn.LT.5) adv="NO"                          ! Inversion of angle/aperture
-                        !IF (nn.EQ.5) adv="YES"                         ! Inversion of angle/aperture
-                        !IF (dbles(nn).NE.0) THEN                       ! Inversion of angle/aperture
-                        !        WRITE(20,FMT50d,ADVANCE=adv)dbles(nn)  ! Inversion of angle/aperture
-                        !ELSE                                           ! Inversion of angle/aperture
-                        !        WRITE(20,FMT50i,ADVANCE=adv)0          ! Inversion of angle/aperture
-                        !END IF
+                DO nn=1,5                                             ! If NO inversion of angle/aperture, change 5 to 4, and conversely
+                        !IF (nn.LT.4) adv="NO"                         ! NO inversion of angle/aperture
+                        !IF (nn.EQ.4) adv="YES"                        ! NO inversion of angle/aperture
+                        !IF (dbles(nn).NE.0) THEN                      ! NO inversion of angle/aperture
+                        !        WRITE(20,FMT50d,ADVANCE=adv)dbles(nn) ! NO inversion of angle/aperture
+                        !ELSE                                          ! NO inversion of angle/aperture
+                        !        WRITE(20,FMT50i,ADVANCE=adv)0         ! NO inversion of angle/aperture
+                        !END IF                                        ! NO inversion of angle/aperture
+                        IF (nn.LT.5) adv="NO"                          ! Inversion of angle/aperture
+                        IF (nn.EQ.5) adv="YES"                         ! Inversion of angle/aperture
+                        IF (dbles(nn).NE.0) THEN                       ! Inversion of angle/aperture
+                                WRITE(20,FMT50d,ADVANCE=adv)dbles(nn)  ! Inversion of angle/aperture
+                        ELSE                                           ! Inversion of angle/aperture
+                                WRITE(20,FMT50i,ADVANCE=adv)0          ! Inversion of angle/aperture
+                        END IF
                 END DO
         END DO
 ELSE IF (file_type.EQ.3) THEN ! file of noise parameters
@@ -128,11 +127,11 @@ ELSE IF (file_type.EQ.4) THEN ! file of misfits
         END DO
 ELSE IF (file_type.EQ.5) THEN ! file of acceptance ratios
         DO WHILE (IOstatus.EQ.0)
-                READ(10,IOSTAT=IOstatus)iter,dble1,dble2,dble3,dble4,dble5,dble6        ! NO inversion of angle/aperture
-                !READ(10,IOSTAT=IOstatus)iter,dble1,dble2,dble3,dble4,dble5,dble6,dble8 ! Inversion of angle/aperture
+                !READ(10,IOSTAT=IOstatus)iter,dble1,dble2,dble3,dble4,dble5,dble6        ! NO inversion of angle/aperture
+                READ(10,IOSTAT=IOstatus)iter,dble1,dble2,dble3,dble4,dble5,dble6,dble8 ! Inversion of angle/aperture
                 IF (IOstatus.NE.0) EXIT
-                WRITE(20,FMT54)iter,dble1,dble2,dble3,dble4,dble5,dble6                 ! NO inversion of angle/aperture
-                !WRITE(20,FMT54)iter,dble1,dble2,dble3,dble4,dble5,dble6,dble8          ! Inversion of angle/aperture
+                !WRITE(20,FMT54)iter,dble1,dble2,dble3,dble4,dble5,dble6                 ! NO inversion of angle/aperture
+                WRITE(20,FMT54)iter,dble1,dble2,dble3,dble4,dble5,dble6,dble8          ! Inversion of angle/aperture
         END DO
 ELSE IF (file_type.EQ.6) THEN ! file of temperatures
         READ(10)number_of_temperatures

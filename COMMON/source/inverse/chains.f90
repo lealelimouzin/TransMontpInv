@@ -208,7 +208,7 @@ SUBROUTINE initialize_chains()
                 END IF
         END IF
         chain_acceptance=0
-
+        
         ALLOCATE(accepted_so_far_all(number_of_chains))
 
         ! Name of file containing last model of run

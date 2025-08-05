@@ -43,7 +43,18 @@ if __name__ == "__main__":
         np.savetxt(pjoin(tabVar[4],"rho_a_EPM.txt"), rho_a_EPM, delimiter='\t')
 
     # ---------- Forward DFN ----------
-    rho_a_DFN = fwd.fwdDFN(tabVar)
+    #rho_a_DFN = fwd.fwdDFN(tabVar)
+    #np.savetxt(pjoin(tabVar[4], "rho_a_DFN.txt"),rho_a_DFN, delimiter='\t')
+
+    testError=True
+    while testError==True:
+        try:
+            rho_a_DFN = fwd.fwdDFN(tabVar)
+            testError=False
+        except SystemExit:
+            print('KeyError problem in %s. C++ code is ran again.',name_new_folder)
+    
+
     np.savetxt(pjoin(tabVar[4], "rho_a_DFN.txt"),rho_a_DFN, delimiter='\t')
 
    

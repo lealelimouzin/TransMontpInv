@@ -43,7 +43,7 @@ CONTAINS
 
 SUBROUTINE read_mksamples_in()
 ! Reads mksamples.in
-USE acquisition, ONLY: electrode_file,data_file,datasets_file,number_of_datasets, deltaMN_file
+USE acquisition, ONLY: electrode_file,data_file,datasets_file,number_of_datasets,std_file
 USE chains, ONLY: number_of_datasets,ncell_min,ncell_max,value_min,value_max,x_min,x_max,y_min,y_max,z_min,z_max,&
                   noise_type,a_min,a_max,b_min,b_max,lambda_min,lambda_max,sigma_min,sigma_max,&
                   value_change,value_change_delayed,x_change,y_change,z_change,x_change_delayed,y_change_delayed,z_change_delayed,&
@@ -166,7 +166,7 @@ IF (input_error) section='(J)'
 READ(60,*) 
 READ(60,*) 
 READ(60,*) 
-READ(60,'(a20)')deltaMN_file
+READ(60,'(a20)')std_file
 ! end test 07/07/25
 CLOSE(60)
 

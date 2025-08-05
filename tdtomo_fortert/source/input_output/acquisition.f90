@@ -21,13 +21,13 @@ MODULE acquisition
 
 IMPLICIT NONE
 CHARACTER (LEN=30), SAVE                                :: electrode_file,data_file,datasets_file
-CHARACTER (LEN=30), SAVE                                :: deltaMN_file ! 07/07/25
+CHARACTER (LEN=30), SAVE                                :: std_file ! 07/07/25
 INTEGER, SAVE                                           :: number_of_electrodes,number_of_measurements,number_of_datasets
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE, SAVE     :: electrodes
 INTEGER, DIMENSION(:,:), ALLOCATABLE, SAVE              :: quadrupoles
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: observed_data,data_noise
 INTEGER, DIMENSION(:), ALLOCATABLE, SAVE                :: dataset_associations
-DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: deltaMN ! 07/07/25
+DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: std_val ! 07/07/25
 
 
 CONTAINS
@@ -193,21 +193,21 @@ SUBROUTINE read_distances()
 
 IMPLICIT NONE
 INTEGER                 :: electrode_number
-DOUBLE PRECISION        :: delta
+DOUBLE PRECISION        :: val
 INTEGER                 :: nn,IOstatus
 LOGICAL                 :: verbose=.FALSE.
 
-IF (ALLOCATED(deltaMN)) DEALLOCATE(deltaMN)
+IF (ALLOCATED(std_val)) DEALLOCATE(std_val)
 
 
-OPEN(UNIT=10,FILE=deltaMN_file,STATUS='OLD')
+OPEN(UNIT=10,FILE=std_file,STATUS='OLD')
 READ(10,*)number_of_electrodes
 
-ALLOCATE(deltaMN(number_of_electrodes))
+ALLOCATE(std_val(number_of_electrodes))
 
 DO nn=1,number_of_electrodes
-        READ(10,*,IOSTAT=IOstatus)delta
-        deltaMN(nn)=delta
+        READ(10,*,IOSTAT=IOstatus)val
+        std_val(nn)=val
 END DO
 IF (verbose) WRITE(*,*)'IOstatus=',IOstatus
 
@@ -228,10 +228,5 @@ IF (verbose) WRITE(*,*)'IOstatus=',IOstatus
 CLOSE(10)
 
 END SUBROUTINE
-
-
-
-
-
 
 END MODULE

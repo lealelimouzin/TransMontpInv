@@ -1,7 +1,7 @@
 
  ***************************
-  Job started on 07-07-2025
-  at 14:11:07
+  Job started on 28-07-2025
+  at 15:11:11
  ***************************
 
   Hello from rj-McMC tomography and chain 1 on core 0!                 
@@ -10,8 +10,8 @@
 WARNING: /res_chain_2/ directory already exists! It is removed before starting the new simulation.
 ***** Hej från Python initialize_fracmodels.py på res_chain_1! *****
 WARNING: /res_chain_1/ directory already exists! It is removed before starting the new simulation.
-***** Demat da Python main.py res_chain_2 ! *****
 ***** Demat da Python main.py res_chain_1 ! *****
+***** Demat da Python main.py res_chain_2 ! *****
 
  STARTING CHAINS FROM SAMPLE 0
 
@@ -22,79 +22,43 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
   Initial number of cells on chain 1: 5                                
   Initial number of cells on chain 2: 5                                
 
-  Initial misfit on chain 1: 288845.13025150541                        
-  Initial misfit on chain 2: 362991.45274316403                        
+  Initial misfit on chain 1: 5438.0084862578751                        
+  Initial misfit on chain 2: 6083.2799462774192                        
 
- NOISE at chain 1
+ VALUE at chain 1
+ VALUE voronoi_proposed =    7.9586143318540250        0.0000000000000000        9.9586296081542969        9.0827713362919482        0.0000000000000000     
+ VALUE at chain 2
+ VALUE voronoi_proposed =    8.0571758499023982        0.0000000000000000        9.0782299041748047        8.8856483001952036        0.0000000000000000     
+***** Demat da Python main.py res_chain_2 ! *****
+***** Demat da Python main.py res_chain_1 ! *****
+ alpha (move/value/noise/opt) at chain 2 is :    0.0000000000000000     
+ noise proposed at chain 2 =   6.0199999999999996     
+ noise current at chain 2 =   6.0199999999999996     
+ likelihood proposed at chain 2 =   2756.9084802140887     
+ likelihood current at chain 2 =   3041.6399731387100     
+ likelihood normalization at chain 2 =   0.0000000000000000     
+ Metropolis-Hastings acceptance criterion at chain 2 = -0.83166838837713808     
+ Is the proposed model accepted at chain 2 ?  T
  alpha (move/value/noise/opt) at chain 1 is :    0.0000000000000000     
- noise proposed at chain 1 =  0.38474659334487954     
- noise current at chain 1 =  0.38352099530713657     
- likelihood proposed at chain 1 =   143646.03953949892     
- likelihood current at chain 1 =   144422.56512575274     
- likelihood normalization at chain 1 =  -2.9715327810114700     
+ noise proposed at chain 1 =   6.0199999999999996     
+ noise current at chain 1 =   6.0199999999999996     
+ likelihood proposed at chain 1 =   2467.6740371917176     
+ likelihood current at chain 1 =   2719.0042431289376     
+ likelihood normalization at chain 1 =   0.0000000000000000     
  Metropolis-Hastings acceptance criterion at chain 1 =  -9.0759748727656273     
  Is the proposed model accepted at chain 1 ?  T
- Tempering : T1 is 1 with a temperature of 1.0000000000000000
- Tempering : T2 is 2 with a temperature of 8.0000000000000000
- VALUE at chain 2
- VALUE voronoi_proposed =    6.5358505249023438        0.0000000000000000        8.8107995986938477        6.5071629624349852        0.0000000000000000     
-***** Demat da Python main.py res_chain_2 ! *****
- alpha (move/value/noise/opt) at chain 2 is :   -35.622479922745697     
- noise proposed at chain 2 =  0.38731178156489310     
- noise current at chain 2 =  0.38731178156489310     
- likelihood proposed at chain 2 =   181780.70621096398     
- likelihood current at chain 2 =   181495.72637158202     
- likelihood normalization at chain 2 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 2 =  -5.3684982651701282E-002
- Is the proposed model accepted at chain 2 ?  F
- VALUE DELAYED at chain 2
- VALUE DELAYED voronoi_proposed is    6.5358505249023438        0.0000000000000000        8.8107995986938477        5.8211650780981428        0.0000000000000000     
-***** Demat da Python main.py res_chain_2 ! *****
- noise proposed DELAYED at chain 2=  0.38731178156489310     
- noise current DELAYED at chain 2=  0.38731178156489310     
- likelihood proposed DELAYED at chain 2=   181780.70621096398     
- likelihood current DELAYED at chain 2=   181495.72637158202     
- likelihood normalization DELAYED at chain 2=   0.0000000000000000     
- alpha DELAYED at chain 2=   0.0000000000000000     
- Metropolis-Hastings acceptance criterion DELAYED at chain 2= -0.86662523268454705     
- Is the poposed DELAYED model accepted at chain 2?  T
  --------------------------------------
  Chain number: 1/2
  Sample: 1/3000
- Iteration in this run: 1/3
+ Iteration in this run: 1/2
 
  Number of cells: 5
 
- Dataset 1, "lambda": 4.2373296672439782
- Minimum uncertainty:       0.6131 %
- Maximum uncertainty:      98.7810 %
+ Dataset 1, "lambda": 1.0000000000000000
+ Minimum uncertainty:       7.9472 %
+ Maximum uncertainty:     626.3829 %
 
- Misfit : 287292.07907899783
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:  100.0000 %
-
- TOTAL acceptance:  100.0000 %
- --------------------------------------
- --------------------------------------
- Chain number: 2/2
- Sample: 1/3000
- Iteration in this run: 1/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 4.3655890782446569
- Minimum uncertainty:       0.7126 %
- Maximum uncertainty:     427.2950 %
-
- Misfit : 361287.20169916772
+ Misfit : 4935.3480743834343
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -102,8 +66,33 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
        main:    0.0000 %
        delayed:    0.0000 %
  VALUE acceptance:  100.0000 %
+       main:  100.0000 %
+       delayed:    0.0000 %
+ NOISE acceptance:    0.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+ --------------------------------------
+ Chain number: 2/2
+ Sample: 1/3000
+ Iteration in this run: 1/2
+
+ Number of cells: 5
+
+ Dataset 1, "lambda": 1.0000000000000000
+ Minimum uncertainty:      14.8327 %
+ Maximum uncertainty:     380.2808 %
+
+ Misfit : 5513.8169604281775
+
+ BIRTH acceptance:    0.0000 %
+ DEATH acceptance:    0.0000 %
+ MOVE  acceptance:    0.0000 %
        main:    0.0000 %
-       delayed:  100.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:  100.0000 %
+       main:  100.0000 %
+       delayed:    0.0000 %
  NOISE acceptance:    0.0000 %
 
  TOTAL acceptance:  100.0000 %
@@ -111,12 +100,11 @@ WARNING: /res_chain_1/ directory already exists! It is removed before starting t
  --------------------------------------
  PARALLEL TEMPERING acceptance:    0.0000 %
  --------------------------------------
- TIME ELAPSED: 0h 17m 14s
+ TIME ELAPSED: 0h 0m 2s
  --------------------------------------
-   1.7489189471144049     
- ADD at chain 2
- ADD voronoi_proposed =    5.1336830243546707        0.0000000000000000        8.0464863609630815        1.7489189471144049        0.0000000000000000     
- MOVE at chain 1
- MOVE voronoi_proposed =    6.3899413301621513        0.0000000000000000        8.0905488449368139        6.3643007278442383        0.0000000000000000     
+  0.77113253801607573     
+ ADD at chain 1
+ ADD voronoi_proposed =    4.8256582460193105        0.0000000000000000        7.4675589258474204       0.77113253801607573        0.0000000000000000     
+ DELETE at chain 2
 ***** Demat da Python main.py res_chain_1 ! *****
 ***** Demat da Python main.py res_chain_2 ! *****

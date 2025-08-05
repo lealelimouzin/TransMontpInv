@@ -56,6 +56,7 @@ nb_lib = np.shape(lib_frac)[0]
 
 # Select random fractures from the fracture library file to initialize each Markov chain differently
 nb_frac = 5
+rd.seed(10) # Set the seed for reproductibility. This line can be deleted.
 with open(pjoin(path_folder,'results_chains',name_new_folder,'input','testDFN','DFN.txt'), 'w') as f:
     f.write('DETERMINISTIC1\n')
     f.write(str(int(nb_frac))+"\n")
@@ -68,6 +69,7 @@ with open(pjoin(path_folder,'results_chains',name_new_folder,'input','testDFN','
 
 
 # ---------- Save the initial model ----------
+
 path_data=pjoin(path_folder,'results_chains',name_new_folder,'input','testDFN','DFN.txt')
 new_path_data = pjoin(path_folder,'results_chains',name_new_folder,'results_fwd','DFN_initial.txt')
 shutil.copyfile(path_data,new_path_data)

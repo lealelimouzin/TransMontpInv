@@ -106,7 +106,8 @@ IF (run_number.EQ.1) THEN
                 END DO
         ELSE IF (noise_type.EQ.3.OR.noise_type.EQ.6) THEN
                 DO nn=1,number_of_datasets
-                        lambda_current(nn)=lambda_min+unirand()*(lambda_max-lambda_min)
+                        !lambda_current(nn)=lambda_min+unirand()*(lambda_max-lambda_min)
+                        lambda_current(nn)=1 ! 18/07/25
                 END DO
         END IF
 

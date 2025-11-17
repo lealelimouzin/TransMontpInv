@@ -4,6 +4,13 @@
 
 TransMontpInv is a software to invert electrical resistivity data based on a discrete dual porosity approach. It is a combination of the already existent codes from Galetti & Curtis (2018) and the forward model adapted from Caballero Sanz et al. (2017). The two codes have been merged and adapted to support the geometry of thin pathways such as fractures.
 
+## Table of Contents
+
+- [Contributions](#contributions)
+- [Prepare the working environment to run the code](#prepare-the-working-environment-to-run-the-code)
+- [Set files](#set-files)
+- [Compile](#compile)
+
 ## Contributions
 
 ### Main code: origins
@@ -48,6 +55,14 @@ Another option to create a Python environment can be to use Python "venv" packag
 - Activate the environment: `source env_python/bin/activate`
 - Install the dependencies in the virtual environment: `pip install -r requirements.txt`
 - To close the environment: `source deactivate`
+
+## Set files
+
+In the file `tdtomo_fortert/source/main/rjtomo/chain2txt.f90`, change line 23 ("opt" variable) to indicate if there is inversion of angle/aperture.
+
+
+
+## Compile
 
 Once the working environment is created, the code needs to be compiled in the environment from the terminal:
 

@@ -39,6 +39,7 @@ ncell_initial=0
 
 length_ok=.TRUE.
 
+
 DO nn=1,number_of_chains
 
         ! File of chain steps

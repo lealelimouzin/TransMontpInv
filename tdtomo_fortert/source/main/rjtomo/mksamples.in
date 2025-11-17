@@ -35,7 +35,7 @@ residuals.out                 :: File containing residuals (gets renamed to e.g.
 0.05   0.2                    :: Noise type 0: minimum and maximum noise parameter "sigma"
 6                             :: Noise type 6: standard deviation associated to the homogeneous matrix (no fracture) "sigma_mat"
 16.3130                       :: Targetted apparent electrical resisitivty of the homegeneous matrix
-0                             :: Add a model parameter (0=no option, 1=fracture angle, 2=fracture aperture)
+1                             :: Add a model parameter (0=no option, 1=fracture angle, 2=fracture aperture)
 0   360                       :: Minimum and maximum angle (degree). Required even if no model parameter is added (no option)
 0.001   0.1                   :: Minimum and maximum aperture (meter). Required even if no model parameter is added (no option)
 ********************************************************************************************************************************
@@ -65,7 +65,7 @@ forward.in                    :: File containing forward modelling parameters fo
 * (I) MARKOV CHAIN PARAMETERS                                                                                                  *
 ********************************************************************************************************************************
 0.3                           :: Maximum run time in hours
-2                             :: Number of samples in this run
+1                             :: Number of samples in this run
 3000                          :: Total number of samples per chain including all runs (=0 to switch off this limit)
 1                             :: Sample interval for displaying information in output file
 1                             :: Add 1s sleep time between the display of each chain's information? (1=yes, 0=no)

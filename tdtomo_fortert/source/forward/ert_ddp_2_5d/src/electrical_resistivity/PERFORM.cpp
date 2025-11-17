@@ -26,11 +26,20 @@
 #include <iostream>
 #include <string>
 
+// Tests
+//#include </home/leal/Desktop/Doctorat/Scripts/MontpInv_Python/transdimension/refonte_matlab_python/montp_inv/Library/Eigen/IterativeLinearSolvers>
+//#include </usr/include/eigen3/Eigen/IterativeLinearSolvers>
+//#include </usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/pybind11.h>
+//#include </usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/stl.h>
+//#include </usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/eigen.h>
+
+// original versions
 #include <Eigen/IterativeLinearSolvers>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/eigen.h>
+
 #include <map>
 
 using Eigen::SparseMatrix;
@@ -40,6 +49,8 @@ namespace py = pybind11;
 typedef Eigen::Triplet<double> T;
 
 std::map<int, Eigen::SparseMatrix<double>> perform() {
+//std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
+//         Eigen::aligned_allocator<std::pair<const int, Eigen::SparseMatrix<double>> > > perform() {
 
 	clock_t t_begin=clock(),t_end;
 
@@ -55,6 +66,8 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 	double min_visu=-1,max_visu=-1;
     // 1.4. Output results
     std::map<int, Eigen::SparseMatrix<double> > res_map;
+    //std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
+    //     Eigen::aligned_allocator<std::pair<const int, Eigen::SparseMatrix<double>> > > res_map;
 
 	// 2. Simulation
 	// 2.1. DFN generation
@@ -95,6 +108,29 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 		else if (param.simu_param.model_option==DDP){
 			// Read the source term positions
 			map<int,pair<double,double> > source_term_positions=ReadSourceTermsCoordinates(param);
+
+			//----------------------- BEGIN TEST -------------------------------------
+			#ifdef LIB_TEST_SMALL_MATRIX
+			// 1000 matrices of size 8x2
+			cout << "TEST SMALL MATRIX 1000 matrices of size 8x2" << endl;
+			for (int i=129;i<=1000;i++) {
+				source_term_positions[i] = make_pair((double)rand()/RAND_MAX*13,(double)rand()/RAND_MAX*16);
+			}
+			param.simu_param.DDP_param.Nx=2;param.simu_param.DDP_param.Ny=2;
+			#endif
+
+			#ifdef LIB_TEST_BIG_MATRIX
+			cout << "TEST BIG MATRIX 10 matrices of size 8000x2000" << endl;
+			// Changes for test2: 10 matrices of size 8000x2000
+			map<int, pair<double, double> > source_term_positions_bis;
+			for (int i=1;i<=10;i++) {
+				source_term_positions_bis[i] = make_pair((double)rand()/RAND_MAX*13,(double)rand()/RAND_MAX*16);
+			}
+			source_term_positions=source_term_positions_bis;
+			param.simu_param.DDP_param.Nx=2000;param.simu_param.DDP_param.Ny=2000;
+			#endif
+			//---------------------- END TEST -----------------------------------------
+
 			// Run the simulations
 			if (source_term_positions.size()>0){
 				//FourierPotentialDDPSourceTerm(param,domain,singularity,source_term_positions);
@@ -196,6 +232,4 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 PYBIND11_MODULE(PERFORM, m) {
     m.doc() = "pybind11 electrical resistivity"; // optional module docstring
     m.def("perform", &perform, py::return_value_policy::reference);
-	//m.def("perform", &perform, py::return_value_policy::reference_internal);
-	//m.def("perform", &perform, py::return_value_policy::move);
 }

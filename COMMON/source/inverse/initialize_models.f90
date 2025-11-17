@@ -31,8 +31,8 @@ DOUBLE PRECISION        :: random_deviate
 REAL,DIMENSION(5,6)     :: tempo
 CHARACTER(100)          :: namefile,nametmp
 CHARACTER(300)          :: namedir
-CHARACTER(400)          :: filename,cwd
-LOGICAL :: Existent=.FALSE.
+CHARACTER(400)          :: filename
+LOGICAL                 :: Existent=.FALSE.
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initializing models ---'
 
@@ -148,10 +148,11 @@ IF (run_number.EQ.1) THEN
         END IF
         
 ELSE IF (run_number.GT.1) THEN
-        
+
         ! Open file containing last model of previous run
-        OPEN(UNIT=80,FILE=last_tmp,STATUS='OLD',FORM='UNFORMATTED')
+        OPEN(UNIT=80,FILE=TRIM("results/")//TRIM(last_tmp),STATUS='OLD',FORM='UNFORMATTED')
         
+        !-------- MODELLING METHOD 1----------
         IF (modelling_method.EQ.1) THEN
                 ! Read Voronoi tessellation
                 READ(80)ncell_current
@@ -161,6 +162,7 @@ ELSE IF (run_number.GT.1) THEN
                         voronoi_proposed(nn,:)=voronoi_current(nn,:)
                         voronoi_delayed(nn,:)=voronoi_current(nn,:)
                 END DO
+        !-------------------------------------
         ELSE IF (modelling_method.EQ.2) THEN 
                 ! Read fractures
                 READ(80)ncell_current

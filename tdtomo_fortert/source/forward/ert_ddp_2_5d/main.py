@@ -47,12 +47,14 @@ if __name__ == "__main__":
     #np.savetxt(pjoin(tabVar[4], "rho_a_DFN.txt"),rho_a_DFN, delimiter='\t')
 
     testError=True
-    while testError==True:
+    cpt=1
+    while testError==True or cpt==10:
         try:
             rho_a_DFN = fwd.fwdDFN(tabVar)
             testError=False
         except SystemExit:
-            print('KeyError problem in %s. C++ code is ran again.',name_new_folder)
+            print(f'KeyError problem in {name_new_folder}. C++ code is ran again for the {cpt}th time.')
+            cpt+=1
     
 
     np.savetxt(pjoin(tabVar[4], "rho_a_DFN.txt"),rho_a_DFN, delimiter='\t')

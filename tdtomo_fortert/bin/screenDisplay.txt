@@ -1,7 +1,7 @@
 
  ***************************
-  Job started on 28-07-2025
-  at 15:11:11
+  Job started on 17-11-2025
+  at 09:07:17
  ***************************
 
   Hello from rj-McMC tomography and chain 1 on core 0!                 
@@ -10,101 +10,5 @@
 WARNING: /res_chain_2/ directory already exists! It is removed before starting the new simulation.
 ***** Hej från Python initialize_fracmodels.py på res_chain_1! *****
 WARNING: /res_chain_1/ directory already exists! It is removed before starting the new simulation.
-***** Demat da Python main.py res_chain_1 ! *****
-***** Demat da Python main.py res_chain_2 ! *****
-
- STARTING CHAINS FROM SAMPLE 0
-
- Max run time is: 0.29999999999999999 hr (1080.0000000000000 sec)
-
- Number of measurements: 2008
-
-  Initial number of cells on chain 1: 5                                
-  Initial number of cells on chain 2: 5                                
-
-  Initial misfit on chain 1: 5438.0084862578751                        
-  Initial misfit on chain 2: 6083.2799462774192                        
-
- VALUE at chain 1
- VALUE voronoi_proposed =    7.9586143318540250        0.0000000000000000        9.9586296081542969        9.0827713362919482        0.0000000000000000     
- VALUE at chain 2
- VALUE voronoi_proposed =    8.0571758499023982        0.0000000000000000        9.0782299041748047        8.8856483001952036        0.0000000000000000     
 ***** Demat da Python main.py res_chain_2 ! *****
 ***** Demat da Python main.py res_chain_1 ! *****
- alpha (move/value/noise/opt) at chain 2 is :    0.0000000000000000     
- noise proposed at chain 2 =   6.0199999999999996     
- noise current at chain 2 =   6.0199999999999996     
- likelihood proposed at chain 2 =   2756.9084802140887     
- likelihood current at chain 2 =   3041.6399731387100     
- likelihood normalization at chain 2 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 2 = -0.83166838837713808     
- Is the proposed model accepted at chain 2 ?  T
- alpha (move/value/noise/opt) at chain 1 is :    0.0000000000000000     
- noise proposed at chain 1 =   6.0199999999999996     
- noise current at chain 1 =   6.0199999999999996     
- likelihood proposed at chain 1 =   2467.6740371917176     
- likelihood current at chain 1 =   2719.0042431289376     
- likelihood normalization at chain 1 =   0.0000000000000000     
- Metropolis-Hastings acceptance criterion at chain 1 =  -9.0759748727656273     
- Is the proposed model accepted at chain 1 ?  T
- --------------------------------------
- Chain number: 1/2
- Sample: 1/3000
- Iteration in this run: 1/2
-
- Number of cells: 5
-
- Dataset 1, "lambda": 1.0000000000000000
- Minimum uncertainty:       7.9472 %
- Maximum uncertainty:     626.3829 %
-
- Misfit : 4935.3480743834343
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:  100.0000 %
-       main:  100.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
-
- TOTAL acceptance:  100.0000 %
- --------------------------------------
- --------------------------------------
- Chain number: 2/2
- Sample: 1/3000
- Iteration in this run: 1/2
-
- Number of cells: 5
-
- Dataset 1, "lambda": 1.0000000000000000
- Minimum uncertainty:      14.8327 %
- Maximum uncertainty:     380.2808 %
-
- Misfit : 5513.8169604281775
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:  100.0000 %
-       main:  100.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:    0.0000 %
-
- TOTAL acceptance:  100.0000 %
- --------------------------------------
- --------------------------------------
- PARALLEL TEMPERING acceptance:    0.0000 %
- --------------------------------------
- TIME ELAPSED: 0h 0m 2s
- --------------------------------------
-  0.77113253801607573     
- ADD at chain 1
- ADD voronoi_proposed =    4.8256582460193105        0.0000000000000000        7.4675589258474204       0.77113253801607573        0.0000000000000000     
- DELETE at chain 2
-***** Demat da Python main.py res_chain_1 ! *****
-***** Demat da Python main.py res_chain_2 ! *****

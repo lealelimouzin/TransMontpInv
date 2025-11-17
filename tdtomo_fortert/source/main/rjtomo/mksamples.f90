@@ -43,7 +43,6 @@ LOGICAL                 :: length_ok
 LOGICAL                 :: accepted,delayed,accepted_main,accepted_delayed
 LOGICAL                 :: time_is_up,temper
 CHARACTER(LEN=70)       :: message
-CHARACTER(LEN=300)      :: cwd
 ! For MPI
 INTEGER                 :: status(MPI_STATUS_SIZE)
 INTEGER                 :: number_of_cores,core_number,ierror,rr
@@ -131,12 +130,11 @@ ELSE
 END IF
 
 ! Get run number from command line
-CALL getarg(1,run_name) ! intrinsic routine to get command line arguments
-                        ! retrieve the ith argument, here the 1st, "run_name" is a chain of character corresponding to the value of the ith argument
-CALL check_run_number() ! input_files.f90 --> run_number = the n° of the job started 
+CALL getarg(1,run_name) 
+CALL check_run_number()
 
 ! Read mksamples.in
-CALL read_mksamples_in() ! input_files.f90
+CALL read_mksamples_in()
 IF (input_error) THEN
         CALL MPI_FINALIZE(ierror)
         STOP
@@ -144,7 +142,7 @@ END IF
 
 ! Set up sleep time between chain status display
 sleep_total=0
-IF (add_sleep.EQ.1) THEN ! input_files.f90 and mksamples.in: add 1s of sleeping time between the display of each chain's information
+IF (add_sleep.EQ.1) THEN
         sleep_time=1
 ELSE IF (add_sleep.EQ.0) THEN
         sleep_time=0
@@ -157,7 +155,7 @@ IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': read data --
 
 ! Initialise random number generator
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initializing random numbers ---'
-CALL initialize_random_generator(chain_number) ! random_generator.f90
+CALL initialize_random_generator(chain_number)
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initialized random numbers ---'
 
 ! Initialise Markov chains and allocate necessary arrays
@@ -167,8 +165,8 @@ CALL initialize_chains() ! chains.f90: allocate the space for different variable
 IF (run_number.EQ.1) THEN
         info=1
         DO WHILE (info.NE.0)
-                CALL initialize_models() ! initialize_models.f90
-                IF (no_data.EQ.0) CALL forward_modelling(ncell_current,voronoi_current,data_current,info,chain_number,iteration) ! forward.f90
+                CALL initialize_models()
+                IF (no_data.EQ.0) CALL forward_modelling(ncell_current,voronoi_current,data_current,info,chain_number,iteration)
                 IF (no_data.EQ.1) info=0
         END DO
         residuals(:,1)=observed_data-LOG(data_current) 
@@ -197,8 +195,11 @@ ELSE IF (run_number.GT.1) THEN
         ELSE
                 CALL MPI_SSEND(accepted_so_far_other,1,MPI_INTEGER,0,1,MPI_COMM_WORLD,ierror)
         END IF
+
         IF (core_number.EQ.0) THEN
+                CALL CHDIR(TRIM("results/"))
                 CALL check_output_files(length_ok)
+                CALL CHDIR("../")
         END IF
         CALL MPI_BCAST(length_ok,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierror)
         IF (.NOT.length_ok) THEN
@@ -321,7 +322,7 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
 
         ! Apply the step
         IF (birth) THEN
-                CALL add_cell(modelling_method) ! chains.f90
+                CALL add_cell(modelling_method)
         ELSE IF (death) THEN
                 CALL delete_cell(modelling_method)
         ELSE IF (move) THEN
@@ -364,21 +365,21 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                 CALL calculate_alpha(likelihood_current,likelihood_proposed,&
                                      likelihood_normalization,temper,alpha)
                 
-                write(*,*) 'noise proposed at chain ', TRIM(chain_name), ' =', noise_proposed(1)
-                write(*,*) 'noise current at chain ', TRIM(chain_name), ' =', noise_current(1)
-                write(*,*) 'likelihood proposed at chain ', TRIM(chain_name), ' =', likelihood_proposed
-                write(*,*) 'likelihood current at chain ', TRIM(chain_name), ' =', likelihood_current 
-                write(*,*) 'likelihood normalization at chain ', TRIM(chain_name), ' =',likelihood_normalization
+                write(*,*) 'NOISE proposed at chain ', TRIM(chain_name), ' =', noise_proposed(1)
+                write(*,*) 'NOISE current at chain ', TRIM(chain_name), ' =', noise_current(1)
+                write(*,*) '  likelihood proposed at chain ', TRIM(chain_name), ' =', likelihood_proposed
+                write(*,*) '  likelihood current at chain ', TRIM(chain_name), ' =', likelihood_current 
+                write(*,*) '  likelihood normalization at chain ', TRIM(chain_name), ' =',likelihood_normalization
 
                 ! Metropolis-Hastings acceptance criterion
                 random_deviate=unirand()
-                write(*,*) 'Metropolis-Hastings acceptance criterion at chain ',TRIM(chain_name), ' =', LOG(random_deviate)
+                write(*,*) 'MH criterion at chain ',TRIM(chain_name), ' =', LOG(random_deviate)
                 IF (LOG(random_deviate).LE.alpha) accepted=.TRUE.
                 
                 IF (move.AND.accepted) accepted_main=.TRUE.
                 IF (value.AND.accepted) accepted_main=.TRUE.
                 IF (option.AND.accepted) accepted_main=.TRUE.
-                write(*,*) 'Is the proposed model accepted at chain ', TRIM(chain_name), ' ? ', accepted
+                write(*,*) '     Is the proposed model accepted at chain ', TRIM(chain_name), ' ? ', accepted
         END IF
         
         ! Write step to screen if in debug mode
@@ -425,19 +426,18 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                                                      likelihood_delayed,likelihood_normalization,&
                                                      temper,alpha_delayed)
                         
-                        write(*,*) 'noise proposed DELAYED at chain ', TRIM(chain_name), '=', noise_proposed(1)
-                        write(*,*) 'noise current DELAYED at chain ', TRIM(chain_name), '=', noise_current(1)
-                        write(*,*) 'likelihood proposed DELAYED at chain ', TRIM(chain_name), '=', likelihood_proposed
-                        write(*,*) 'likelihood current DELAYED at chain ', TRIM(chain_name), '=', likelihood_current 
-                        write(*,*) 'likelihood normalization DELAYED at chain ', TRIM(chain_name), '=',likelihood_normalization
-                        write(*,*) 'alpha DELAYED at chain ', TRIM(chain_name), '=',alpha_delayed
+                        write(*,*) 'NOISE proposed DELAYED at chain ', TRIM(chain_name), '=', noise_proposed(1)
+                        write(*,*) 'NOISE current DELAYED at chain ', TRIM(chain_name), '=', noise_current(1)
+                        write(*,*) '  likelihood proposed DELAYED at chain ', TRIM(chain_name), '=', likelihood_proposed
+                        write(*,*) '  likelihood current DELAYED at chain ', TRIM(chain_name), '=', likelihood_current 
+                        write(*,*) '  likelihood normalization DELAYED at chain ', TRIM(chain_name), '=',likelihood_normalization
                         ! Metropolis-Hastings acceptance criterion
                         random_deviate=unirand()
                         IF (LOG(random_deviate).LE.alpha_delayed) accepted=.TRUE.
-                        write(*,*) 'Metropolis-Hastings acceptance criterion DELAYED at chain ',TRIM(chain_name),&
+                        write(*,*) 'MH acceptance criterion DELAYED at chain ',TRIM(chain_name),&
                                          &'=', LOG(random_deviate)
                         IF (accepted) accepted_delayed=.TRUE.
-                        write(*,*) 'Is the poposed DELAYED model accepted at chain ', TRIM(chain_name), '? ', accepted_delayed
+                        write(*,*) '     Is the poposed DELAYED model accepted at chain ', TRIM(chain_name), '? ', accepted_delayed
                 END IF
                 
         END IF
@@ -579,11 +579,12 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
         
         !CALL MPI_BARRIER(MPI_COMM_WORLD,ierror)
 
-        ! Write chains content to file every 10 iterations
+        ! Write chains content to file every iteration
         IF (MOD(iteration,1).EQ.0) THEN
-                CALL CHDIR("tempo/")
+                CALL CHDIR( TRIM("results") )
                 CALL write_chains_to_file()
                 CALL write_last_model()
+                CALL CHDIR('../')
         END IF
 
         
@@ -603,9 +604,13 @@ samples_so_far=samples_at_start+samples_in_run
 IF (parallel_tempering.EQ.1) THEN
         CALL MPI_BCAST(acceptance_tempering,3,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierror)
 END IF
+CALL CHDIR( TRIM("results") )
 CALL write_last_model()
-CALL write_chains_to_file()
 IF (core_number.EQ.0) CALL write_inversion_parameters()
+CALL CHDIR('../')
+
+! Save a copy of the results per run
+CALL SYSTEM('scp -r results/ results_run_'//TRIM(int2str(run_number)))
 
 ! Stop timer
 CALL cpu_time(timer_end)

@@ -180,14 +180,8 @@ FilesParameters::FilesParameters(){
 	/*cout << "Enter the path for Input and Output folders" << endl;
 	cin >> code_path;*/
 	// 1. Read the type of simulations and define input path
-	//code_path="/Users/delphineroubinet/Documents/Projets/UNIL/ElectricalResistivity/Code/Code2.5D";
-	//code_path="./../..";
+	///code_path="./../..";
 	code_path=".";
-	//code_path="./refonte_matlab_python";
-	//cout << code_path << endl;
-	//cout << std::filesystem::current_path() << endl;
-    //code_path="refonte_matlab_./../..";
-	//code_path="/home/lelimouzinl/work_ert_ddp/Stage_Lea_Lelimouzin/Code_C++/Code2.5D/Code2.5D";
 	string simu_file_name=code_path+"/input/SimuType.txt";
 	//cout << simu_file_name << endl;
 	ifstream fichier1(simu_file_name.c_str());

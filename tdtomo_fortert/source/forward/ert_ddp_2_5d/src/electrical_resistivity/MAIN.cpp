@@ -35,11 +35,9 @@ using namespace std;
 typedef Eigen::Triplet<double> T;
 
 int main(int argc, char **argv) {
-//std::map<int, Eigen::SparseMatrix<double>> main() {
 
 	clock_t t_begin=clock(),t_end;
-
-	//cout << "MAIN begin" << endl;
+	cout << "Electrical Resistivity is starting..." << endl;    
 
 	bool singularity=false,bc_on_border=false;
 	// 1. Parameter and domain definition reading
@@ -50,7 +48,7 @@ int main(int argc, char **argv) {
 	// 1.3. Display parameters
 	double min_visu=-1,max_visu=-1;
     // 1.4. Output results
-    //std::map<int, Eigen::SparseMatrix<double> > res_map;
+    std::map<int, Eigen::SparseMatrix<double> > res_map;
 
 	// 2. Simulation
 	// 2.1. DFN generation
@@ -58,15 +56,15 @@ int main(int argc, char **argv) {
 		DFNVisu DFN_visu=DFNGeneration(param,domain);
 
 	// Compute the backbone
-		/*NetworkMeshes net_mesh1=DFN_visu.net_mesh,backbone;
-		backbone=net_mesh1.return_backbone(param,EPSILON);
-		DFN_visu.net_mesh=backbone;*/
+		//NetworkMeshes net_mesh1=DFN_visu.net_mesh,backbone;
+		//backbone=net_mesh1.return_backbone(param,EPSILON);
+		//DFN_visu.net_mesh=backbone;
 
 		// Cut the domain
-		/*NetworkMeshes net_mesh2=DFN_visu.net_mesh;
+		//NetworkMeshes net_mesh2=DFN_visu.net_mesh;
 		//DFNCutting(net_mesh2,26.6);
 		//DFNCutting(net_mesh2,25);
-		DFN_visu.net_mesh=net_mesh2;*/
+		//DFN_visu.net_mesh=net_mesh2;
 
 		// DFN writing
 		Results results(param.files_param.output_path+param.files_param.output_file,DFN_visu.net_mesh);
@@ -89,12 +87,37 @@ int main(int argc, char **argv) {
 		}
 		// Discrete-Dual-Porosity model for fractured porous domains
 		else if (param.simu_param.model_option==DDP){
-			// Read the source term positions
+
+		    // Read the source term positions
 			map<int,pair<double,double> > source_term_positions=ReadSourceTermsCoordinates(param);
+
+            //----------------------- BEGIN TEST -------------------------------------
+			#ifdef TEST_SMALL_MATRIX
+            // 1000 matrices of size 8x2
+            cout << "TEST SMALL MATRIX 1000 matrices of size 8x2" << endl;
+            for (int i=129;i<=1000;i++) {
+				cout << "i = " << i << endl;
+                source_term_positions[i] = make_pair((double)rand()/RAND_MAX*13,(double)rand()/RAND_MAX*16);
+            }
+            param.simu_param.DDP_param.Nx=2;param.simu_param.DDP_param.Ny=2;
+            #endif
+
+            #ifdef TEST_BIG_MATRIX
+            cout << "TEST BIG MATRIX 10 matrices of size 8000x2000" << endl;
+            // Changes for test2: 10 matrices of size 8000x2000
+            map<int, pair<double, double> > source_term_positions_bis;
+            for (int i=1;i<=10;i++) {
+                source_term_positions_bis[i] = make_pair((double)rand()/RAND_MAX*13,(double)rand()/RAND_MAX*16);
+            }
+            source_term_positions=source_term_positions_bis;
+            param.simu_param.DDP_param.Nx=2000;param.simu_param.DDP_param.Ny=2000;
+            #endif
+            //---------------------- END TEST -----------------------------------------
+
 			// Run the simulations
 			if (source_term_positions.size()>0){
 				FourierPotentialDDPSourceTerm(param,domain,singularity,source_term_positions);
-				//cout << "after FourierPotentialDDPSourceTerm" << endl;
+				cout << "after FourierPotentialDDPSourceTerm" << endl;
 			}
 			else if (source_term_positions.size()==0){FourierPotentialDDP(param,domain,singularity,bc_on_border);}
 			else{cout << "WARNING in main (MAIN.cpp): option not implemented" << endl;}
@@ -102,7 +125,6 @@ int main(int argc, char **argv) {
 		}
 		else{cout << "WARNING in main (MAIN.cpp): solving method not implemented" << endl;}
 	}
-
 
 
 	// 2.2. Potential computation and visualization
@@ -148,8 +170,8 @@ int main(int argc, char **argv) {
 
 	// 2.4. Study of the flow exchanged between fractures and matrix at the matrix-block scale
 	else if (param.simu_param.simu_option==EXCHANGE_STUDY){
-		/*int nb_div=6,nb_seed=1; // nb_div:number of times that we divide the domain and nb_seed:number of generated domain
-		ExchangeStudy(param,domain,nb_div,nb_seed);*/
+		//int nb_div=6,nb_seed=1; // nb_div:number of times that we divide the domain and nb_seed:number of generated domain
+		//ExchangeStudy(param,domain,nb_div,nb_seed);
 		//ExchangeStudy2(param,domain);
 	}
 	// 2.5. Comparison of the potential with DDP and EPMDFN
@@ -165,31 +187,10 @@ int main(int argc, char **argv) {
 	}
 	else{cout << "WARNING in main (MAIN.cpp): simulation option not implemented" << endl;}
 
-	//cout << "MAIN end" << endl;
 
 	t_end=clock();
-	//cout << "CPU Time = " << (t_end-t_begin)/CLOCKS_PER_SEC << endl;
+	cout << "CPU Time = " << (t_end-t_begin)/CLOCKS_PER_SEC << endl;
 	//cout << "CPU Time = " << (t_end-t_begin) << endl;
-
-	// Test eigen matrix
-    /*int n = 5;
-    SparseMatrix<double> A(n,n);
-    std::vector<T> coefficients;
-
-	for (int i=0;i<n;i++){
-	    for (int j=0;j<n;j++){
-            	coefficients.push_back(T(i,j,10.));
-                        }
-                }
-    A.setFromTriplets(coefficients.begin(), coefficients.end());
-
-    std::map<int,Eigen::SparseMatrix<double>> map_matrices;
-    map_matrices[0] = A;
-
-    cout << "end test eigen" << endl;
-
-	return map_matrices;*/
-
 
     return 0;
 }

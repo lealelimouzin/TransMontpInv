@@ -23,7 +23,10 @@ RM := rm -rf
 -include DDPModel/subdir.mk
 -include .metadata/.plugins/org.eclipse.cdt.make.core/subdir.mk
 -include objects.mk
+
 ifeq ($(MAKECMDGOALS),lib)
+-include perform.mk
+else ifeq ($(MAKECMDGOALS),Perform)
 -include perform.mk
 else
 -include subdir.mk
@@ -54,24 +57,41 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables
 
-.PHONY: all
-all:
-	$(MAKE) BUILD_CXXFLAGS="-O3 -Wall -fopenmp" BUILD_LDFLAGS="-O3 -Wall -fopenmp" exec
+.PHONY: exec
+exec:
+	$(MAKE) BUILD_CXXFLAGS="-O3 -Wall -fopenmp" BUILD_LDFLAGS="-O3 -Wall -fopenmp" ElectricalResistivity
 
-.PHONY: debug
-debug:
-	$(MAKE) BUILD_CXXFLAGS="-g -Wall -fopenmp" BUILD_LDFLAGS="-g -Wall -fopenmp" exec
+.PHONY: lib
+lib:
+	$(MAKE) BUILD_CXXFLAGS="-O3 -Wall -fPIC -fopenmp" BUILD_LDFLAGS="-O3 -Wall -fopenmp" Perform
 
-.PHONY: shared
-shared:
-	$(MAKE) BUILD_CXXFLAGS="-O3 -Wall -fPIC -fopenmp" BUILD_LDFLAGS="-O3 -Wall -fopenmp" lib
+.PHONY: exec-debug
+exec-debug:
+	$(MAKE) BUILD_CXXFLAGS="-g -Wall -fopenmp" BUILD_LDFLAGS="-g -Wall -fopenmp" ElectricalResistivity
+
+.PHONY: lib-debug
+lib-debug:
+	$(MAKE) BUILD_CXXFLAGS="-g -Wall -fPIC -fopenmp" BUILD_LDFLAGS="-g -Wall -fopenmp" Perform
+
+.PHONY: test_small_matrix
+test_small_matrix:		
+	$(MAKE) BUILD_CXXFLAGS="-DTEST_SMALL_MATRIX -g -Wall -fopenmp" BUILD_LDFLAGS="-g -Wall -fopenmp" ElectricalResistivity
+	
+.PHONY: test_big_matrix
+test_big_matrix:		
+	$(MAKE) BUILD_CXXFLAGS="-DTEST_BIG_MATRIX -g -Wall -fopenmp" BUILD_LDFLAGS="-g -Wall -fopenmp" ElectricalResistivity
+
+.PHONY: lib_test_small_matrix
+lib_test_small_matrix:
+	$(MAKE) BUILD_CXXFLAGS="-DLIB_TEST_SMALL_MATRIX -g -Wall -fPIC -fopenmp" BUILD_LDFLAGS="-O3 -Wall -fopenmp" Perform
+
+.PHONY: lib_test_big_matrix
+lib_test_big_matrix:
+	$(MAKE) BUILD_CXXFLAGS="-DLIB_TEST_BIG_MATRIX -g -Wall -fPIC -fopenmp" BUILD_LDFLAGS="-O3 -Wall -fopenmp" Perform
 
 CXX := g++
 CXXFLAGS := $(BUILD_CXXFLAGS)
 LDFLAGS := $(BUILD_LDFLAGS)
-
-# All Target
-exec: ElectricalResistivity
 
 # Tool invocations
 ElectricalResistivity: $(OBJS) $(USER_OBJS)
@@ -81,8 +101,6 @@ ElectricalResistivity: $(OBJS) $(USER_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-lib: Perform
-# Tool invocations
 Perform: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'

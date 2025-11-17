@@ -70,9 +70,10 @@ def mainDFN(tabVar,res_cxx):
         else: # If the library version of the C++ code is used
             # 28/07/25
             try:
-                AllResultsDFN[i, :, :] = res_cxx[i+1].toarray(order='C')
+                #AllResultsDFN[i, :, :] = res_cxx[i+1].toarray(order='C')
+                AllResultsDFN[i, :, :] = res_cxx[i+1].toarray()
             except KeyError:
-                print('KeyError problem with matrix %i. Exit function.',i)
+                print(f'KeyError problem with matrix {i}. Exit function.')
                 sys.exit(1)
 
     for i in range(nb_exp):

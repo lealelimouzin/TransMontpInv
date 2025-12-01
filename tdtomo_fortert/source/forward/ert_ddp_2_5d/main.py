@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     testError=True
     cpt=1
-    while testError==True or cpt==10:
+    while testError==True or cpt==5:
         try:
             rho_a_DFN = fwd.fwdDFN(tabVar)
             testError=False

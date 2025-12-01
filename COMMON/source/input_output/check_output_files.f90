@@ -203,6 +203,9 @@ DO nn=1,number_of_chains
         ! of samples so far + 1
         IF (file_lengths(nn,2).NE.samples_so_far+1) THEN
                 length_ok=.FALSE.
+                !write(*,*)'line 210: ',length_ok ! 25/11/24
+                !write(*,*)'l213 check output file_lengths: ',file_lengths(nn,2)
+                !write(*,*)'l213 check output fsamples_so_far+1: ',samples_so_far+1
                 EXIT
         END IF
         

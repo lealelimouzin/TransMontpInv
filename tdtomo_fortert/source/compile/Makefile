@@ -70,6 +70,7 @@ tomo	::
 	${F90} ${OPTS} -c ../input_output/check_output_files.f90
 	${F90} ${OPTS} -c ../inverse/initialize_models.f90
 	${F90} ${OPTS} -c ../input_output/write_last_model.f90
+	${F90} ${OPTS} -c ../input_output/write_model_tempo.f90
 	${F90} ${OPTS} -c ../inverse/choose_step.f90
 	${F90} ${OPTS} -c ../inverse/noise_calculation.f90
 	${F90} ${OPTS} -c ../inverse/alpha_calculation.f90

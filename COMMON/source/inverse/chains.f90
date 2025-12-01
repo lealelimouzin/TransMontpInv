@@ -111,6 +111,7 @@ DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE             :: chain_misfits
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE           :: chain_acceptance
 INTEGER, DIMENSION(:,:), ALLOCATABLE                    :: chain_temperatures
 CHARACTER (LEN=30)                                      :: last_model_file,last_tmp
+CHARACTER (LEN=30)                                      :: last_model_file_tempo,last_tmp_tempo ! 25/11/28
 INTEGER                                                 :: accepted_so_far,accepted_in_run,accepted_so_far_other
 INTEGER, DIMENSION(:), ALLOCATABLE                      :: accepted_so_far_all
 DOUBLE PRECISION, DIMENSION(3)                          :: acceptance_total
@@ -214,6 +215,8 @@ SUBROUTINE initialize_chains()
         ! Name of file containing last model of run
         last_model_file='last.tmp'
         last_tmp=TRIM(last_model_file) // TRIM(chain_name)
+        last_model_file_tempo='last_tempo.tmp' !25/11/28
+        last_tmp_tempo=TRIM(last_model_file_tempo) // TRIM(chain_name) !25/11/28
 
         IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initialized chains ---'
 END SUBROUTINE

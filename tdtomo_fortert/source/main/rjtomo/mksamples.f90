@@ -79,6 +79,11 @@ INTERFACE
         SUBROUTINE write_last_model()
         END SUBROUTINE
 END INTERFACE
+INTERFACE !25/11/28
+        SUBROUTINE write_model_tempo(iteration) !25/11/28
+                INTEGER, INTENT(IN)           :: iteration
+        END SUBROUTINE !25/11/28
+END INTERFACE !25/11/28
 INTERFACE
         SUBROUTINE write_chains_to_file()
         END SUBROUTINE
@@ -245,6 +250,7 @@ END IF
 
 ! Write initial number of cells to screen
 WRITE(message,*)'Initial number of cells on chain ',TRIM(chain_name),': ',TRIM(int2str(ncell_current))
+
 IF (core_number.EQ.0) THEN
         WRITE(*,*)message
         DO ii=1,number_of_cores-1
@@ -305,6 +311,7 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
           samples_at_start+iteration.LT.max_number_of_samples)
         
         iteration=iteration+1
+
         CALL reset_proposed_models()
         accepted=.FALSE.
         delayed=.FALSE.
@@ -581,9 +588,10 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
 
         ! Write chains content to file every iteration
         IF (MOD(iteration,1).EQ.0) THEN
-                CALL CHDIR( TRIM("results") )
+                CALL CHDIR( TRIM("results/") )
                 CALL write_chains_to_file()
-                CALL write_last_model()
+                CALL write_model_tempo(iteration)
+                !CALL write_last_model()
                 CALL CHDIR('../')
         END IF
 
@@ -604,7 +612,8 @@ samples_so_far=samples_at_start+samples_in_run
 IF (parallel_tempering.EQ.1) THEN
         CALL MPI_BCAST(acceptance_tempering,3,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierror)
 END IF
-CALL CHDIR( TRIM("results") )
+CALL CHDIR( TRIM("results/") )
+CALL write_chains_to_file()
 CALL write_last_model()
 IF (core_number.EQ.0) CALL write_inversion_parameters()
 CALL CHDIR('../')

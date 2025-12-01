@@ -25,8 +25,8 @@ IMPLICIT NONE
 INTEGER         :: nn
 
 ! Open file containing last model of current run
-OPEN(UNIT=90,FILE=TRIM(last_tmp) // '.txt',STATUS='REPLACE') ! this is just for reference
-OPEN(UNIT=80,FILE=last_tmp,STATUS='REPLACE',FORM='UNFORMATTED') ! this will be read in the following iteration
+OPEN(UNIT=90,FILE=TRIM(last_tmp_tempo) // '.txt',STATUS='REPLACE') ! this is just for reference
+OPEN(UNIT=80,FILE=last_tmp_tempo,STATUS='REPLACE',FORM='UNFORMATTED') ! this will be read in the following iteration
 
 ! Write Voronoi tessellation
 WRITE(90,*)'Voronoi model'
@@ -82,6 +82,7 @@ IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
 END IF
 WRITE(90,*)acceptance_tempering(1),acceptance_tempering(2),acceptance_tempering(3)
 IF (opt_parameters.GT.0) THEN 
+        WRITE(90,*)acceptance_opt(1),acceptance_opt(2),acceptance_opt(3) ! 25/11/24
         WRITE(90,*)acceptance_opt_main(1),acceptance_opt_main(2),acceptance_opt_main(3)
         WRITE(90,*)acceptance_opt_delayed(1),acceptance_opt_delayed(2),acceptance_opt_delayed(3)
 END IF
@@ -102,6 +103,7 @@ IF (noise_type.EQ.1.OR.noise_type.EQ.2.OR.noise_type.EQ.5) THEN
 END IF
 WRITE(80)acceptance_tempering(1),acceptance_tempering(2),acceptance_tempering(3)
 IF (opt_parameters.GT.0) THEN 
+        WRITE(80)acceptance_opt(1),acceptance_opt(2),acceptance_opt(3)
         WRITE(80)acceptance_opt_main(1),acceptance_opt_main(2),acceptance_opt_main(3)
         WRITE(80)acceptance_opt_delayed(1),acceptance_opt_delayed(2),acceptance_opt_delayed(3)
 END IF
@@ -115,6 +117,7 @@ WRITE(80)random_counter
 WRITE(90,*)'Total samples so far'
 WRITE(90,*)samples_so_far
 WRITE(80)samples_so_far
+write(*,*)'in write_last_model samples_so_far: ',samples_so_far !25/11/27
 
 ! Write modelled data from current model
 WRITE(90,*)'Modelled data'

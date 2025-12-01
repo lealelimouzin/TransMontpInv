@@ -279,8 +279,8 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
 #pragma omp single
        {
             for (it1 = source_term_positions.begin(); it1 != source_term_positions.end(); it1++) {
-#pragma omp task firstprivate(res_matrices, it1, it2, nb_elec, source_position_x, source_position_y, param, Potential_Matrices, Potential_Fractures, DFN_potential, matrix_potential, str_cpt, output_file_matrix, results, matrix_syst, vector_syst, bc_def_epm, bc_map, bc_def_epm_sing, source_terms_epm, source_terms_epm_sing, subnetwork_map)
-//#pragma omp task firstprivate(it1, it2, nb_elec, source_position_x, source_position_y, param, Potential_Matrices, Potential_Fractures, DFN_potential, matrix_potential, str_cpt, output_file_matrix, results, matrix_syst, vector_syst, bc_def_epm, bc_map, bc_def_epm_sing, source_terms_epm, source_terms_epm_sing, subnetwork_map)
+//#pragma omp task firstprivate(res_matrices, it1, it2, nb_elec, source_position_x, source_position_y, param, Potential_Matrices, Potential_Fractures, DFN_potential, matrix_potential, str_cpt, output_file_matrix, results, matrix_syst, vector_syst, bc_def_epm, bc_map, bc_def_epm_sing, source_terms_epm, source_terms_epm_sing, subnetwork_map)
+#pragma omp task firstprivate(it1, it2, nb_elec, source_position_x, source_position_y, param, Potential_Matrices, Potential_Fractures, DFN_potential, matrix_potential, str_cpt, output_file_matrix, results, matrix_syst, vector_syst, bc_def_epm, bc_map, bc_def_epm_sing, source_terms_epm, source_terms_epm_sing, subnetwork_map)
                 {
                     nb_elec = it1->first;
                     source_position_x = it1->second.first;

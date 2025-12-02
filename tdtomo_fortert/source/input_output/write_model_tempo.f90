@@ -26,8 +26,10 @@ INTEGER         :: nn
 INTEGER , INTENT(IN)                :: iteration
 
 ! Open file containing last model of current run
-OPEN(UNIT=95,FILE=TRIM(last_tmp_tempo) // '.txt',STATUS='REPLACE') ! this is just for reference
-OPEN(UNIT=85,FILE=last_tmp_tempo,STATUS='REPLACE',FORM='UNFORMATTED') ! this will be read in the following iteration
+!OPEN(UNIT=95,FILE=TRIM(last_tmp_tempo) // '.txt',STATUS='REPLACE') ! this is just for reference
+!OPEN(UNIT=85,FILE=last_tmp_tempo,STATUS='REPLACE',FORM='UNFORMATTED') ! this will be read in the following iteration
+OPEN(UNIT=95,FILE=TRIM(last_tmp) // '.txt',STATUS='REPLACE') ! this is just for reference
+OPEN(UNIT=85,FILE=last_tmp,STATUS='REPLACE',FORM='UNFORMATTED') ! this will be read in the following iteration
 
 ! Write Voronoi tessellation
 WRITE(95,*)'Voronoi model'
@@ -119,9 +121,9 @@ WRITE(95,*)'Total samples so far'
 !WRITE(95,*)samples_so_far+1
 !WRITE(85)samples_so_far+1
 !write(*,*)'in write_last_model samples_so_far: ',samples_so_far+1 !25/11/27
-WRITE(95,*)iteration
-WRITE(85)iteration
-write(*,*)'in write_last_model iteration: ',iteration !25/12/01
+WRITE(95,*)samples_at_start+iteration
+WRITE(85)samples_at_start+iteration
+!write(*,*)'in write_last_model iteration: ',samples_at_start+iteration !25/12/01
 
 ! Write modelled data from current model
 WRITE(95,*)'Modelled data'

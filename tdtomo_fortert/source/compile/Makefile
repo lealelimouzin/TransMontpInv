@@ -76,6 +76,7 @@ tomo	::
 	${F90} ${OPTS} -c ../inverse/alpha_calculation.f90
 	${F90} ${OPTS} -c ../inverse/chain_update.f90
 	${F90} ${OPTS} -c ../input_output/write_chains_to_file.f90
+	${F90} ${OPTS} -c ../input_output/write_tempo_chains_to_file.f90
 	${F90} ${OPTS} -c ../input_output/inversion_parameters.f90
 	${F90} ${OPTS} -c ../inverse/print_status.f90
 	${F90} ${OPTS} -c ../inverse/tempering.f90

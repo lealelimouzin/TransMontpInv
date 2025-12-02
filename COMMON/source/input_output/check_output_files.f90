@@ -31,6 +31,7 @@ INTEGER                                 :: nn,IOstatus
 INTEGER, DIMENSION(:,:), ALLOCATABLE    :: file_lengths
 INTEGER, DIMENSION(:), ALLOCATABLE      :: ncell_initial
 INTEGER                                 :: pp,accept,noise_count
+CHARACTER(100) :: samples_file_test
 
 ALLOCATE(file_lengths(number_of_chains,8))
 file_lengths=0
@@ -38,7 +39,6 @@ ALLOCATE(ncell_initial(number_of_chains))
 ncell_initial=0
 
 length_ok=.TRUE.
-
 
 DO nn=1,number_of_chains
 
@@ -203,7 +203,7 @@ DO nn=1,number_of_chains
         ! of samples so far + 1
         IF (file_lengths(nn,2).NE.samples_so_far+1) THEN
                 length_ok=.FALSE.
-                !write(*,*)'line 210: ',length_ok ! 25/11/24
+                !write(*,*)'l210 whith chain ', chain_number, ': ',length_ok ! 25/11/24
                 !write(*,*)'l213 check output file_lengths: ',file_lengths(nn,2)
                 !write(*,*)'l213 check output fsamples_so_far+1: ',samples_so_far+1
                 EXIT

@@ -84,6 +84,11 @@ INTERFACE !25/11/28
                 INTEGER, INTENT(IN)           :: iteration
         END SUBROUTINE !25/11/28
 END INTERFACE !25/11/28
+INTERFACE !25/11/28
+        SUBROUTINE write_tempo_chains_to_file(iteration) !25/11/28
+                INTEGER, INTENT(IN)           :: iteration
+        END SUBROUTINE !25/11/28
+END INTERFACE !25/11/28
 INTERFACE
         SUBROUTINE write_chains_to_file()
         END SUBROUTINE
@@ -98,6 +103,7 @@ INTERFACE
         SUBROUTINE write_inversion_parameters()
         END SUBROUTINE
 END INTERFACE
+
 
 ! Start timer
 CALL cpu_time(timer_start)
@@ -589,8 +595,9 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
         ! Write chains content to file every iteration
         IF (MOD(iteration,1).EQ.0) THEN
                 CALL CHDIR( TRIM("results/") )
-                CALL write_chains_to_file()
+                !CALL write_chains_to_file()
                 CALL write_model_tempo(iteration)
+                CALL write_tempo_chains_to_file(iteration)
                 !CALL write_last_model()
                 CALL CHDIR('../')
         END IF

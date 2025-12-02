@@ -75,14 +75,14 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parame
 	       // cout << "system lineaire par elec par w Time = " << (t_end-t_begin)/(double)CLOCKS_PER_SEC << endl;
         }
         // Write the results
-        stringstream ss;
+        /*stringstream ss;
         string str_cpt;
         ss << elec_nb;
         str_cpt = ss.str();
         string output_file = "Results" + str_cpt;
         output_file = output_file + ".txt";
         //Results results(param.files_param.output_path+output_file,Potential_Matrices);
-        Results results(param.files_param.output_path + output_file, Potential_Vector, epd_model.Nx, epd_model.Ny);
+        Results results(param.files_param.output_path + output_file, Potential_Vector, epd_model.Nx, epd_model.Ny);*/
 
         // Store results in the map of eigen matrices to be used then in the matlab or python post-processing
         // (required transposition and translation of the matrix which contains the electrical potential distribution
@@ -328,10 +328,10 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
                     }
                     //cout << endl;
                     // 2.3. Write the results
-                    str_cpt = to_string(nb_elec);
+                    /*str_cpt = to_string(nb_elec);
                     output_file_matrix = "Matrix_Potential" + str_cpt;
                     output_file_matrix = output_file_matrix + ".txt";
-                    results = Results(param.files_param.output_path + output_file_matrix, Potential_Matrices);
+                    results = Results(param.files_param.output_path + output_file_matrix, Potential_Matrices);*/
 
                     // 2.4. Free memory
                     DFN_potential.clear();

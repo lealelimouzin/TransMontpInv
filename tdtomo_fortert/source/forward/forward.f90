@@ -189,24 +189,30 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         DOUBLE PRECISION, DIMENSION(:), INTENT(OUT)             :: modelled_data
         DOUBLE PRECISION, DIMENSION(number_of_measurements)     :: modelled_data_epm, modelled_data_dfn
         INTEGER, INTENT(OUT)                                    :: info
+        LOGICAL :: res
 
         ! Go to the result directory
         CALL CHDIR (namedir)
         
         ! Run forward model
         CALL EXECUTE_COMMAND_LINE ("python3 ../../main.py",CMDSTAT=CSTAT)
-
         IF ((CSTAT > 0).OR.(CSTAT < 0)) THEN
                 PRINT *, "Command execution failed when running Python in forward.f90"
         END IF
 
         ! Store current apparent resistivity model (ratio of simulated data)
         textfileDFN = ADJUSTL(ADJUSTR(namedir)//TRIM("/results_fwd/rho_a_DFN.txt"))
-        open (unit=88, file=textfileDFN, status='old', action='read')
-                do I=1,number_of_measurements
-                        read(88,*) modelled_data_dfn(I) 
-                end do
-        close(88)
+
+        INQUIRE(file=textfileDFN,exist=res)
+        IF (.NOT.res) THEN
+                STOP
+        ELSE
+                open (unit=88, file=textfileDFN, status='old', action='read')
+                        do I=1,number_of_measurements
+                                read(88,*) modelled_data_dfn(I) 
+                        end do
+                close(88)
+        END IF
 
         textfileEPM = ADJUSTL(ADJUSTR(namedir)//TRIM("/results_fwd/rho_a_EPM.txt"))
         open (unit=89, file=textfileEPM, status='old', action='read')

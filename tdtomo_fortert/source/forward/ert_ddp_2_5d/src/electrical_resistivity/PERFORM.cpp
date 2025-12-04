@@ -71,7 +71,7 @@ std::vector<Eigen::SparseMatrix<double>> perform() {
 	//std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
     //     Eigen::aligned_allocator<std::pair<const int, Eigen::SparseMatrix<double>> > > res_map;
 
-	if (param.simu_param.debug_mode){cout << "*** DEBUG mode is activated ***" << endl;}
+	if (param.simu_param.debug_mode){cout << "~~~~~~~~~~ DEBUG mode is activated in C++ forward model ~~~~~~~~~~" << endl;}
 	// 2. Simulation
 	// 2.1. DFN generation
 	if (param.simu_param.simu_option==DFN_GENERATION){
@@ -233,9 +233,10 @@ std::vector<Eigen::SparseMatrix<double>> perform() {
 	return map_matrices;*/
 	if (param.simu_param.debug_mode){
 		cout << "DEBUG: check results at the end of perform.cpp" << endl;
-		cout << "res_map size = " << res_map.size() << endl;
+		cout << "	res_map size = " << res_map.size() << endl;
 		Eigen::SparseMatrix<double> A=res_map[0];
-		cout << "res_map[0] = " << A << endl;
+		cout << "	res_map[0] = " << A << endl;
+		cout << "~~~~~~~~~~ End of DEBUG test ~~~~~~~~~~" << endl;
 	}
 	return res_map;
 }

@@ -68,14 +68,19 @@ def mainDFN(tabVar,res_cxx):
         if res_cxx == 0: # If the executable version of the C++ code is used
             AllResultsDFN[i, :, :] = np.loadtxt(pjoin(path_results_DFN, f'{file_name_DFN}{i+1}.txt'))
         else: # If the library version of the C++ code is used
-            # 28/07/25
-            try:
-                #AllResultsDFN[i, :, :] = res_cxx[i+1].toarray(order='C')
-                #AllResultsDFN[i, :, :] = res_cxx[i+1].toarray() # if map (indices and eigen matrices) in C++
-                AllResultsDFN[i, :, :] = res_cxx[i].toarray() # if vector (list of eigen matrices) in C++
-            except KeyError:
-                print(f'KeyError problem with matrix {i}. Exit function.')
+            # Test if the matrix is empty
+            if np.size(res_cxx[i].toarray())==0:
+                print(f'\nError matrix {i} is empty. Exit function.')
                 sys.exit(1)
+            else:
+                # Test if the matrix is well filled
+                try:
+                    #AllResultsDFN[i, :, :] = res_cxx[i+1].toarray(order='C')
+                    #AllResultsDFN[i, :, :] = res_cxx[i+1].toarray() # if map (indices and eigen matrices) in C++
+                    AllResultsDFN[i, :, :] = res_cxx[i].toarray() # if vector (list of eigen matrices) in C++
+                except KeyError:
+                    print(f'KeyError problem with matrix {i} content. Exit function.')
+                    sys.exit(1)
 
     for i in range(nb_exp):
 

@@ -57,7 +57,6 @@ def fwdDFN(tabVar):
         subprocess.run([pjoin("electrical_resistivity","Release", "ElectricalResistivity")])
     else:
         res_cxx = perform()
-        print(res_cxx)
 
     # Calculate the electrical resistivity from the C++ outputs
     rho_a_DFN = mainDFN(tabVar,res_cxx)

@@ -43,21 +43,28 @@ if __name__ == "__main__":
         np.savetxt(pjoin(tabVar[4],"rho_a_EPM.txt"), rho_a_EPM, delimiter='\t')
 
     # ---------- Forward DFN ----------
-    #rho_a_DFN = fwd.fwdDFN(tabVar)
-    #np.savetxt(pjoin(tabVar[4], "rho_a_DFN.txt"),rho_a_DFN, delimiter='\t')
-
     testError=True
-    cpt=1
-    while testError==True or cpt==5:
+    cpt=0 # count the number of tests ater a bug appeared
+    while testError==True and cpt<3:
+        cpt+=1
         try:
             rho_a_DFN = fwd.fwdDFN(tabVar)
             testError=False
         except SystemExit:
-            print(f'KeyError problem in {name_new_folder}. C++ code is ran again for the {cpt}th time.')
-            cpt+=1
-    print(type(rho_a_DFN))
-    print(np.shape(rho_a_DFN))
+            print(f'An error occured in {name_new_folder} while calultating the forward problem.\n C++ code is ran again in debug mode for the {cpt}th time.')
 
-    np.savetxt(pjoin(tabVar[4], "rho_a_DFN.txt"),rho_a_DFN, delimiter='\t')
+            if cpt==1:
+                # Activate the debug mode of the C++ code
+                lines = open(pjoin(path_folder,'input','testDFN','Simu.txt'), 'r').readlines()
+                new_last_line = (str(1))
+                lines[-1] = new_last_line
+                open(pjoin(path_folder,'input','testDFN','Simu.txt'), 'w').writelines(lines)
+    
+    if testError==True and cpt==3:
+        print('\nThe error in the forward calculation could not be solved.')
+        print('\n         ***** THE SIMULATION IS INTERRUPTED !!! ***** ')
+        exit()
+    else:
+        np.savetxt(pjoin(tabVar[4], "rho_a_DFN.txt"),rho_a_DFN, delimiter='\t')
 
    

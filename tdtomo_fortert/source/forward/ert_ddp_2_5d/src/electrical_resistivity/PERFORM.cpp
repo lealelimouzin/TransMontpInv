@@ -55,7 +55,7 @@ std::vector<Eigen::SparseMatrix<double>> perform() {
 
 	clock_t t_begin=clock(),t_end;
 
-	cout << "PERFORM begin" << endl;
+	//cout << "PERFORM begin" << endl;
 
 	bool singularity=false,bc_on_border=false;
 	// 1. Parameter and domain definition reading

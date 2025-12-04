@@ -151,10 +151,21 @@ If the error still appears check python version (here, python3.13 was used on th
 
 If the compilation fails and an error occurs on the parameters, comment `#include <filesystem>` (write `//` in front of the line) at the beginning of `InputOut/Parameters.cpp`.
 
+### Fatal error: gl.h: No such file or directory
+
+When using clusters, GL package might be missing. If it is not possible to install GL, a possibility is to comment in the C++ scripts every reference to the library.
+
+- Comment all .cpp and .h files in the directory `../Utilitaries/Visualization`.
+- In `/home/lelimouzinl/scratch_lelimouzinl/TERT_aperture/tdtomo_fortert/source/forward/ert_ddp_2_5d/src/electrical_resistivity/DFNModel`, comment in `DFNGeneration.cpp` lines 15 to 22, and in `DFNGeneration.h` comment `DFNVisu DFNGeneration(Parameters,Domain);`
+- In `/home/lelimouzinl/scratch_lelimouzinl/TERT_aperture/tdtomo_fortert/source/forward/ert_ddp_2_5d/src/electrical_resistivity/PERFORM.cpp`, comment lines 75, 78 to 91, 153, 154, 165, 166 and 171.
+- In `/home/lelimouzinl/scratch_lelimouzinl/TERT_aperture/tdtomo_fortert/source/forward/ert_ddp_2_5d/src/electrical_resistivity/Release/objects.mk`, remove -lGL and -lglut.
+
 ### Alpha delayed set to Infinity
 
-It may happens to get alpha_delayed equal to -Infinity (TT3t=-Infinity in `alpha_calculation.f90`). This occurs when the likelihood delayed is equal or higher than the likelihood proposed, i.e. the second try leads to a worse likelihood (delayed) than the first try (proposed). Setting alpha to -Infinty is a way to ensure the rejection of the model.
+This is not an error but can surprise the user. It may happens to get alpha_delayed equal to -Infinity (TT3t=-Infinity in `alpha_calculation.f90`). This occurs when the likelihood delayed is equal or higher than the likelihood proposed, i.e. the second try leads to a worse likelihood (delayed) than the first try (proposed). Setting alpha to -Infinty is a way to ensure the rejection of the model.
 
-### keyError (still unsolved)
+### KeyError and random interuption of simulations with the forward model ERT\_DDP\_2.5D (still unsolved)
 
-A keyError may occur when loading the C++ results in the post-processing python functions using the libraries PERFORM.so and PyBind11. It means that a given data is not found in the dictionnary. This error seems to be linked with eigen structures.
+A keyError may occur when loading the C++ results in the post-processing python functions using the libraries PERFORM.so and PyBind11. It means that a given data is not found in the dictionnary. Simulations may also crash at a random iteration without explanations but they are still running on the clsuter like if it is stuck in an infinite loop.
+
+A debug_mode option has been implemented in the C++ scripts to better understand these errors. If one of these two errors occur, the forward model is automatically run again at the current iteration with the debug_mode activated. Details on the bug should appear in the log file.

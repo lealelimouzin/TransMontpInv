@@ -55,7 +55,8 @@ if __name__ == "__main__":
         except SystemExit:
             print(f'KeyError problem in {name_new_folder}. C++ code is ran again for the {cpt}th time.')
             cpt+=1
-    
+    print(type(rho_a_DFN))
+    print(np.shape(rho_a_DFN))
 
     np.savetxt(pjoin(tabVar[4], "rho_a_DFN.txt"),rho_a_DFN, delimiter='\t')
 

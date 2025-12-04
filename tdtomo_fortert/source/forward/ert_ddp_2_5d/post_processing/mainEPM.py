@@ -73,7 +73,8 @@ def mainEPM(tabVar,res_cxx):
         if res_cxx == 0: # If the executable version of the C++ code is used
             AllResultsEPM[i, :, :] = np.loadtxt(pjoin(path_results_EPM, f'{file_name_EPM}{i+1}.txt'))
         else: # If the library version of the C++ code is used
-            AllResultsEPM[i, :, :] = res_cxx[i+1].toarray(order='C')
+            #AllResultsEPM[i, :, :] = res_cxx[i+1].toarray(order='C') # if map (indices and eigen matrices) in C++
+            AllResultsEPM[i, :, :] = res_cxx[i].toarray() # if vector (list of eigen matrices) in C++
 
     for i in range(nb_exp):
 

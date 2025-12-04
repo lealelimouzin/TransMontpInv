@@ -48,13 +48,14 @@ namespace py = pybind11;
 
 typedef Eigen::Triplet<double> T;
 
-std::map<int, Eigen::SparseMatrix<double>> perform() {
+//std::map<int, Eigen::SparseMatrix<double>> perform() {
+std::vector<Eigen::SparseMatrix<double>> perform() {
 //std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
 //         Eigen::aligned_allocator<std::pair<const int, Eigen::SparseMatrix<double>> > > perform() {
 
 	clock_t t_begin=clock(),t_end;
 
-	//cout << "PERFORM begin" << endl;
+	cout << "PERFORM begin" << endl;
 
 	bool singularity=false,bc_on_border=false;
 	// 1. Parameter and domain definition reading
@@ -65,25 +66,27 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 	// 1.3. Display parameters
 	double min_visu=-1,max_visu=-1;
     // 1.4. Output results
-    std::map<int, Eigen::SparseMatrix<double> > res_map;
-    //std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
+    //std::map<int, Eigen::SparseMatrix<double> > res_map;
+    std::vector<Eigen::SparseMatrix<double> > res_map;
+	//std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
     //     Eigen::aligned_allocator<std::pair<const int, Eigen::SparseMatrix<double>> > > res_map;
 
+	if (param.simu_param.debug_mode){cout << "*** DEBUG mode is activated ***" << endl;}
 	// 2. Simulation
 	// 2.1. DFN generation
 	if (param.simu_param.simu_option==DFN_GENERATION){
 		DFNVisu DFN_visu=DFNGeneration(param,domain);
 
 	// Compute the backbone
-		/*NetworkMeshes net_mesh1=DFN_visu.net_mesh,backbone;
+		NetworkMeshes net_mesh1=DFN_visu.net_mesh,backbone;
 		backbone=net_mesh1.return_backbone(param,EPSILON);
-		DFN_visu.net_mesh=backbone;*/
+		//DFN_visu.net_mesh=backbone;
 
 		// Cut the domain
-		/*NetworkMeshes net_mesh2=DFN_visu.net_mesh;
+		NetworkMeshes net_mesh2=DFN_visu.net_mesh;
 		//DFNCutting(net_mesh2,26.6);
 		//DFNCutting(net_mesh2,25);
-		DFN_visu.net_mesh=net_mesh2;*/
+		//DFN_visu.net_mesh=net_mesh2;
 
 		// DFN writing
 		Results results(param.files_param.output_path+param.files_param.output_file,DFN_visu.net_mesh);
@@ -94,6 +97,7 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 	else if (param.simu_param.simu_option==FOURIER_POTENTIAL_COMPUTATION){
 		// Equivalent Porous Media
 		if (param.simu_param.model_option==EPM){
+			if (param.simu_param.debug_mode){cout << "DEBUG: EPM" << endl;}
 			// Read the source term positions
 			map<int,pair<double,double> > source_term_positions=ReadSourceTermsCoordinates(param);
 			// Run the simulations
@@ -106,6 +110,7 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 		}
 		// Discrete-Dual-Porosity model for fractured porous domains
 		else if (param.simu_param.model_option==DDP){
+			if (param.simu_param.debug_mode){cout << "DEBUG: DDP" << endl;}
 			// Read the source term positions
 			map<int,pair<double,double> > source_term_positions=ReadSourceTermsCoordinates(param);
 
@@ -189,8 +194,8 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 
 	// 2.4. Study of the flow exchanged between fractures and matrix at the matrix-block scale
 	else if (param.simu_param.simu_option==EXCHANGE_STUDY){
-		/*int nb_div=6,nb_seed=1; // nb_div:number of times that we divide the domain and nb_seed:number of generated domain
-		ExchangeStudy(param,domain,nb_div,nb_seed);*/
+		int nb_div=6,nb_seed=1; // nb_div:number of times that we divide the domain and nb_seed:number of generated domain
+		ExchangeStudy(param,domain,nb_div,nb_seed);
 		//ExchangeStudy2(param,domain);
 	}
 	// 2.5. Comparison of the potential with DDP and EPMDFN
@@ -211,8 +216,8 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
 	t_end=clock();
 	//cout << "CPU Time = " << (t_end-t_begin)/CLOCKS_PER_SEC << endl;
 
-    /*// Test eigen matrix
-    int n = 5;
+    // Test eigen matrix
+    /*int n = 5;
     SparseMatrix<double> A(n,n);
     std::vector<T> coefficients;
 
@@ -226,6 +231,12 @@ std::map<int, Eigen::SparseMatrix<double>> perform() {
     std::map<int,Eigen::SparseMatrix<double>> map_matrices;
     map_matrices[0] = A;
 	return map_matrices;*/
+	if (param.simu_param.debug_mode){
+		cout << "DEBUG: check results at the end of perform.cpp" << endl;
+		cout << "res_map size = " << res_map.size() << endl;
+		Eigen::SparseMatrix<double> A=res_map[0];
+		cout << "res_map[0] = " << A << endl;
+	}
 	return res_map;
 }
 

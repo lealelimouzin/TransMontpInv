@@ -16,12 +16,14 @@
 
 void FourierPotentialEPM(Parameters,Domain,bool);
 //void FourierPotentialEPMSourceTerm(Parameters,Domain,bool,bool,std::map<int,std::pair<double,double> >);
-std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parameters,Domain,bool,bool,std::map<int,std::pair<double,double> >);
+//std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parameters,Domain,bool,bool,std::map<int,std::pair<double,double> >);
+std::vector<Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parameters,Domain,bool,bool,std::map<int,std::pair<double,double> >);
 //std::map<int, Eigen::SparseMatrix<double>, std::less<int>,Eigen::aligned_allocator<std::pair<const int,
 //    Eigen::SparseMatrix<double>> > > FourierPotentialEPMSourceTerm(Parameters,Domain,bool,bool,std::map<int,std::pair<double,double> >);
 void FourierPotentialEPMSourceTerm(Parameters,Domain,bool,bool);
 //void FourierPotentialDDPSourceTerm(Parameters,Domain,bool,std::map<int,std::pair<double,double> >);
-std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parameters,Domain,bool,std::map<int,std::pair<double,double> >);
+//std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parameters,Domain,bool,std::map<int,std::pair<double,double> >);
+std::vector<Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parameters,Domain,bool,std::map<int,std::pair<double,double> >);
 //std::map<int, Eigen::SparseMatrix<double>, std::less<int>,Eigen::aligned_allocator<std::pair<const int,
 //    Eigen::SparseMatrix<double>> > > FourierPotentialDDPSourceTerm(Parameters,Domain,bool,std::map<int,std::pair<double,double> >);
 void FourierPotentialDDPSourceTerm(Parameters,Domain,bool);

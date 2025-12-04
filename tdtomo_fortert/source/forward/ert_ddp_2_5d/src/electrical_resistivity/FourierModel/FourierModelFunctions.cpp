@@ -17,7 +17,9 @@ using namespace std;
 
 typedef Eigen::Triplet<double> T;
 
-std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parameters param, Domain domain, bool singularity, bool bc_on_border,
+/*std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parameters param, Domain domain, bool singularity, bool bc_on_border,
+                                   map<int, pair<double, double> > source_term_positions) {*/
+std::vector<Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parameters param, Domain domain, bool singularity, bool bc_on_border,
                                    map<int, pair<double, double> > source_term_positions) {
 //std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
 //         Eigen::aligned_allocator<std::pair<const int, Eigen::SparseMatrix<double>> > >
@@ -26,8 +28,10 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parame
 /*void FourierPotentialEPMSourceTerm(Parameters param, Domain domain, bool singularity, bool bc_on_border,
                                    map<int, pair<double, double> > source_term_positions) {*/
     // Parameters
-    std::map<int, Eigen::SparseMatrix<double> > res_matrices; //st version
-    //std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
+//    std::map<int, Eigen::SparseMatrix<double> > res_matrices; //st version
+    std::vector<Eigen::SparseMatrix<double> > res_matrices(source_term_positions.size()); //st version 
+    //cout << "EPM: res_matrices size 1 = " << res_matrices.size() << endl;
+//std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
     //     Eigen::aligned_allocator<std::pair<const int, Eigen::SparseMatrix<double>> > > res_matrices; // modif lea 12/05/25
 
     vector<double> w_vect = param.simu_param.EPM_param.w_vect;
@@ -111,8 +115,11 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialEPMSourceTerm(Parame
 	    //cout << "remplissage eigen par electrode Time = " << (t_end-t_begin)/(double)CLOCKS_PER_SEC << endl;
         }
         A.setFromTriplets(coefficients.begin(), coefficients.end());
-        res_matrices[elec_nb]=A;
+        //cout << "test1" << endl;
+        res_matrices[elec_nb-1]=A;
+        //cout << "test2" << endl;
     }
+    //cout << "EPM: res_matrices size 2 = " << res_matrices.size() << endl;
     return res_matrices;
 }
 
@@ -224,7 +231,9 @@ void FourierPotentialDDP(Parameters param, Domain domain, bool singularity, bool
     Results results1(param.files_param.output_path + param.files_param.output_file1, Potential_Fractures);
 }
 
-std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parameters param, Domain domain, bool singularity,
+//std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parameters param, Domain domain, bool singularity,
+//                                   map<int, pair<double, double> > source_term_positions) {
+std::vector<Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parameters param, Domain domain, bool singularity,
                                    map<int, pair<double, double> > source_term_positions) {
 /*std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
          Eigen::aligned_allocator<std::pair<const int,
@@ -234,8 +243,8 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
                                   map<int, pair<double, double> > source_term_positions) {*/
     // 1. Global variables and fracture network generation
     // 1.1. Variables
-    std::map<int, Eigen::SparseMatrix<double> > res_matrices;
-	//std::vector<Eigen::SparseMatrix<double> > res_matrices;
+    //std::map<int, Eigen::SparseMatrix<double> > res_matrices;
+	std::vector<Eigen::SparseMatrix<double> > res_matrices(source_term_positions.size());
 	//std::vector<int> res_index_elec;
     //std::map<int, Eigen::SparseMatrix<double>, std::less<int>,
     //     Eigen::aligned_allocator<std::pair<const int, Eigen::SparseMatrix<double>> > > res_matrices; // modif lea 12/05/25
@@ -273,15 +282,20 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
     ublas_matrix porous_cond = ddp_model_init.porous_cond;
     SourceTermsEPM source_terms_epm = ddp_model_init.source_terms_epm, source_terms_epm_sing = ddp_model_init.source_terms_epm_sing;
     SubNetworkMap subnetwork_map = ddp_model_init.subnetwork_map;
-#pragma omp parallel
+/*#pragma omp parallel
     {
 //#pragma omp single nowait
-#pragma omp single
-       {
+//#pragma omp single
+ //      {
             for (it1 = source_term_positions.begin(); it1 != source_term_positions.end(); it1++) {
 //#pragma omp task firstprivate(res_matrices, it1, it2, nb_elec, source_position_x, source_position_y, param, Potential_Matrices, Potential_Fractures, DFN_potential, matrix_potential, str_cpt, output_file_matrix, results, matrix_syst, vector_syst, bc_def_epm, bc_map, bc_def_epm_sing, source_terms_epm, source_terms_epm_sing, subnetwork_map)
 #pragma omp task firstprivate(it1, it2, nb_elec, source_position_x, source_position_y, param, Potential_Matrices, Potential_Fractures, DFN_potential, matrix_potential, str_cpt, output_file_matrix, results, matrix_syst, vector_syst, bc_def_epm, bc_map, bc_def_epm_sing, source_terms_epm, source_terms_epm_sing, subnetwork_map)
-                {
+                {*/
+    #pragma omp parallel private(it1, it2, nb_elec, source_position_x, source_position_y, param, Potential_Matrices, Potential_Fractures, DFN_potential, matrix_potential, str_cpt, output_file_matrix, results, matrix_syst, vector_syst, bc_def_epm, bc_map, bc_def_epm_sing, source_terms_epm, source_terms_epm_sing, subnetwork_map) 
+    {
+        #pragma omp single nowait
+        {
+        for (it1 = source_term_positions.begin(); it1 != source_term_positions.end(); it1++){         
                     nb_elec = it1->first;
                     source_position_x = it1->second.first;
                     source_position_y = it1->second.second;
@@ -357,17 +371,24 @@ std::map<int, Eigen::SparseMatrix<double> > FourierPotentialDDPSourceTerm(Parame
                             cpt_w++;
                     }
                     A.setFromTriplets(coefficients.begin(), coefficients.end());
-                    res_matrices[nb_elec]=A;
+                    res_matrices[nb_elec-1]=A;
+                    if (param.simu_param.debug_mode){
+                        cout << "DEBUG: res_matrices calculated for simulation number " << nb_elec-1 << endl;
+                        cout << res_matrices[nb_elec-1] << endl;
+                    }
                     //res_matrices.push_back(A);
 					//res_index_elec.push_back(nb_elec);
                 }
             }
-        }
     }
     t2 = clock();
     //cout << "Computation time for simulating all the experiments = "
      //    << (t2 - t1) / CLOCKS_PER_SEC / omp_get_max_threads() << " seconds" << endl;
     //exit(0);
+    if (param.simu_param.debug_mode){
+        cout << "DEBUG: print the first res_matrices at the end of the Fourrier DDP function" << endl;
+        cout << res_matrices[0] << endl;
+    }
     return res_matrices;
 }
 

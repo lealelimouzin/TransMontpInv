@@ -40,6 +40,7 @@ SimuParameters::SimuParameters(string file_name,string file_name_bc,string file_
 				int Nx,Ny;
 				fichier >> Nx;
 				fichier >> Ny;
+				fichier >> debug_mode;
 				DDP_param=DiscretizationParameters(Nx,Ny);
 				EPM_param=DiscretizationParameters(Nx,Ny);
 			}

@@ -76,6 +76,7 @@ public:
 	SourceTermsDef source_terms_sing;
 	int nb_angle_step;	// number of angle step for ellipse permeability computation
 	bool singularity;	// = true: singularity removal method
+	bool debug_mode;
 public:
 	SimuParameters();
 	SimuParameters(std::string,std::string,std::string file_name_bc_sing="",std::string file_name_waves="",bool singularity_=false);

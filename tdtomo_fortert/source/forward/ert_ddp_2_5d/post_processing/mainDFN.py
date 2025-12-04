@@ -71,7 +71,8 @@ def mainDFN(tabVar,res_cxx):
             # 28/07/25
             try:
                 #AllResultsDFN[i, :, :] = res_cxx[i+1].toarray(order='C')
-                AllResultsDFN[i, :, :] = res_cxx[i+1].toarray()
+                #AllResultsDFN[i, :, :] = res_cxx[i+1].toarray() # if map (indices and eigen matrices) in C++
+                AllResultsDFN[i, :, :] = res_cxx[i].toarray() # if vector (list of eigen matrices) in C++
             except KeyError:
                 print(f'KeyError problem with matrix {i}. Exit function.')
                 sys.exit(1)

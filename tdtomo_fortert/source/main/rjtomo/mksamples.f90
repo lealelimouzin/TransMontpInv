@@ -620,7 +620,7 @@ IF (parallel_tempering.EQ.1) THEN
         CALL MPI_BCAST(acceptance_tempering,3,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierror)
 END IF
 CALL CHDIR( TRIM("results/") )
-CALL write_chains_to_file()
+!CALL write_chains_to_file()
 CALL write_last_model()
 IF (core_number.EQ.0) CALL write_inversion_parameters()
 CALL CHDIR('../')

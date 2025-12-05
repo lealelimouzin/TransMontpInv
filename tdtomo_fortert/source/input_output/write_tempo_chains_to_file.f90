@@ -269,7 +269,8 @@ ELSE IF (run_number.GT.1) THEN
                                                                 POSITION='APPEND')
         
         !DO pp=1,samples_in_run
-        DO pp=1,iteration 
+        !DO pp=1,iteration 
+        pp=iteration
                 
                 ! Number of cells
                 WRITE(ncell_unit)samples_at_start+pp,chain_ncell(pp)
@@ -347,7 +348,7 @@ ELSE IF (run_number.GT.1) THEN
                                                                                             chain_acceptance(pp,7)
                 END IF
                 
-        END DO
+        !END DO
         
 END IF
 

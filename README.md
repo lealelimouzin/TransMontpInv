@@ -71,7 +71,7 @@ Part of the architecture of TransMontpInv is detailed in the following chart. Fi
 └── version
 ```
 
-## Licence
+## License
 
 TransMontpInv is under the GNU GPL license.
 

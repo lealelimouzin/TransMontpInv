@@ -15,14 +15,12 @@
 ! You should have received a copy of the GNU General Public License
 ! along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ! ********************************************************************* !
+
 ! ********************************************************************* !
-! The subroutine has been modified to support the inversion of thin
-! preferential pathways such as fractures.
-! Copyrigth (C) 2025 Lea Lelimouzin
-!
-! The same licence as presented above applied to this adaptation of the
-! code.
-! ********************************************************************* ! 
+! Scripts adapted to inversion of preferential pathways:
+! Copyright (C) 2026 Léa Lelimouzin
+! ********************************************************************* !
+
 
 SUBROUTINE choose_step(iteration,step)
 

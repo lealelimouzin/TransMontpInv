@@ -39,7 +39,6 @@ DOUBLE PRECISION        :: T2_value
 CONTAINS
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE initialize_tempering()
 
 IMPLICIT NONE
@@ -53,7 +52,6 @@ temperature=temperature_values(chain_number)
 END SUBROUTINE
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE choose_T1()
 ! The first temperature is chosen randomly
 IMPLICIT NONE
@@ -75,7 +73,6 @@ IF (debug_mode) WRITE(debug_unit,*)'----- T1: chain=',TRIM(int2str(T1_chain)),&
 END SUBROUTINE
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE choose_T2()
 ! Choose the second temperature depending on the choice made in mksamples.in
 IMPLICIT NONE
@@ -129,7 +126,6 @@ IF (debug_mode) WRITE(debug_unit,*)'----- T2: chain=',TRIM(int2str(T2_chain)),&
 END SUBROUTINE
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE do_tempering(modelled_data)
 
 USE alpha_calculation
@@ -160,7 +156,6 @@ END IF
 END SUBROUTINE
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE update_temperatures(iteration)
 
 IMPLICIT NONE

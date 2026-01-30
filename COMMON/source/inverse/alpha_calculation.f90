@@ -16,6 +16,11 @@
 ! along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ! ********************************************************************* !
 
+! ********************************************************************* !
+! Scripts adapted to inversion of preferential pathways:
+! Copyright (C) 2026 Léa Lelimouzin
+! ********************************************************************* !
+
 
 MODULE alpha_calculation
 
@@ -56,7 +61,6 @@ IF (modelling_method.EQ.1) THEN
                 ELSE IF (no_data.EQ.1) THEN
                         alpha=MINVAL([DBLE(0),alpha_component-LOG(value_max-value_min)])
                 END IF
-                write(*,*) 'alpha (add) at chain ', TRIM(chain_name), ' is : ', alpha
         ELSE IF (death) THEN
                 IF (no_data.EQ.0) THEN
                         IF (temper) THEN
@@ -71,7 +75,6 @@ IF (modelling_method.EQ.1) THEN
                 ELSE IF (no_data.EQ.1) THEN
                         alpha=MINVAL([DBLE(0),alpha_component-LOG(value_max-value_min)])
                 END IF
-                write(*,*) 'alpha (delete) at chain ', chain_name, ' is : ', alpha
         ELSE IF (move.OR.value.OR.noise) THEN
                 IF (no_data.EQ.0) THEN
                         IF (temper) THEN
@@ -83,7 +86,6 @@ IF (modelling_method.EQ.1) THEN
                 ELSE IF (no_data.EQ.1) THEN
                         alpha=DBLE(0)
                 END IF
-                write(*,*) 'alpha (move/value/noise) at chain', TRIM(chain_name), 'is : ', alpha
         END IF
 
         IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': calculated alpha ---'
@@ -91,13 +93,6 @@ IF (modelling_method.EQ.1) THEN
 ELSEIF (modelling_method.EQ.2) THEN
         IF (birth) THEN
                 IF (no_data.EQ.0) THEN
-                        !IF (temper) THEN
-                                !alpha=MINVAL([DBLE(0),alpha_component&
-                                !                +(-likelihood_proposed+likelihood_current+likelihood_normalization)/temperature])
-                        !ELSE
-                        !        alpha=MINVAL([DBLE(0),alpha_component&
-                        !                        -likelihood_proposed+likelihood_current+likelihood_normalization])
-                        !END IF
                         IF (temper) THEN
                                 alpha=MINVAL([DBLE(0),(-likelihood_proposed+likelihood_current&
                                                         +likelihood_normalization)/temperature])
@@ -105,19 +100,11 @@ ELSEIF (modelling_method.EQ.2) THEN
                                 alpha=MINVAL([DBLE(0),-likelihood_proposed+likelihood_current+likelihood_normalization])
                         END IF
                 ELSE IF (no_data.EQ.1) THEN
-                        !alpha=MINVAL([DBLE(0),alpha_component-LOG(value_max-value_min)])
                         alpha=MINVAL([DBLE(0),-LOG(value_max-value_min)])
                 END IF
                 write(*,*) 'alpha (add) at chain ', TRIM(chain_name), ' is : ', alpha
         ELSE IF (death) THEN
                 IF (no_data.EQ.0) THEN
-                        !IF (temper) THEN
-                        !        alpha=MINVAL([DBLE(0),alpha_component&
-                        !                        +(-likelihood_proposed+likelihood_current+likelihood_normalization)/temperature])
-                        !ELSE
-                        !        alpha=MINVAL([DBLE(0),alpha_component&
-                        !                        -likelihood_proposed+likelihood_current+likelihood_normalization])
-                        !END IF
                         IF (temper) THEN
                                 alpha=MINVAL([DBLE(0),(-likelihood_proposed+likelihood_current&
                                                         +likelihood_normalization)/temperature])
@@ -125,10 +112,8 @@ ELSEIF (modelling_method.EQ.2) THEN
                                 alpha=MINVAL([DBLE(0),-likelihood_proposed+likelihood_current+likelihood_normalization])
                         END IF
                 ELSE IF (no_data.EQ.1) THEN
-                        !alpha=MINVAL([DBLE(0),alpha_component-LOG(value_max-value_min)])
                         alpha=MINVAL([DBLE(0),-LOG(value_max-value_min)])
                 END IF
-                write(*,*) 'alpha (delete) at chain ', TRIM(chain_name), ' is : ', alpha
         ELSE IF (move.OR.value.OR.noise.OR.option) THEN
                 IF (no_data.EQ.0) THEN
                         IF (temper) THEN
@@ -140,14 +125,12 @@ ELSEIF (modelling_method.EQ.2) THEN
                 ELSE IF (no_data.EQ.1) THEN
                         alpha=DBLE(0)
                 END IF
-                write(*,*) 'alpha (move/value/noise/opt) at chain ', TRIM(chain_name), ' is : ', alpha
         END IF
 END IF
 
 END SUBROUTINE
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE calculate_alpha_delayed(likelihood_current,likelihood_proposed,likelihood_delayed,&
                                    likelihood_normalization,temper,alpha_delayed)
 
@@ -163,7 +146,6 @@ LOGICAL, INTENT(IN)             :: temper
 DOUBLE PRECISION, INTENT(OUT)   :: alpha_delayed
 DOUBLE PRECISION                :: value_min,value_max
 DOUBLE PRECISION                :: TT1,TT2,TT3,TT2x,TT2y,TT2z,TT3t,TT3b
-!DOUBLE PRECISION                :: l_change
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': calculating alpha delayed ---'
 
@@ -173,7 +155,6 @@ IF (no_data.EQ.0) THEN
         ELSE
                 TT1=-likelihood_delayed+likelihood_current+likelihood_normalization
         END IF
-        !write(*,*)'DELAYED move/length/opt TT1 chain ',TRIM(chain_name),': ',TT1
 ELSE IF (no_data.EQ.1) THEN
         TT1=DBLE(0)
 END IF
@@ -186,33 +167,12 @@ IF (move) THEN
         TT2z=((voronoi_proposed(cell_number,3)-voronoi_current(cell_number,3))**2&
                 -(voronoi_proposed(cell_number,3)-voronoi_delayed(cell_number,3))**2)/(2*z_change**2)
         TT2=TT2x+TT2y+TT2z
-        !write(*,*)'DELAYED move TT2 chain ',TRIM(chain_name),': ',TT2
-        !write(*,*)'DELAYED move TT2 chain ',TRIM(chain_name),' vor_prop: ',voronoi_proposed(cell_number,1),&
-        !                                                                        voronoi_proposed(cell_number,2),&
-        !                                                                        voronoi_proposed(cell_number,3)
-        !write(*,*)'DELAYED move TT2 chain ',TRIM(chain_name),' vor_del: ',voronoi_delayed(cell_number,1),&
-        !                                                                        voronoi_delayed(cell_number,2),&
-        !                                                                        voronoi_delayed(cell_number,3)
-        !write(*,*)'DELAYED move TT2 chain ',TRIM(chain_name),' vor_curr: ',voronoi_current(cell_number,1),&
-        !                                                                        voronoi_current(cell_number,2),&
-        !                                                                        voronoi_current(cell_number,3)
 ELSE IF (value) THEN
-        !l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
-        !TT2=(-(voronoi_proposed(cell_number,4)-voronoi_delayed(cell_number,4))**2&
-        !        +(voronoi_proposed(cell_number,4)-voronoi_current(cell_number,4))**2)/(2*value_change**2)
         TT2=(-(voronoi_proposed(cell_number,4)-voronoi_delayed(cell_number,4))**2&
                 +(voronoi_proposed(cell_number,4)-voronoi_current(cell_number,4))**2)/(2*l_change**2)
-        !write(*,*)'DELAYED length TT2 chain ',TRIM(chain_name),': ',TT2
-        !write(*,*)'DELAYED l TT2 chain ',TRIM(chain_name),' vor_prop: ',voronoi_proposed(cell_number,4)
-        !write(*,*)'DELAYED l TT2 chain ',TRIM(chain_name),' vor_del: ',voronoi_delayed(cell_number,4)
-        !write(*,*)'DELAYED l TT2 chain ',TRIM(chain_name),' vor_curr: ',voronoi_current(cell_number,4)
 ELSE IF (option) THEN
         TT2=(-(voronoi_proposed(cell_number,5)-voronoi_delayed(cell_number,5))**2&
                 +(voronoi_proposed(cell_number,5)-voronoi_current(cell_number,5))**2)/(2*opt_change**2)
-        !write(*,*)'DELAYED opt TT2 chain ',TRIM(chain_name),': ',TT2
-        !write(*,*)'DELAYED opt TT2 chain ',TRIM(chain_name),' vor_prop: ',voronoi_proposed(cell_number,5)
-        !write(*,*)'DELAYED opt TT2 chain ',TRIM(chain_name),' vor_del: ',voronoi_delayed(cell_number,5)
-        !write(*,*)'DELAYED opt TT2 chain ',TRIM(chain_name),' vor_curr: ',voronoi_current(cell_number,5)
 END IF
 
 
@@ -220,28 +180,18 @@ END IF
 IF (.NOT.inside_prior.AND.inside_prior_delayed) THEN ! if the first proposal was rejected because out of bounds, then TT3=0
         TT3=0
         alpha_delayed=MINVAL([DBLE(0),TT1+TT2])
-        !write(*,*)'DELAYED move/length/opt if out of bounds TT3 chain ',TRIM(chain_name),': ',TT3
-        !write(*,*)'DELAYED move/length/opt if out of bounds alpha_delayed chain ',TRIM(chain_name),': ',alpha_delayed
 ELSE IF (inside_prior.AND.inside_prior_delayed) THEN ! if both the first and the delayed proposal are within the bounds
         IF (no_data.EQ.0) THEN
                 IF (temper) THEN
                         TT3t=LOG(1-EXP(MINVAL([DBLE(0),&
                                                 (-likelihood_proposed+likelihood_delayed+likelihood_normalization)/temperature])))
-                        !WRITE(*,*)'DELAYED TT3t chain ',TRIM(chain_name),' like_prop : ',likelihood_proposed
-                        !WRITE(*,*)'DELAYED TT3t chain ',TRIM(chain_name),' like_del : ',likelihood_delayed
-                        !WRITE(*,*)'DELAYED TT3t chain ',TRIM(chain_name),' like_norm : ',likelihood_normalization 
                 ELSE
                         TT3t=LOG(1-EXP(MINVAL([DBLE(0),-likelihood_proposed+likelihood_delayed+likelihood_normalization])))
                 END IF
-!         ELSE IF (no_data.EQ.1) THEN ! shouldn't even get to this point because for no data all m' are accepted
-!                 TT3t=LOG(DBLE(0))
         END IF
-        !write(*,*)'DELAYED move/length/opt TT3t chain ',TRIM(chain_name),': ',TT3t
         TT3b=LOG(1-EXP(alpha))
-        !write(*,*)'DELAYED move/length/opt TT3b chain ',TRIM(chain_name),': ',TT3b
         TT3=TT3t-TT3b
         alpha_delayed=MINVAL([DBLE(0),TT1+TT2+TT3])
-        !write(*,*)'DELAYED move/length/opt alpha_delayed chain ',TRIM(chain_name),': ',alpha_delayed 
 END IF
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': calculated alpha delayed ---'
@@ -249,7 +199,6 @@ IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': calculated a
 END SUBROUTINE
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE calculate_likelihood(number_of_measurements,observed_data,modelled_data,uncertainty,likelihood_type,likelihood,misfit)
 
 IMPLICIT NONE
@@ -289,7 +238,6 @@ IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': calculated l
 END SUBROUTINE
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE calculate_normalization(number_of_measurements,modelled_data,uncertainty_current,uncertainty_proposed,normalization)
 
 IMPLICIT NONE

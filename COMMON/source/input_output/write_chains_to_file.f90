@@ -16,6 +16,11 @@
 ! along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ! ********************************************************************* !
 
+! ********************************************************************* !
+! Scripts adapted to inversion of preferential pathways:
+! Copyright (C) 2026 Léa Lelimouzin
+! ********************************************************************* !
+
 
 SUBROUTINE write_chains_to_file()
 
@@ -88,9 +93,6 @@ IF (run_number.EQ.1) THEN
                 ! Number of cells
                 IF (pp.EQ.0) WRITE(ncell_unit)file_type_1
                 WRITE(ncell_unit)pp,chain_ncell(pp+1)
-                !write(*,*)'ncell_unit: ', ncell_unit ! 25/11/25
-                !write(*,*)'samples_at_start ',chain_ncell! 25/11/25
-                !write(*,*)'samples_in_run ',samples_in_run ! 25/11/25
                 
                 ! Chain steps
                 IF (pp.EQ.0) THEN

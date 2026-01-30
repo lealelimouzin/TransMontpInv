@@ -16,6 +16,11 @@
 ! along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ! ********************************************************************* !
 
+! ********************************************************************* !
+! Scripts adapted to inversion of preferential pathways:
+! Copyright (C) 2026 Léa Lelimouzin
+! ********************************************************************* !
+
 
 SUBROUTINE check_output_files(length_ok)
 
@@ -57,7 +62,7 @@ DO nn=1,number_of_chains
                         IF (IOstatus.EQ.0.AND.step.EQ.5.AND.accept.EQ.1) noise_count=noise_count+1
                 END IF
                 IF (IOstatus.EQ.0) THEN
-                        file_lengths(nn,3)=file_lengths(nn,3)+1 ! length of file of chain steps (actual)
+                        file_lengths(nn,3)=file_lengths(nn,3)+1 ! length of file of chain steps (current)
                 ELSE
                         EXIT
                 END IF
@@ -203,9 +208,6 @@ DO nn=1,number_of_chains
         ! of samples so far + 1
         IF (file_lengths(nn,2).NE.samples_so_far+1) THEN
                 length_ok=.FALSE.
-                !write(*,*)'l210 whith chain ', chain_number, ': ',length_ok ! 25/11/24
-                !write(*,*)'l213 check output file_lengths: ',file_lengths(nn,2)
-                !write(*,*)'l213 check output fsamples_so_far+1: ',samples_so_far+1
                 EXIT
         END IF
         

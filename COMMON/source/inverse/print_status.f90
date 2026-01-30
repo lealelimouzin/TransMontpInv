@@ -16,6 +16,11 @@
 ! along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ! ********************************************************************* !
 
+! ********************************************************************* !
+! Scripts adapted to inversion of preferential pathways:
+! Copyright (C) 2026 Léa Lelimouzin
+! ********************************************************************* !
+
 
 SUBROUTINE print_status(start_end,acceptances,iteration,number_of_chains)
 

@@ -15,14 +15,11 @@
 ! You should have received a copy of the GNU General Public License
 ! along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ! ********************************************************************* !
+
 ! ********************************************************************* !
-! The module has been modified to support the inversion of thin
-! preferential pathways such as fractures.
-! Copyrigth (C) 2025 Lea Lelimouzin
-!
-! The same licence as presented above applied to this adaptation of the
-! code.
-! ********************************************************************* ! 
+! Scripts adapted to inversion of preferential pathways:
+! Copyright (C) 2026 Léa Lelimouzin
+! ********************************************************************* !
 
 
 MODULE chains
@@ -364,6 +361,7 @@ SUBROUTINE move_cell(modelling_method)
         write(*,*) 'MOVE voronoi_proposed = ', voronoi_proposed(cell_number,:) 
 
         CALL check_inside_prior()
+        
 END SUBROUTINE
 
 
@@ -486,6 +484,7 @@ SUBROUTINE move_cell_delayed(modelling_method)
         write(*,*)'MOVE DELAYED voronoi_proposed is ', voronoi_delayed(cell_number,:) 
 
         CALL check_inside_prior()
+        
 END SUBROUTINE
 
 
@@ -680,20 +679,8 @@ SUBROUTINE check_frac_inside_domain(fracture)
 
         CALL box_segment_clip_2d(p1,p2,pa,pb,ival)
 
-        !WRITE ( *, '(2x,4f8.4)' ) pa_old(1:dim_num), pb_old(1:dim_num)
         IF ( ival == -1 ) THEN
-                WRITE ( *, '(a)' ) '  Line is outside the box.'
-        !ELSE IF ( ival == 0 ) THEN
-        !        WRITE ( *, '(a)' ) '  Line is inside the box.'
-        !ELSE IF ( ival == 1 ) THEN
-        !        WRITE ( *, '(a)' ) '  Line is partly outside the box.'
-                !WRITE ( *, '(2x,2f8.4)' ) pa(1:dim_num)
-        !ELSE IF ( ival == 2 ) THEN
-        !        WRITE ( *, '(a)' ) '  Line is partly outside the box.'
-                !WRITE ( *, '(2x,16x,2f8.4)' ) pb(1:dim_num)
-        !ELSE IF ( ival == 3 ) THEN
-        !        WRITE ( *, '(a)' ) '  Line is partly outside the box.'
-                !WRITE ( *, '(2x,4f8.4)' ) pa(1:dim_num), pb(1:dim_num)
+                WRITE ( *, '(a)' ) 'WARNING: the proposed line is outside the domain.'
         END IF
 
         IF (ival.EQ.1.OR.ival.EQ.2.OR.ival.EQ.3) THEN
@@ -721,8 +708,8 @@ END SUBROUTINE
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE box_segment_clip_2d ( p1, p2, pa, pb, ival )
 
-!*****************************************************************************80
-!! BOX_SEGMENT_CLIP_2D uses a box to clip a line segment in 2D.
+!*****************************************************************************!
+! BOX_SEGMENT_CLIP_2D uses a box to clip a line segment in 2D.
 !
 !  Discussion:
 !
@@ -763,7 +750,8 @@ SUBROUTINE box_segment_clip_2d ( p1, p2, pa, pb, ival )
 !     1, PA was clipped.
 !     2, PB was clipped.
 !     3, PA and PB were clipped.
-!
+!*****************************************************************************!
+
   implicit none
 
   integer ( kind = 4 ), parameter :: dim_num = 2
@@ -868,5 +856,6 @@ SUBROUTINE box_segment_clip_2d ( p1, p2, pa, pb, ival )
 
   return
 END SUBROUTINE
+
 
 END MODULE

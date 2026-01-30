@@ -16,6 +16,10 @@
 ! along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ! ********************************************************************* !
 
+! ********************************************************************* !
+! Scripts adapted to inversion of preferential pathways:
+! Copyright (C) 2026 Léa Lelimouzin
+! ********************************************************************* !
 
 SUBROUTINE initialize_models()
 
@@ -164,7 +168,7 @@ ELSE IF (run_number.GT.1) THEN
                 END DO
         !-------------------------------------
         ELSE IF (modelling_method.EQ.2) THEN 
-                ! Read fractures
+                ! Read fractures or preferential pathways
                 READ(80)ncell_current
                 ncell_proposed=ncell_current
                 IF (opt_parameters.EQ.0) THEN 
@@ -254,7 +258,6 @@ IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initialized 
 END SUBROUTINE
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE save_first_model()
 
 USE chains

@@ -17,14 +17,15 @@
 ! ********************************************************************* !
 
 ! ********************************************************************* !
-! Scripts adapted to inversion of preferential pathways:
+! Scripts adapted to inversion of preferential pathways in TransMontpInv
+! package.
 ! Copyright (C) 2026 Léa Lelimouzin
 ! ********************************************************************* !
 
 PROGRAM chain2txt
 
 IMPLICIT NONE
-INTEGER                                 :: opt=1 ! opt=0 if no option, opt=1 if inversion on the angle/aperture
+INTEGER                                 :: opt=1 ! opt=0 if no option, opt=1 if inversion of the angle/aperture
 CHARACTER(LEN=30)                       :: file_name
 INTEGER                                 :: file_type
 INTEGER                                 :: noise_type,number_of_datasets

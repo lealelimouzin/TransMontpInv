@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Program under the GNU General Public License <http://www.gnu.org/licenses/>.
+
 """
     MAIN
 
-    Main script to run the forward of electrical resistivity data in a context of heterogeneous or fractured media.
+    Main script to run the forward model of electrical resistivity data in a context of heterogeneous or fractured media.
 
     Last modification: December 2025 - Léa Lelimouzin
 """
@@ -37,8 +39,8 @@ if __name__ == "__main__":
     tabVar = [expt_name_epm, expt_name_dfn, data_xx_yy, nb_electrodes, path_results, ratioData, optCompile]
 
     # ---------- Forward EPM (calculated only once during the inversion) ----------
+    bool_error=True
     if not os.path.exists(pjoin(tabVar[4], "rho_a_EPM.txt")):
-        bool_error=True
         cpt=0 # count the number of tests ater a bug appeared
         while bool_error==True and cpt<2:
             cpt+=1

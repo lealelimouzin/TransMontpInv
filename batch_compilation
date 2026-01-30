@@ -12,7 +12,7 @@
 
 echo "Running on $SLURM_NODELIST" 
 
-cd /home/lelimouzinl/scratch/TransMontpInv/tdtomo_fortert/source/compile
+cd /home/lelimouzinl/scratch/TransMontpInv/tdtomo_fortmtpi/source/compile
 make clean
 make
 cd ../forward/ert_ddp_2_5d/src/electrical_resistivity/Release

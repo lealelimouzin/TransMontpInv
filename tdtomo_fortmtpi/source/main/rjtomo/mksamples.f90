@@ -17,7 +17,8 @@
 ! ********************************************************************* !
 
 ! ********************************************************************* !
-! Scripts adapted to inversion of preferential pathways:
+! Scripts adapted to inversion of preferential pathways in TransMontpInv
+! package.
 ! Copyright (C) 2026 Léa Lelimouzin
 ! ********************************************************************* !
 
@@ -292,11 +293,6 @@ IF (no_data.EQ.0) CALL calculate_likelihood(number_of_measurements,observed_data
                                             likelihood_type,likelihood_current,&
                                             misfit_current)
 
-write(*,*)'mksamples initialization likelihood_type: ',likelihood_type ! TO BE DELETED
-write(*,*)'mksamples initialization likelihood_current: ',likelihood_current ! TO BE DELETED
-write(*,*)'mksamples initialization misfit_current: ',misfit_current ! TO BE DELETED
-write(*,*)'mksamples initialization data_current: ',data_current ! TO BE DELETED
-
 ! Write initial misfit to screen
 WRITE(message,*)'Initial misfit on chain ',TRIM(chain_name),': ',TRIM(dble2str(misfit_current))
 IF (core_number.EQ.0) THEN
@@ -344,7 +340,7 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
         CALL choose_step(iteration,step)
         CALL step_type()
 
-        ! Apply the step
+        ! Apply the step (cell in TERT corresponds to pathways in TransMontpInv)
         IF (birth) THEN
                 CALL add_cell(modelling_method)
         ELSE IF (death) THEN
@@ -636,7 +632,7 @@ IF (core_number.EQ.0) CALL write_inversion_parameters()
 CALL CHDIR('../')
 
 ! Save a copy of the results per run
-CALL SYSTEM('scp -r results/ results_run_'//TRIM(int2str(run_number)))
+CALL SYSTEM('scp -r results results_run_'//TRIM(int2str(run_number)))
 
 ! Stop timer
 CALL cpu_time(timer_end)

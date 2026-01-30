@@ -17,7 +17,8 @@
 ! ********************************************************************* !
 
 ! ********************************************************************* !
-! Scripts adapted to inversion of preferential pathways:
+! Scripts adapted to inversion of preferential pathways in TransMontpInv
+! package.
 ! Copyright (C) 2026 Léa Lelimouzin
 ! ********************************************************************* !
 
@@ -32,7 +33,7 @@ IMPLICIT NONE
 INTEGER                 :: pp,nn,ii
 LOGICAL                 :: file_open
 CHARACTER(LEN=3)        :: adv
-INTEGER                 :: file_type_1=1 ! file of number of cells
+INTEGER                 :: file_type_1=1 ! file of number of cells/pathways
 INTEGER                 :: file_type_2=2 ! file of chain steps
 INTEGER                 :: file_type_3=3 ! file of noise parameters
 INTEGER                 :: file_type_4=4 ! file of misfits

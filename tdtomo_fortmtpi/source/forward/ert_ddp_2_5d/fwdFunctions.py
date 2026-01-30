@@ -1,12 +1,16 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Program under the GNU General Public License <http://www.gnu.org/licenses/>.
+
 """
     FORWARD FUNCTIONS
 
-    Contain the forward procedures for the Equivalent Porous Media (EPM) model (homogeneous) and the Discrete Dual Porosity (DDP) model (matrix (EPM) +
+    This function is part of ERT_DDP_2.5D software.
+
+    It contains the forward procedures for the Equivalent Porous Media (EPM) model (homogeneous) and the Discrete Dual Porosity (DDP) model (matrix (EPM) +
     Discrete Fracture Network (DFN)).
-    The forward models are adapted from Caballero-Sanz et al. (2017) to data acquired in time-lapse cross-borehole ERT during aquifer remediation.
+    The forward model is adapted from Caballero-Sanz et al. (2017) to data acquired in time-lapse cross-borehole ERT during aquifer remediation.
 
     Translation from MATLAB to Python: July 2024 - Fabien Rétif & Léa Lelimouzin
 

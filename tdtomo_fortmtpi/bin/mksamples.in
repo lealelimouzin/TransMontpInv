@@ -82,7 +82,7 @@ forward.in                    :: File containing forward modelling parameters fo
 ********************************************************************************************************************************
 * (K) PATH TO ert_ddp_2_5d REPOSITORY                                                                                          *
 ********************************************************************************************************************************
-/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/source/forward/ert_ddp_2_5d/
+/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortmtpi/source/forward/ert_ddp_2_5d/
 ********************************************************************************************************************************
 * (L) TEMPORARY                                                                                         *
 ********************************************************************************************************************************

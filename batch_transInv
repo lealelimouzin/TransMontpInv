@@ -12,6 +12,6 @@
 
 echo "Running on $SLURM_NODELIST" 
 
-cd /home/lelimouzinl/scratch/TransMontpInv/tdtomo_fortert/bin
+cd /home/lelimouzinl/scratch/TransMontpInv/tdtomo_fortmtpi/bin
 mpiexec -np 6 ./mksamples 1
 cd ../..

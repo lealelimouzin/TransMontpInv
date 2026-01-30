@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Program under the GNU General Public License <http://www.gnu.org/licenses/>.
+
 """
     INITIALIZE MODEL
 
-    Script to initialize the model for each Markov chain by starting from a set of randomly choosen pathways found with MontpInv software. 
+    Script to initialize the model for each Markov chain by starting from a set of randomly choosen pathways. 
 
     Last modification: December 2025 - Léa Lelimouzin
 """

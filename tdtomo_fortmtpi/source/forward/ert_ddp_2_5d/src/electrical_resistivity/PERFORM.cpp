@@ -26,14 +26,6 @@
 #include <iostream>
 #include <string>
 
-// Tests
-//#include </home/leal/Desktop/Doctorat/Scripts/MontpInv_Python/transdimension/refonte_matlab_python/montp_inv/Library/Eigen/IterativeLinearSolvers>
-//#include </usr/include/eigen3/Eigen/IterativeLinearSolvers>
-//#include </usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/pybind11.h>
-//#include </usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/stl.h>
-//#include </usr/local/lib/python3.10/dist-packages/pybind11/include/pybind11/eigen.h>
-
-// original versions
 #include <Eigen/IterativeLinearSolvers>
 
 #include <pybind11/pybind11.h>

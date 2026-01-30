@@ -17,7 +17,8 @@
 ! ********************************************************************* !
 
 ! ********************************************************************* !
-! Scripts adapted to inversion of preferential pathways:
+! Scripts adapted to inversion of preferential pathways in TransMontpInv
+! package.
 ! Copyright (C) 2026 Léa Lelimouzin
 ! ********************************************************************* !
 

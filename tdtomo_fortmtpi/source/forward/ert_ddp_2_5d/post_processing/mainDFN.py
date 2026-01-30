@@ -1,10 +1,13 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Program under the GNU General Public License <http://www.gnu.org/licenses/>.
+
 """
     MAIN DFN
 
-    This function is part of ERT_DDP_2.5D software (Cabllero-Sanz et al., 2017).
+    This function is part of ERT_DDP_2.5D software.
+
     It is the main file for inverting 2.5D data provided in the Fourier domain from the C++ code to the real
     domain. The function was first developed in a context of surface electrode configuration.
     The present version is an adaptation to a cross-borehole configuration.

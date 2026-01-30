@@ -1,10 +1,13 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Program under the GNU General Public License <http://www.gnu.org/licenses/>.
+
 """
     INVERSE FOURIER POTENTIAL
 
-    This function is part of ERT_DDP_2.5D software (Cabllero-Sanz et al., 2017).
+    This function is part of ERT_DDP_2.5D software.
+    
     It calculates the inverse potential from a matrix using N wavenumbers to do it. It has been created by Victor 
     Caballero in August 2014. Last modification: January 2015 - Victor Caballero
 

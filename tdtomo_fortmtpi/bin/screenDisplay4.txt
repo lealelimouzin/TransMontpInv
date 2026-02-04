@@ -1,7 +1,7 @@
 
  ***************************
   Job started on 04-02-2026
-  at 08:54:49
+  at 11:36:46
  ***************************
 
   Hello from rj-McMC tomography and chain 1 on core 0!                 
@@ -12,16 +12,6 @@ WARNING: /res_chain_2/ directory already exists! It is removed before starting t
 WARNING: /res_chain_1/ directory already exists! It is removed before starting the new simulation.
 ***** Demat da Python main.py res_chain_2 ! *****
 ***** Demat da Python main.py res_chain_1 ! *****
-bool_error start epm =  True
-bool_error start epm =  True
-bool_error in epm =  False
-bool_error end epm =  False
-bool_error start dfn =  True
-bool_error in epm =  False
-bool_error end epm =  False
-bool_error start dfn =  True
-bool_error in dfn =  False
-bool_error end dfn =  False
 
  STARTING CHAINS FROM SAMPLE 0
 
@@ -30,21 +20,31 @@ bool_error end dfn =  False
  Number of measurements: 2008
 
   Initial number of cells on chain 1: 5                                
-bool_error in dfn =  False
-bool_error end dfn =  False
+ VALUE at chain 2
+ VALUE voronoi_proposed =    6.1076102256774902        0.0000000000000000        11.119810104370117        4.8193601170072284       0.61086621013851028     
   Initial number of cells on chain 2: 5                                
 
-  Initial misfit on chain 1: 685625.37994468561                        
-  Initial misfit on chain 2: 594442.60508691659                        
+  Initial misfit on chain 1: 889938.94851595093                        
+  Initial misfit on chain 2: 1419824.2885729612                        
 
- NOISE at chain 1
- NOISE proposed at chain 1 =  0.55941976241101388     
- NOISE current at chain 1 =  0.60660000000000003     
-   Likelihood proposed at chain 1 =   403075.21373343811     
-   Likelihood current at chain 1 =   342812.68997234281     
-   Likelihood normalization at chain 1 =   162.18188294108279     
- MH criterion at chain 1 =  -9.5994497229100878E-004
-      Is the proposed model accepted at chain 1 ?  F
+ OPTION 1 at chain 1
+ OPTION voronoi_proposed =    11.641172498751965        0.0000000000000000        12.479294155796234        1.9340154280685444       0.47753849979573937     
+***** Demat da Python main.py res_chain_2 ! *****
+***** Demat da Python main.py res_chain_1 ! *****
+ NOISE proposed at chain 2 =  0.37142681846792097     
+ NOISE current at chain 2 =  0.37142681846792097     
+   Likelihood proposed at chain 2 =   709912.14428648085     
+   Likelihood current at chain 2 =   709912.14428648085     
+   Likelihood normalization at chain 2 =   0.0000000000000000     
+ MH criterion at chain 2 = -0.83166838837713808     
+      Is the proposed model accepted at chain 2 ?  T
+ NOISE proposed at chain 1 =  0.57299761772487301     
+ NOISE current at chain 1 =  0.57299761772487301     
+   Likelihood proposed at chain 1 =   444969.47425797541     
+   Likelihood current at chain 1 =   444969.47425797541     
+   Likelihood normalization at chain 1 =   0.0000000000000000     
+ MH criterion at chain 1 =  -2.3822930714533244     
+      Is the proposed model accepted at chain 1 ?  T
  Tempering : T1 is 1 with a temperature of 1.0000000000000000
  Tempering : T2 is 2 with a temperature of 8.0000000000000000
  --------------------------------------
@@ -54,11 +54,12 @@ bool_error end dfn =  False
 
  Number of cells: 5
 
- Dataset 1, "lambda": 1.0000000000000000
- Minimum uncertainty:       1.2728 %
- Maximum uncertainty:     122.6179 %
+ Dataset 1, "a": 4.2285177854887487E-002
+ Dataset 1, "b": 0.19944259205633835
+ Minimum uncertainty:       4.2297 %
+ Maximum uncertainty:      99.2275 %
 
- Misfit : 685625.37994468561
+ Misfit : 889938.94851595093
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -69,20 +70,12 @@ bool_error end dfn =  False
        main:    0.0000 %
        delayed:    0.0000 %
  NOISE acceptance:    0.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
+ OPTION acceptance:  100.0000 %
+       main:  100.0000 %
        delayed:    0.0000 %
 
- TOTAL acceptance:    0.0000 %
+ TOTAL acceptance:  100.0000 %
  --------------------------------------
- NOISE at chain 2
- NOISE proposed at chain 2 =  0.61700419951689889     
- NOISE current at chain 2 =  0.60660000000000003     
-   Likelihood proposed at chain 2 =   287282.05919390201     
-   Likelihood current at chain 2 =   297221.30254345835     
-   Likelihood normalization at chain 2 =  -34.012469952080885     
- MH criterion at chain 2 =  -5.3684982651701282E-002
-      Is the proposed model accepted at chain 2 ?  T
  --------------------------------------
  Chain number: 2/2
  Sample: 1/5000
@@ -90,148 +83,67 @@ bool_error end dfn =  False
 
  Number of cells: 5
 
- Dataset 1, "lambda": 1.0171516642217258
- Minimum uncertainty:       2.2779 %
- Maximum uncertainty:     248.0390 %
+ Dataset 1, "a": 4.4163495369992103E-002
+ Dataset 1, "b": 3.8646252140087600E-002
+ Minimum uncertainty:       4.4174 %
+ Maximum uncertainty:      15.9091 %
 
- Misfit : 574564.11838780402
+ Misfit : 1419824.2885729612
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
  MOVE  acceptance:    0.0000 %
        main:    0.0000 %
        delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:  100.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
-
- TOTAL acceptance:  100.0000 %
- --------------------------------------
- --------------------------------------
- PARALLEL TEMPERING acceptance:  100.0000 %
- --------------------------------------
- TIME ELAPSED: 0h 0m 18s
- --------------------------------------
- DELETE at chain 2
- MOVE at chain 1
- MOVE voronoi_proposed =    9.2443553163682051        0.0000000000000000        11.636864038113083        1.0914692878723145       0.43632991415034716     
-***** Demat da Python main.py res_chain_2 ! *****
-***** Demat da Python main.py res_chain_1 ! *****
- NOISE proposed at chain 2 =  0.61700419951689889     
- NOISE current at chain 2 =  0.61700419951689889     
-   Likelihood proposed at chain 2 =   287282.05919390201     
-   Likelihood current at chain 2 =   287282.05919390201     
-   Likelihood normalization at chain 2 =   0.0000000000000000     
- MH criterion at chain 2 = -0.86662523268454705     
-      Is the proposed model accepted at chain 2 ?  T
- NOISE proposed at chain 1 =  0.60660000000000003     
- NOISE current at chain 1 =  0.60660000000000003     
-   Likelihood proposed at chain 1 =   342812.68997234281     
-   Likelihood current at chain 1 =   342812.68997234281     
-   Likelihood normalization at chain 1 =   0.0000000000000000     
- MH criterion at chain 1 = -0.81316369739546979     
-      Is the proposed model accepted at chain 1 ?  T
- Tempering : T1 is 1 with a temperature of 8.0000000000000000
- Tempering : T2 is 2 with a temperature of 1.0000000000000000
- --------------------------------------
- Chain number: 1/2
- Sample: 2/5000
- Iteration in this run: 2/3
-
- Number of cells: 5
-
- Dataset 1, "lambda": 1.0000000000000000
- Minimum uncertainty:       1.2728 %
- Maximum uncertainty:     122.6179 %
-
- Misfit : 685625.37994468561
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:    0.0000 %
- MOVE  acceptance:  100.0000 %
+ VALUE acceptance:  100.0000 %
        main:  100.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
        delayed:    0.0000 %
  NOISE acceptance:    0.0000 %
  OPTION acceptance:    0.0000 %
        main:    0.0000 %
        delayed:    0.0000 %
 
- TOTAL acceptance:   50.0000 %
- --------------------------------------
- --------------------------------------
- Chain number: 2/2
- Sample: 2/5000
- Iteration in this run: 2/3
-
- Number of cells: 4
-
- Dataset 1, "lambda": 1.0171516642217258
- Minimum uncertainty:       2.2779 %
- Maximum uncertainty:     248.0390 %
-
- Misfit : 574564.11838780402
-
- BIRTH acceptance:    0.0000 %
- DEATH acceptance:  100.0000 %
- MOVE  acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- VALUE acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
- NOISE acceptance:  100.0000 %
- OPTION acceptance:    0.0000 %
-       main:    0.0000 %
-       delayed:    0.0000 %
-
  TOTAL acceptance:  100.0000 %
  --------------------------------------
  --------------------------------------
- PARALLEL TEMPERING acceptance:   50.0000 %
+ PARALLEL TEMPERING acceptance:    0.0000 %
  --------------------------------------
- TIME ELAPSED: 0h 0m 20s
+ TIME ELAPSED: 0h 0m 9s
  --------------------------------------
- VALUE at chain 2
- VALUE voronoi_proposed =    10.345920562744141        0.0000000000000000        7.3723173141479492        3.4491846258148402       0.43633673413338048     
- OPTION 1 at chain 1
- OPTION voronoi_proposed =    9.2443553163682051        0.0000000000000000        11.636864038113083        1.0914692878723145        1.1414723038157555     
-***** Demat da Python main.py res_chain_2 ! *****
+ MOVE at chain 1
+ MOVE voronoi_proposed =    10.433679159998263        0.0000000000000000        6.7610288989765817        3.6014614251905619       0.43633673413338048     
+ DELETE at chain 2
 ***** Demat da Python main.py res_chain_1 ! *****
- NOISE proposed at chain 1 =  0.60660000000000003     
- NOISE current at chain 1 =  0.60660000000000003     
-   Likelihood proposed at chain 1 =   342812.68997234281     
-   Likelihood current at chain 1 =   342812.68997234281     
-   Likelihood normalization at chain 1 =   0.0000000000000000     
- MH criterion at chain 1 = -0.84234680664630746     
-      Is the proposed model accepted at chain 1 ?  T
- Tempering : T1 is 1 with a temperature of 8.0000000000000000
- Tempering : T2 is 2 with a temperature of 1.0000000000000000
- NOISE proposed at chain 2 =  0.61700419951689889     
- NOISE current at chain 2 =  0.61700419951689889     
-   Likelihood proposed at chain 2 =   287282.05919390201     
-   Likelihood current at chain 2 =   287282.05919390201     
+***** Demat da Python main.py res_chain_2 ! *****
+ NOISE proposed at chain 2 =  0.37142681846792097     
+ NOISE current at chain 2 =  0.37142681846792097     
+   Likelihood proposed at chain 2 =   709912.14428648085     
+   Likelihood current at chain 2 =   709912.14428648085     
    Likelihood normalization at chain 2 =   0.0000000000000000     
- MH criterion at chain 2 = -0.35830099456117004     
+ MH criterion at chain 2 =  -1.1377593231085510     
       Is the proposed model accepted at chain 2 ?  T
+ NOISE proposed at chain 1 =  0.57299761772487301     
+ NOISE current at chain 1 =  0.57299761772487301     
+   Likelihood proposed at chain 1 =   444969.47425797541     
+   Likelihood current at chain 1 =   444969.47425797541     
+   Likelihood normalization at chain 1 =   0.0000000000000000     
+ MH criterion at chain 1 = -0.81316369739546979     
+      Is the proposed model accepted at chain 1 ?  T
+ Tempering : T1 is 1 with a temperature of 1.0000000000000000
+ Tempering : T2 is 2 with a temperature of 8.0000000000000000
  --------------------------------------
  Chain number: 1/2
- Sample: 3/5000
- Iteration in this run: 3/3
+ Sample: 2/5000
+ Iteration in this run: 2/3
 
  Number of cells: 5
 
- Dataset 1, "lambda": 1.0000000000000000
- Minimum uncertainty:       1.2728 %
- Maximum uncertainty:     122.6179 %
+ Dataset 1, "a": 4.2285177854887487E-002
+ Dataset 1, "b": 0.19944259205633835
+ Minimum uncertainty:       4.2297 %
+ Maximum uncertainty:      99.2275 %
 
- Misfit : 685625.37994468561
+ Misfit : 889938.94851595093
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:    0.0000 %
@@ -246,20 +158,21 @@ bool_error end dfn =  False
        main:  100.0000 %
        delayed:    0.0000 %
 
- TOTAL acceptance:   66.6667 %
+ TOTAL acceptance:  100.0000 %
  --------------------------------------
  --------------------------------------
  Chain number: 2/2
- Sample: 3/5000
- Iteration in this run: 3/3
+ Sample: 2/5000
+ Iteration in this run: 2/3
 
  Number of cells: 4
 
- Dataset 1, "lambda": 1.0171516642217258
- Minimum uncertainty:       2.2779 %
- Maximum uncertainty:     248.0390 %
+ Dataset 1, "a": 4.4163495369992103E-002
+ Dataset 1, "b": 3.8646252140087600E-002
+ Minimum uncertainty:       4.4174 %
+ Maximum uncertainty:      15.9091 %
 
- Misfit : 574564.11838780402
+ Misfit : 1419824.2885729612
 
  BIRTH acceptance:    0.0000 %
  DEATH acceptance:  100.0000 %
@@ -269,7 +182,7 @@ bool_error end dfn =  False
  VALUE acceptance:  100.0000 %
        main:  100.0000 %
        delayed:    0.0000 %
- NOISE acceptance:  100.0000 %
+ NOISE acceptance:    0.0000 %
  OPTION acceptance:    0.0000 %
        main:    0.0000 %
        delayed:    0.0000 %
@@ -277,15 +190,100 @@ bool_error end dfn =  False
  TOTAL acceptance:  100.0000 %
  --------------------------------------
  --------------------------------------
- PARALLEL TEMPERING acceptance:   33.3333 %
+ PARALLEL TEMPERING acceptance:    0.0000 %
  --------------------------------------
- TIME ELAPSED: 0h 0m 22s
+ TIME ELAPSED: 0h 0m 11s
+ --------------------------------------
+ VALUE at chain 2
+ VALUE voronoi_proposed =    10.244456033864516        0.0000000000000000        7.3250030811684823        4.9774450765602340       0.43633673413338048     
+ OPTION 1 at chain 1
+ OPTION voronoi_proposed =    10.634258736178033        0.0000000000000000        7.1991718080783738        2.6377158671169814        1.1414791237987889     
+***** Demat da Python main.py res_chain_2 ! *****
+***** Demat da Python main.py res_chain_1 ! *****
+ NOISE proposed at chain 2 =  0.37142681846792097     
+ NOISE current at chain 2 =  0.37142681846792097     
+   Likelihood proposed at chain 2 =   709912.14428648085     
+   Likelihood current at chain 2 =   709912.14428648085     
+   Likelihood normalization at chain 2 =   0.0000000000000000     
+ MH criterion at chain 2 = -0.47921234684920672     
+      Is the proposed model accepted at chain 2 ?  T
+ NOISE proposed at chain 1 =  0.57299761772487301     
+ NOISE current at chain 1 =  0.57299761772487301     
+   Likelihood proposed at chain 1 =   444969.47425797541     
+   Likelihood current at chain 1 =   444969.47425797541     
+   Likelihood normalization at chain 1 =   0.0000000000000000     
+ MH criterion at chain 1 = -0.84234680664630746     
+      Is the proposed model accepted at chain 1 ?  T
+ Tempering : T1 is 1 with a temperature of 1.0000000000000000
+ Tempering : T2 is 2 with a temperature of 8.0000000000000000
+ --------------------------------------
+ Chain number: 1/2
+ Sample: 3/5000
+ Iteration in this run: 3/3
+
+ Number of cells: 5
+
+ Dataset 1, "a": 4.2285177854887487E-002
+ Dataset 1, "b": 0.19944259205633835
+ Minimum uncertainty:       4.2297 %
+ Maximum uncertainty:      99.2275 %
+
+ Misfit : 889938.94851595093
+
+ BIRTH acceptance:    0.0000 %
+ DEATH acceptance:    0.0000 %
+ MOVE  acceptance:  100.0000 %
+       main:  100.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ NOISE acceptance:    0.0000 %
+ OPTION acceptance:  100.0000 %
+       main:  100.0000 %
+       delayed:    0.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+ --------------------------------------
+ Chain number: 2/2
+ Sample: 3/5000
+ Iteration in this run: 3/3
+
+ Number of cells: 4
+
+ Dataset 1, "a": 4.4163495369992103E-002
+ Dataset 1, "b": 3.8646252140087600E-002
+ Minimum uncertainty:       4.4174 %
+ Maximum uncertainty:      15.9091 %
+
+ Misfit : 1419824.2885729612
+
+ BIRTH acceptance:    0.0000 %
+ DEATH acceptance:  100.0000 %
+ MOVE  acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+ VALUE acceptance:  100.0000 %
+       main:  100.0000 %
+       delayed:    0.0000 %
+ NOISE acceptance:    0.0000 %
+ OPTION acceptance:    0.0000 %
+       main:    0.0000 %
+       delayed:    0.0000 %
+
+ TOTAL acceptance:  100.0000 %
+ --------------------------------------
+ --------------------------------------
+ PARALLEL TEMPERING acceptance:    0.0000 %
+ --------------------------------------
+ TIME ELAPSED: 0h 0m 13s
  --------------------------------------
 
-Elapsed time is   0.01 hours.
+Elapsed time is   0.00 hours.
 
  ****************************
   Job finished on 04-02-2026
-  at 09:02:52
+  at 11:44:52
  ****************************
 

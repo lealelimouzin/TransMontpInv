@@ -56,12 +56,12 @@ if __name__ == "__main__":
                     lines[-1] = new_last_line
                     open(pjoin(path_folder,'input','testEPM','Simu.txt'), 'w').writelines(lines)
     
-    if bool_error==True:
-        print('\nThe error in the forward model could not be solved.')
-        print('\n         ***** THE SIMULATION IS INTERRUPTED !!! ***** ')
-        exit()
-    else:
-        np.savetxt(pjoin(tabVar[4],"rho_a_EPM.txt"), rho_a_EPM, delimiter='\t')
+        if bool_error==True:
+            print('\nThe error in the forward model could not be solved.')
+            print('\n         ***** THE SIMULATION IS INTERRUPTED !!! ***** ')
+            exit()
+        else:
+            np.savetxt(pjoin(tabVar[4],"rho_a_EPM.txt"), rho_a_EPM, delimiter='\t')
 
     # ---------- Forward DFN ----------
     bool_error=True

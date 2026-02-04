@@ -431,6 +431,8 @@ SUBROUTINE change_noise()
         END IF
 
         write(*,*) 'NOISE at chain ', TRIM(int2str(chain_number))
+        write(*,*) 'in chains.f90 noise a = ',a_proposed(dataset_number)
+        write(*,*) 'in chains.f90 noise b = ',b_proposed(dataset_number)
 
         CALL check_inside_prior()
 END SUBROUTINE

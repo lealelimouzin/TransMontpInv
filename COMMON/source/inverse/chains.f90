@@ -36,7 +36,7 @@ IMPLICIT NONE
 ! Prior
 LOGICAL                                                 :: inside_prior,inside_prior_delayed
 INTEGER, SAVE                                           :: ncell_min,ncell_max
-DOUBLE PRECISION, SAVE                                  :: value_min,value_max
+DOUBLE PRECISION, SAVE                                  :: value_min,value_max,powerlaw_a
 DOUBLE PRECISION, SAVE                                  :: x_min,x_max,y_min,y_max,z_min,z_max
 INTEGER, SAVE                                           :: noise_type
 DOUBLE PRECISION, SAVE                                  :: a_min,a_max,b_min,b_max
@@ -381,7 +381,7 @@ SUBROUTINE change_value(modelling_method)
                 voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)&
                                                 +gausrand()*value_change
         ELSE IF (modelling_method.EQ.2) THEN ! If ert_ddp_2_5d
-                l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max)
+                l_change=(gausrand()*value_change)*powerrand_std(value_min,value_max,powerlaw_a)
                 voronoi_proposed(cell_number,4)=voronoi_current(cell_number,4)+l_change
                 ! Check if the fracture is still in the domain
                 CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))
@@ -503,7 +503,7 @@ SUBROUTINE change_value_delayed(modelling_method)
                                                 +gausrand()*value_change_delayed
         ELSE IF (modelling_method.EQ.2) THEN ! If ert_ddp_2_5d
                 ! Change length
-                l_change=(gausrand()*value_change_delayed)*powerrand_std(value_min,value_max)
+                l_change=(gausrand()*value_change_delayed)*powerrand_std(value_min,value_max,powerlaw_a)
                 voronoi_delayed(cell_number,4)=voronoi_delayed(cell_number,4)+l_change
                 ! Check if the fracture is still in the domain
                 CALL check_frac_inside_domain(voronoi_delayed(cell_number,:))

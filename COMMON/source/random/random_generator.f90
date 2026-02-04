@@ -123,12 +123,12 @@ FUNCTION powerrand_k(value_min,value_max) RESULT(powerlaw_k)
 RETURN
 END FUNCTION
 
-FUNCTION powerrand_std(value_min,value_max) RESULT(powerlaw_std)
+FUNCTION powerrand_std(value_min,value_max,a) RESULT(powerlaw_std)
     
     IMPLICIT NONE
-    DOUBLE PRECISION        :: value_min,value_max,a,powerlaw_std,part1,part2 ,part3
+    DOUBLE PRECISION        :: value_min,value_max,part1,part2,part3
+    DOUBLE PRECISION        :: a, powerlaw_std
 
-    a=2
     if (a.EQ.2) then
         powerlaw_std = sqrt( value_min*value_max - ((log(value_max)-log(value_min))/(value_min**(-1)-value_max**(-1)))**2 )
     ELSEIF ((a.NE.2).AND.(a.NE.3)) then

@@ -6,7 +6,7 @@ Trandimensional inversion of electrical data in heterogeneous media.
 
 TransMontpInv is a software to invert electrical resistivity data based on a discrete dual porosity approach. It is a combination of the already existent codes from Erica Galetti and Andrew Curtis ([TERT](https://bitbucket.org/glterica/tdtomo_fortert/src/master/)) and the forward model adapted from Caballero Sanz et al. (2017) (ERT_DDP_2.5D). The two codes have been merged and adapted to support the geometry of thin pathways such as fractures.
 
-A user-guide is provided in the projetc package as weel as a copy of the user-guides of TERT and ERT\_DDP\_2.5D.
+A user-guide is provided in the projetc package as well as a copy of the user-guides of TERT and ERT\_DDP\_2.5D.
 
 ## Project architecture
 

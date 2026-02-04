@@ -76,7 +76,6 @@ IF (run_number.EQ.1) THEN
 
                 ! Fill up current arrays
                 filename = ADJUSTL(ADJUSTR(namedir)//TRIM("/input/testDFN/DFN.txt"))
-
                 INQUIRE(FILE=filename, EXIST=Existent)
                 IF (EXistent) THEN
                         open (unit=15, file=filename, status='old', action='read')
@@ -88,10 +87,13 @@ IF (run_number.EQ.1) THEN
                         close(15)
                         DO nn=1,ncell_current
                                 voronoi_current(nn,1) = tempo(nn,1) + ABS(tempo(nn,3)-tempo(nn,1))/2 ! x centre
-                                voronoi_current(nn,3) = tempo(nn,2) ! z centre
-                                voronoi_current(nn,4) = ABS(tempo(nn,3)-tempo(nn,1)) ! length
+                                voronoi_current(nn,3) = tempo(nn,2) + ABS(tempo(nn,4)-tempo(nn,2))/2 ! z centre
+                                !voronoi_current(nn,4) = ABS(tempo(nn,3)-tempo(nn,1)) ! length
+                                voronoi_current(nn,4) = SQRT( (tempo(nn,3)-tempo(nn,1))**2 + (tempo(nn,4)-tempo(nn,2))**2 ) ! length
                                 IF (opt_parameters.EQ.1) THEN 
-                                        voronoi_current(nn,5) = 0 ! angle
+                                        !voronoi_current(nn,5) = 0 ! angle
+                                        voronoi_current(nn,5) = ACOS( ABS(voronoi_current(nn,1)-tempo(nn,1)) &
+                                                                * 2/voronoi_current(nn,4) ) ! angle
                                 ELSEIF (opt_parameters.EQ.2) THEN
                                         voronoi_current(nn,5) = 0.03 ! aperture
                                 END IF

@@ -55,7 +55,7 @@ USE chains, ONLY: number_of_datasets,ncell_min,ncell_max,value_min,value_max,x_m
                   birth_change,a_change,b_change,lambda_change,sigma_change,likelihood_type,&
                   max_runtime,number_of_samples,max_number_of_samples,display_interval,no_data,&
                   parallel_tempering,jump_type,tempering_start,sigma_mat,rho_mat,number_of_parameters,opt_parameters,&
-                  opt_min,opt_max,opt_change,opt_change_delayed,pi
+                  opt_min,opt_max,opt_change,opt_change_delayed,pi,powerlaw_a
 IMPLICIT NONE
 INTEGER                 :: nn
 CHARACTER(LEN=3)        :: section
@@ -90,6 +90,7 @@ READ(60,*)
 READ(60,*)
 READ(60,*)ncell_min,ncell_max
 READ(60,*)value_min,value_max
+READ(60,*)powerlaw_a
 READ(60,*)x_min,x_max
 READ(60,*)y_min,y_max
 READ(60,*)z_min,z_max

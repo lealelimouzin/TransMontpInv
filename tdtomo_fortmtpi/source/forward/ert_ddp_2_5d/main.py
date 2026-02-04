@@ -39,8 +39,9 @@ if __name__ == "__main__":
     tabVar = [expt_name_epm, expt_name_dfn, data_xx_yy, nb_electrodes, path_results, ratioData, optCompile]
 
     # ---------- Forward EPM (calculated only once during the inversion) ----------
-    bool_error=True
+
     if not os.path.exists(pjoin(tabVar[4], "rho_a_EPM.txt")):
+        bool_error=True
         cpt=0 # count the number of tests ater a bug appeared
         while bool_error==True and cpt<2:
             cpt+=1
@@ -49,7 +50,6 @@ if __name__ == "__main__":
                 bool_error=False
             except SystemExit:
                 print(f'An error occured in {name_new_folder} while solving the forward EPM problem.\n C++ code is ran again in debug mode for the {cpt}th time.')
-
                 if cpt==1: # Activate the debug mode of the C++ code
                     lines = open(pjoin(path_folder,'input','testEPM','Simu.txt'), 'r').readlines()
                     new_last_line = (str(1))
@@ -73,13 +73,12 @@ if __name__ == "__main__":
             bool_error=False
         except SystemExit:
             print(f'An error occured in {name_new_folder} while solving the forward DDP problem.\n C++ code is ran again in debug mode for the {cpt}th time.')
-
             if cpt==1: # Activate the debug mode of the C++ code
                 lines = open(pjoin(path_folder,'input','testDFN','Simu.txt'), 'r').readlines()
                 new_last_line = (str(1))
                 lines[-1] = new_last_line
                 open(pjoin(path_folder,'input','testDFN','Simu.txt'), 'w').writelines(lines)
-    
+
     if bool_error==True:
         print('\nThe error in the forward model could not be solved.')
         print('\n         ***** THE SIMULATION IS INTERRUPTED !!! ***** ')

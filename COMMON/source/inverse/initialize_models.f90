@@ -37,7 +37,8 @@ REAL,DIMENSION(5,6)     :: tempo
 CHARACTER(100)          :: namefile,nametmp
 CHARACTER(300)          :: namedir
 CHARACTER(400)          :: filename
-LOGICAL                 :: Existent=.FALSE.
+LOGICAL                 :: Existent=.FALSE.,Existent2=.FALSE.
+CHARACTER(400)          :: C
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initializing models ---'
 
@@ -60,22 +61,35 @@ IF (run_number.EQ.1) THEN
         
         !----- If fracture representation (ert_ddp_2_5d) -----
         ELSE IF (modelling_method.EQ.2) THEN
+
                 ! Create a new directory
                 nametmp = "results_chains/"//"res_chain_"//TRIM(int2str(chain_number))
-                namedir = ADJUSTL(ADJUSTR(path_fwdFrac)//nametmp)
+                !namedir = ADJUSTL(ADJUSTR(path_fwdFrac)//nametmp)
+                namedir = ADJUSTL(ADJUSTR(nametmp))
 
-                CALL EXECUTE_COMMAND_LINE ("mkdir -p "//namedir)
+                INQUIRE(FILE=namedir, EXIST=Existent2)
+                IF (Existent2.EQV.(.FALSE.)) THEN
+                        CALL EXECUTE_COMMAND_LINE ("mkdir -p "//namedir)
+                ELSE
+                        WRITE(*,*)"WARNING: the following directory already exists! It is removed before starting the new"&
+                        " simulation: ",namedir
+                        CALL EXECUTE_COMMAND_LINE ("rm -r "//namedir)
+                        CALL EXECUTE_COMMAND_LINE ("mkdir -p "//namedir)
+                END IF
 
                 CALL CHDIR (namedir)
 
-                CALL EXECUTE_COMMAND_LINE ("python3 ../../initialize_fracmodels.py",CMDSTAT=CSTAT)
+                !CALL EXECUTE_COMMAND_LINE ("python3 ../../initialize_fracmodels.py",CMDSTAT=CSTAT)
+                CALL EXECUTE_COMMAND_LINE ("python3 ../../../source/inverse/initialize_fracmodels.py",CMDSTAT=CSTAT)
 
                 IF ((CSTAT > 0).OR.(CSTAT < 0)) THEN
                         PRINT *, "Command execution failed when running Python in initialize_models.f90"
                 END IF
 
+                CALL GETCWD(C)
+
                 ! Fill up current arrays
-                filename = ADJUSTL(ADJUSTR(namedir)//TRIM("/input/testDFN/DFN.txt"))
+                filename = ADJUSTL(ADJUSTR(C)//TRIM("/input/testDFN/DFN.txt"))
                 INQUIRE(FILE=filename, EXIST=Existent)
                 IF (EXistent) THEN
                         open (unit=15, file=filename, status='old', action='read')

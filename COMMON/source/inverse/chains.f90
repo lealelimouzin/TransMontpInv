@@ -248,6 +248,7 @@ SUBROUTINE add_cell(modelling_method)
         IMPLICIT NONE
         INTEGER          :: modelling_method
         REAL             :: x1,x2
+        DOUBLE PRECISION :: a
 
         IF (ncell_current.EQ.ncell_max) THEN
                 inside_prior=.FALSE.
@@ -271,7 +272,7 @@ SUBROUTINE add_cell(modelling_method)
                                                 +birth_change*gausrand() 
         ELSEIF (modelling_method.EQ.2) THEN ! If ert_ddp_2_5d
                 ! Length                            
-                voronoi_proposed(ncell_proposed,4)=powerrand(value_min,value_max) 
+                voronoi_proposed(ncell_proposed,4)=powerrand(value_min,value_max,a) 
                 ! Option
                 IF (opt_parameters.GT.0) THEN
                         voronoi_proposed(ncell_proposed,5) = opt_min + unirand()*(opt_max-opt_min)  
@@ -355,7 +356,7 @@ SUBROUTINE move_cell(modelling_method)
 
         ! If ert_ddp_2_5d: check if the fracture is still in the domain
         IF (modelling_method.EQ.2) THEN
-                CALL check_frac_inside_domain(voronoi_proposed(cell_number,:))  
+                CALL check_frac_inside_domain(voronoi_proposed(cell_number,:)) 
         END IF
 
         write(*,*) 'MOVE at chain ', TRIM(int2str(chain_number))
@@ -431,8 +432,6 @@ SUBROUTINE change_noise()
         END IF
 
         write(*,*) 'NOISE at chain ', TRIM(int2str(chain_number))
-        write(*,*) 'in chains.f90 noise a = ',a_proposed(dataset_number)
-        write(*,*) 'in chains.f90 noise b = ',b_proposed(dataset_number)
 
         CALL check_inside_prior()
 END SUBROUTINE
@@ -558,6 +557,10 @@ SUBROUTINE check_inside_prior()
                 voronoi_proposed(ncell_proposed,3).GT.z_max) inside_prior=.FALSE.
                 IF (voronoi_proposed(ncell_proposed,4).LT.value_min.OR.&
                 voronoi_proposed(ncell_proposed,4).GT.value_max) inside_prior=.FALSE.
+                IF (opt_parameters.GT.0) THEN
+                        IF (voronoi_proposed(ncell_proposed,5).LT.opt_min.OR.&
+                        voronoi_proposed(ncell_proposed,5).GT.opt_max) inside_prior=.FALSE.
+                END IF
         ELSE IF (move) THEN
                 IF (.NOT.delayed_position) THEN
                         IF (voronoi_proposed(cell_number,1).LT.x_min.OR.&
@@ -566,6 +569,12 @@ SUBROUTINE check_inside_prior()
                         voronoi_proposed(cell_number,2).GT.y_max) inside_prior=.FALSE.
                         IF (voronoi_proposed(cell_number,3).LT.z_min.OR.&
                         voronoi_proposed(cell_number,3).GT.z_max) inside_prior=.FALSE.
+                        IF (voronoi_proposed(cell_number,4).LT.value_min.OR.&
+                        voronoi_proposed(cell_number,4).GT.value_max) inside_prior=.FALSE.
+                        IF (opt_parameters.GT.0) THEN
+                                IF (voronoi_proposed(cell_number,5).LT.opt_min.OR.&
+                                voronoi_proposed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+                        END IF
                 ELSE IF (delayed_position) THEN
                         IF (voronoi_delayed(cell_number,1).LT.x_min.OR.&
                         voronoi_delayed(cell_number,1).GT.x_max) inside_prior_delayed=.FALSE.
@@ -573,14 +582,40 @@ SUBROUTINE check_inside_prior()
                         voronoi_delayed(cell_number,2).GT.y_max) inside_prior_delayed=.FALSE.
                         IF (voronoi_delayed(cell_number,3).LT.z_min.OR.&
                         voronoi_delayed(cell_number,3).GT.z_max) inside_prior_delayed=.FALSE.
+                        IF (voronoi_delayed(cell_number,4).LT.value_min.OR.&
+                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior=.FALSE.
+                        IF (opt_parameters.GT.0) THEN
+                                IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
+                                voronoi_delayed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+                        END IF
                 END IF
         ELSE IF (value) THEN
                 IF (.NOT.delayed_value) THEN
+                        IF (voronoi_proposed(cell_number,1).LT.x_min.OR.&
+                        voronoi_proposed(cell_number,1).GT.x_max) inside_prior=.FALSE.
+                        IF (voronoi_proposed(cell_number,2).LT.y_min.OR.&
+                        voronoi_proposed(cell_number,2).GT.y_max) inside_prior=.FALSE.
+                        IF (voronoi_proposed(cell_number,3).LT.z_min.OR.&
+                        voronoi_proposed(cell_number,3).GT.z_max) inside_prior=.FALSE.
                         IF (voronoi_proposed(cell_number,4).LT.value_min.OR.&
                         voronoi_proposed(cell_number,4).GT.value_max) inside_prior=.FALSE.
+                        IF (opt_parameters.GT.0) THEN
+                                IF (voronoi_proposed(cell_number,5).LT.opt_min.OR.&
+                                voronoi_proposed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+                        END IF
                 ELSE IF (delayed_value) THEN
+                        IF (voronoi_delayed(cell_number,1).LT.x_min.OR.&
+                        voronoi_delayed(cell_number,1).GT.x_max) inside_prior_delayed=.FALSE.
+                        IF (voronoi_delayed(cell_number,2).LT.y_min.OR.&
+                        voronoi_delayed(cell_number,2).GT.y_max) inside_prior_delayed=.FALSE.
+                        IF (voronoi_delayed(cell_number,3).LT.z_min.OR.&
+                        voronoi_delayed(cell_number,3).GT.z_max) inside_prior_delayed=.FALSE.
                         IF (voronoi_delayed(cell_number,4).LT.value_min.OR.&
-                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior_delayed=.FALSE.
+                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior=.FALSE.
+                        IF (opt_parameters.GT.0) THEN
+                                IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
+                                voronoi_delayed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+                        END IF
                 END IF
         ELSE IF (noise) THEN
                 IF (change_sigma) THEN
@@ -598,11 +633,27 @@ SUBROUTINE check_inside_prior()
                 END IF
         ELSE IF (option) THEN
                 IF (.NOT.delayed_opt) THEN
+                        IF (voronoi_proposed(cell_number,1).LT.x_min.OR.&
+                        voronoi_proposed(cell_number,1).GT.x_max) inside_prior=.FALSE.
+                        IF (voronoi_proposed(cell_number,2).LT.y_min.OR.&
+                        voronoi_proposed(cell_number,2).GT.y_max) inside_prior=.FALSE.
+                        IF (voronoi_proposed(cell_number,3).LT.z_min.OR.&
+                        voronoi_proposed(cell_number,3).GT.z_max) inside_prior=.FALSE.
+                        IF (voronoi_proposed(cell_number,4).LT.value_min.OR.&
+                        voronoi_proposed(cell_number,4).GT.value_max) inside_prior=.FALSE.
                         IF (voronoi_proposed(cell_number,5).LT.opt_min.OR.&
                         voronoi_proposed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
                 ELSE IF (delayed_opt) THEN
+                        IF (voronoi_delayed(cell_number,1).LT.x_min.OR.&
+                        voronoi_delayed(cell_number,1).GT.x_max) inside_prior_delayed=.FALSE.
+                        IF (voronoi_delayed(cell_number,2).LT.y_min.OR.&
+                        voronoi_delayed(cell_number,2).GT.y_max) inside_prior_delayed=.FALSE.
+                        IF (voronoi_delayed(cell_number,3).LT.z_min.OR.&
+                        voronoi_delayed(cell_number,3).GT.z_max) inside_prior_delayed=.FALSE.
+                        IF (voronoi_delayed(cell_number,4).LT.value_min.OR.&
+                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior=.FALSE.
                         IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
-                        voronoi_delayed(cell_number,5).GT.opt_max) inside_prior_delayed=.FALSE.
+                        voronoi_delayed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
                 END IF
         END IF
 END SUBROUTINE
@@ -651,7 +702,7 @@ END SUBROUTINE
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 SUBROUTINE check_frac_inside_domain(fracture)
         IMPLICIT NONE
-        DOUBLE PRECISION, DIMENSION(:) :: fracture 
+        DOUBLE PRECISION, DIMENSION(:) :: fracture
         DOUBLE PRECISION               :: length,x1,x2,z1,z2,angle
         INTEGER(KIND=4), PARAMETER     :: dim_num = 2
         INTEGER(KIND=4)                :: ival

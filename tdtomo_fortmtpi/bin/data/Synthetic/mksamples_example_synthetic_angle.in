@@ -2,7 +2,7 @@
 * (A) DATA                                                                                                                     *
 ********************************************************************************************************************************
 electrodes.dat                :: File of electrode coordinates
-dataSynthetic.dat                      :: File of resistance measurements (data.dat). If synthetic data: dataSynthetic.dat
+dataSynthetic.dat             :: File of resistance measurements (data.dat). If synthetic data: dataSynthetic.dat
 1                             :: Number of datasets with different noise parameterisation
 datasets.dat                  :: File containing dataset associations (only used if number of datasets > 1)
 ********************************************************************************************************************************
@@ -33,8 +33,8 @@ residuals.out                 :: File containing residuals (gets renamed to e.g.
 0.002   0.2                   :: Noise type 1,2: minimum and maximum noise parameter "b"
 0.01   10                     :: Noise type 3,6: minimum and maximum noise parameter "lambda"
 0.05   0.2                    :: Noise type 0: minimum and maximum noise parameter "sigma"
-0.5866                        :: Noise type 6: standard deviation associated to the homogeneous matrix (no fracture) "sigma_mat"
-12.5459                       :: Targetted apparent electrical resisitivty of the homegeneous matrix
+2.7548                        :: Noise type 6: standard deviation associated to the homogeneous matrix (no fracture) "sigma_mat"
+0                             :: Targetted apparent electrical resisitivty of the homegeneous matrix
 1                             :: Add a model parameter (0=no option, 1=fracture angle, 2=fracture aperture)
 0   360                       :: Minimum and maximum angle (degree). Required even if no model parameter is added (no option)
 0.001   0.1                   :: Minimum and maximum aperture (meter). Required even if no model parameter is added (no option)
@@ -64,9 +64,9 @@ forward.in                    :: File containing forward modelling parameters fo
 ********************************************************************************************************************************
 * (I) MARKOV CHAIN PARAMETERS                                                                                                  *
 ********************************************************************************************************************************
-0.3                           :: Maximum run time in hours
-3                             :: Number of samples in this run
-5000                          :: Total number of samples per chain including all runs (=0 to switch off this limit)
+720                           :: Maximum run time in hours
+2000                          :: Number of samples in this run
+10000                         :: Total number of samples per chain including all runs (=0 to switch off this limit)
 1                             :: Sample interval for displaying information in output file
 1                             :: Add 1s sleep time between the display of each chain's information? (1=yes, 0=no)
 0                             :: Run inversion without data? (1=yes,0=no)
@@ -76,13 +76,13 @@ forward.in                    :: File containing forward modelling parameters fo
 1                             :: Use parallel tempering? (1=yes,0=no)
 0                             :: Jump type (0=random,1=near,2=nearest)
 0                             :: Apply parallel tempering starting from this sample number
-1   1                         :: Number of temperatures =1 and >1 (sum must be equal to total number of parallel chains)
+3   3                         :: Number of temperatures =1 and >1 (sum must be equal to total number of parallel chains)
 8                             :: Temperatures >1 (one below the other) / 1st row = hottest temperature if nb temperatures>1 is > 2
 7
 ********************************************************************************************************************************
 * (K) PATH TO ert_ddp_2_5d REPOSITORY                                                                                          *
 ********************************************************************************************************************************
-/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortmtpi/source/forward/ert_ddp_2_5d/
+/home/lelimouzinl/scratch_lelimouzinl/TERT_synthetic/tdtomo_fortmtpi/source/forward/ert_ddp_2.5d/
 ********************************************************************************************************************************
 * (L) TEMPORARY                                                                                         *
 ********************************************************************************************************************************

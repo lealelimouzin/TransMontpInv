@@ -100,11 +100,10 @@ END FUNCTION
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Generate a random number from a power law distribution (fracture length estimation)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-FUNCTION powerrand(value_min,value_max) RESULT(value)
+FUNCTION powerrand(value_min,value_max,a) RESULT(value)
 
 IMPLICIT NONE
 DOUBLE PRECISION        :: value_min, value_max, value, a 
-a=2
 !value=value_min*unirand()**(1/(1-a)) ! if truncated only by a l min
 value=(unirand()*(value_max**(1-a) - value_min**(1-a)) + value_min**(1-a))**(1/(1-a))
 write(*,*) value
@@ -113,11 +112,10 @@ write(*,*) value
 RETURN
 END FUNCTION
 
-FUNCTION powerrand_k(value_min,value_max) RESULT(powerlaw_k)
+FUNCTION powerrand_k(value_min,value_max,a) RESULT(powerlaw_k)
 
     IMPLICIT NONE
     DOUBLE PRECISION        :: value_min,value_max,a,powerlaw_k
-    a=2
     powerlaw_k=(1-a)/(value_max**(1-a) - value_min**(1-a))
     
 RETURN

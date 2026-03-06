@@ -226,6 +226,7 @@ ELSE IF (run_number.GT.1) THEN
         END IF
 END IF
 
+
 ! Initialise tempering
 IF (parallel_tempering.EQ.1) CALL initialize_tempering()
 
@@ -632,7 +633,7 @@ IF (core_number.EQ.0) CALL write_inversion_parameters()
 CALL CHDIR('../')
 
 ! Save a copy of the results per run
-CALL SYSTEM('scp -r results results_run_'//TRIM(int2str(run_number)))
+CALL SYSTEM('scp -r results/ results_run_'//TRIM(int2str(run_number))//'/')
 
 ! Stop timer
 CALL cpu_time(timer_end)

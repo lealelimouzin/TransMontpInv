@@ -30,39 +30,23 @@ print("***** Hej från Python initialize_fracmodels.py på " + name_new_folder +
 os.chdir('../')
 path_folder = os.getcwd()
 
-# Check if a the global result directory already exists
-#if not os.path.isdir('results_chains'):
-#    os.mkdir('results_chains')
-#os.chdir('results_chains')
-
-# Check if result directories per chain already exist 
-#if os.path.isdir(name_new_folder): 
-#        print(pjoin('   WARNING: ', name_new_folder,' directory already exists! It is removed before starting the new simulation.'))
-#        shutil.rmtree(name_new_folder)
-
 # Copy common folders between the chains to avoid overwritting and short-circuits
 shutil.copytree(pjoin('..','..','source','forward','ert_ddp2.5d','src','input'),pjoin(name_new_folder,'input')) 
 shutil.copytree(pjoin('..','..','source','forward','ert_ddp2.5d','src','results'),pjoin(name_new_folder,'results_fwd'))
-#shutil.copytree(pjoin('..','src','input'),pjoin(name_new_folder,'input')) 
-#shutil.copytree(pjoin('..','src','results'),pjoin(name_new_folder,'results_fwd'))
 # If the C++ code is compiled as an executable, uncomment the following two lines:
 #shutil.copytree(pjoin('..','src','electrical_resistivity'),pjoin(name_new_folder,'electrical_resistivity'))
 #shutil.copytree(pjoin('..','src','output'),pjoin(name_new_folder,'output')) 
 
-#os.chdir('../')
-#print("in initilize fraclib: ", os.getcwd())
 
 # ---------- Initialize the model ----------
 
 # Load a list of fractures obtained with pattern search optimization for three different seeds (MATLAB version)
-#lib_frac = np.loadtxt(pjoin(path_folder,'..','..','..','bin','lib_fractures.txt'))
 lib_frac = np.loadtxt(pjoin('..','lib_fractures.txt'))
 nb_lib = np.shape(lib_frac)[0]
 
 # Select random fractures from the fracture library file to initialize each Markov chain differently
 nb_frac = 5
 #rd.seed(10) # Set the seed for reproductibility. This line can be comented.
-#with open(pjoin(path_folder,'results_chains',name_new_folder,'input','testDFN','DFN.txt'), 'w') as f:
 with open(pjoin(name_new_folder,'input','testDFN','DFN.txt'), 'w') as f:
     f.write('DETERMINISTIC1\n')
     f.write(str(int(nb_frac))+"\n")
@@ -75,10 +59,6 @@ with open(pjoin(name_new_folder,'input','testDFN','DFN.txt'), 'w') as f:
 
 
 # ---------- Save the initial model ----------
-
-#path_data=pjoin(path_folder,'results_chains',name_new_folder,'input','testDFN','DFN.txt')
-#new_path_data = pjoin(path_folder,'results_chains',name_new_folder,'results_fwd','DFN_initial.txt')
-#shutil.copyfile(path_data,new_path_data)
 
 path_data=pjoin(name_new_folder,'input','testDFN','DFN.txt')
 new_path_data = pjoin(name_new_folder,'results_fwd','DFN_initial.txt')

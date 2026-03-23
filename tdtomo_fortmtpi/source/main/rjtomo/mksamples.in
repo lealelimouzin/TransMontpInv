@@ -65,9 +65,9 @@ forward.in                    :: File containing forward modelling parameters fo
 ********************************************************************************************************************************
 * (I) MARKOV CHAIN PARAMETERS                                                                                                  *
 ********************************************************************************************************************************
-720                           :: Maximum run time in hours
-2000                          :: Number of samples in this run
-10000                         :: Total number of samples per chain including all runs (=0 to switch off this limit)
+0.2                           :: Maximum run time in hours
+2                          :: Number of samples in this run
+4                         :: Total number of samples per chain including all runs (=0 to switch off this limit)
 1                             :: Sample interval for displaying information in output file
 1                             :: Add 1s sleep time between the display of each chain's information? (1=yes, 0=no)
 0                             :: Run inversion without data? (1=yes,0=no)
@@ -77,7 +77,7 @@ forward.in                    :: File containing forward modelling parameters fo
 1                             :: Use parallel tempering? (1=yes,0=no)
 0                             :: Jump type (0=random,1=near,2=nearest)
 0                             :: Apply parallel tempering starting from this sample number
-3   3                         :: Number of temperatures =1 and >1 (sum must be equal to total number of parallel chains)
+1   1                         :: Number of temperatures =1 and >1 (sum must be equal to total number of parallel chains)
 8                             :: Temperatures >1 (one below the other) / 1st row = hottest temperature if nb temperatures>1 is > 2
 7
 ********************************************************************************************************************************

@@ -1,11 +1,10 @@
 #!/bin/sh
 
 # Move to the correct folder
-cd '/home/leal/Desktop/Doctorat/Data/Data_Farum/TransMontpInv_E6789/26-01-19_TERT_angle_tmp/' # name of the foler containing the output files
+cd '<your_path>' # name of the foler containing the output files
 
 nb_chain=6 # number of chains run in parallel
-path_chain2txt='/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/bin/chain2txt' # path towards the executable
-#path_chain2txt='/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortert/bin/chain2txt_xzl'
+path_chain2txt='<your_path>/TransMontpInv/tdtomo_fortert/bin/chain2txt' # path towards the executable
 
 # Convert files misfit
 for n in $(seq 1 $nb_chain)

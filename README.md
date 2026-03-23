@@ -22,33 +22,38 @@ Part of the architecture of TransMontpInv is detailed in the following chart. Fi
 |   |   |   |   ├── Farum
 |   |   |   |   └── Synthetic
 |   |   |   ├── results
+|   |   |   ├── results_chains
 |   |   |   ├── data.dat                            # To be updated by the user
 |   |   |   ├── electrodes.dat                      # To be updated by the user
 |   |   |   └── ...
-│   │   ├── examples
 │   │   ├── lib
 │   │   ├── papers
 │   │   ├── source
 |   |   |   ├── compile
 │   │   │   ├── cptfiles
 │   │   │   ├── forward
-|   |   |   |   ├── ert_ddp_2_5d
+|   |   |   |   ├── ert_ddp_2.5d
+|   |   |   |   |   ├── documentation
+|   |   |   |   |   ├── example
 |   |   |   |   |   ├── fielddata                   # To be updated by the user
 |   |   |   |   |   ├── post_processing
 |   |   |   |   |   |    ├── farum_elecConfig.py    # To be updated by the user
 |   |   |   |   |   |    └── ...
-|   |   |   |   |   ├── results_chains
 |   |   |   |   |   ├── src
 |   |   |   |   |   |    ├── electrical_resistivity # C++ codes of ERT_DDP_2.5D
 |   |   |   |   |   |    ├── input                  # To be updated by the user
 |   |   |   |   |   |    └── ...
+|   |   |   |   |   ├── batch_fwd
 |   |   |   |   |   ├── fwdFunctions.py
-|   |   |   |   |   ├── initialize_fracmodels.py    # To be updated by the user
-|   |   |   |   |   └── main.py                     # To be updated by the user
+|   |   |   |   |   ├── main.py                     # To be updated by the user
+|   |   |   |   |   ├── README.md
+|   |   |   |   |   └── requirements.txt 
 |   |   |   |   ├── fw2_5d
 |   |   |   |   └── forward.f90
 │   │   │   ├── input_output
 │   │   │   ├── inverse
+|   |   |   |   |   ├── initialize_fracmodels.py    # To be updated by the user
+|   |   |   |   |   └── ...
 │   │   │   ├── main
 |   |   |   |   |   ├── other
 |   |   |   |   |   └── rjtomo
@@ -59,7 +64,9 @@ Part of the architecture of TransMontpInv is detailed in the following chart. Fi
 │   │   │   ├── plotting
 │   │   │   ├── random
 │   │   │   ├── running
-│   │   │   └── tools
+│   │   │   ├── tools
+│   │   │   └── LICENSE.md
+├── bash_convert_out.sh
 ├── batch_compilation
 ├── batch_transinv
 ├── LICENSE

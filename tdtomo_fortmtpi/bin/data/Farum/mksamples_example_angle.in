@@ -25,6 +25,7 @@ residuals.out                 :: File containing residuals (gets renamed to e.g.
 ********************************************************************************************************************************
 3   100                       :: Minimum and maximum number of Voronoi cells
 0.6   10                      :: Minimum and maximum log10(resistivity) / fracture length
+2                             :: Power law exponent for the distribution of the length
 1.5  12.5                     :: Minimum and maximum x
 0   0                         :: Minimum and maximum y (not used in 2D)
 6   16                        :: Minimum and maximum z
@@ -82,7 +83,7 @@ forward.in                    :: File containing forward modelling parameters fo
 ********************************************************************************************************************************
 * (K) PATH TO ert_ddp_2_5d REPOSITORY                                                                                          *
 ********************************************************************************************************************************
-/home/lelimouzinl/scratch_lelimouzinl/TERT_angle/tdtomo_fortmtpi/source/forward/ert_ddp_2_5d/
+/home/leal/Desktop/Doctorat/Scripts/TransMontpInv/TransMontpInv/tdtomo_fortmtpi/source/forward/ert_ddp2.5d/
 ********************************************************************************************************************************
 * (L) TEMPORARY                                                                                         *
 ********************************************************************************************************************************

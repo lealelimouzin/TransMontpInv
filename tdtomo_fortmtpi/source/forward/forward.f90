@@ -51,10 +51,7 @@ IF (modelling_method.EQ.1) THEN ! fw2_5d
 ELSEIF (modelling_method.EQ.2) THEN ! ert_ddp_2_5d
 
         ! Go to the chain directory
-        !nametmp = "results_chains/"//"res_chain_"//TRIM(int2str(chain_number))
-        !nametmp = "../"//"../"//"../"//"bin/"//"results_chains/"//"res_chain_"//TRIM(int2str(chain_number))
         nametmp = "results_chains/"//"res_chain_"//TRIM(int2str(chain_number))
-        !namedir = ADJUSTL(ADJUSTR(path_fwdFrac)//nametmp)
         namedir = ADJUSTL(ADJUSTR(nametmp))
 
         IF (iteration.GT.0) THEN
@@ -138,7 +135,6 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
 
         ! Store current apparent resistivity model
         CALL GETCWD(cwdtmp)
-       ! textfileDFN = ADJUSTL(ADJUSTR(namedir)//TRIM("/results_fwd/rho_a_DFN.txt"))
         textfileDFN = ADJUSTL(ADJUSTR(cwdtmp)//TRIM("/results_fwd/rho_a_DFN.txt"))
         INQUIRE(file=textfileDFN,exist=res)
         
@@ -152,7 +148,6 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
                 CLOSE(88)
         END IF
 
-        !textfileEPM = ADJUSTL(ADJUSTR(namedir)//TRIM("/results_fwd/rho_a_EPM.txt"))
         textfileEPM = ADJUSTL(ADJUSTR(cwdtmp)//TRIM("/results_fwd/rho_a_EPM.txt"))
         OPEN (unit=89, file=textfileEPM, status='old', action='read')
                 DO I=1,number_of_measurements
@@ -160,12 +155,10 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
                 END DO
         CLOSE(89)
         
-        !modelled_data = modelled_data_dfn-(modelled_data_epm-rho_mat) 
-
-        modelled_data = modelled_data_dfn
+        !modelled_data = modelled_data_dfn-(modelled_data_epm-rho_mat) ! If farum data
+        modelled_data = modelled_data_dfn ! If synthetic data
         
         ! Go back to the bin directory
-        !cdtmp = "../../../../../bin/"
         cdtmp = "../../"
         CALL CHDIR (TRIM(cdtmp))
 

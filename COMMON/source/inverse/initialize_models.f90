@@ -64,7 +64,6 @@ IF (run_number.EQ.1) THEN
 
                 ! Create a new directory
                 nametmp = "results_chains/"//"res_chain_"//TRIM(int2str(chain_number))
-                !namedir = ADJUSTL(ADJUSTR(path_fwdFrac)//nametmp)
                 namedir = ADJUSTL(ADJUSTR(nametmp))
 
                 INQUIRE(FILE=namedir, EXIST=Existent2)
@@ -79,7 +78,6 @@ IF (run_number.EQ.1) THEN
 
                 CALL CHDIR (namedir)
 
-                !CALL EXECUTE_COMMAND_LINE ("python3 ../../initialize_fracmodels.py",CMDSTAT=CSTAT)
                 CALL EXECUTE_COMMAND_LINE ("python3 ../../../source/inverse/initialize_fracmodels.py",CMDSTAT=CSTAT)
 
                 IF ((CSTAT > 0).OR.(CSTAT < 0)) THEN

@@ -1,6 +1,6 @@
 # TransMontpInv
 
-Trandimensional inversion of electrical data in heterogeneous media.
+Transdimensional inversion of electrical data in heterogeneous media.
 
 ## Description
 

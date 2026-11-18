@@ -1,17 +1,20 @@
 #!/bin/sh
-#SBATCH -J tert
+#SBATCH -J synthetic
 #SBATCH --mail-type=END
 #SBATCH --mail-user=lea.lelimouzin@umontpellier.fr
-#SBATCH --partition=gm_hydro
-#SBATCH --account=ert_ddp
+#SBATCH --partition=cpu-dedicated
+#SBATCH --account=dedicated-cpu@gm_hydro
 #SBATCH --nodes=1 # number of nodes
-#SBATCH --ntasks=28 #number of core used -> 28
-#SBATCH --ntasks-per-node=28 #number of core par nodes 28
+#SBATCH --ntasks=6 #number of core used -> 28
+#SBATCH --cpus-per-task=12
 #SBATCH -o info_%j.out # STDOUT
 #SBATCH -e error_%j.err # STDERR
+#SBATCH --time=720:00:00
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 echo "Running on $SLURM_NODELIST" 
 
-cd /home/lelimouzinl/scratch/TransMontpInv/tdtomo_fortmtpi/bin
-mpiexec -np 6 ./mksamples 1
+cd /home/lelimouzinl/scratch_lelimouzinl/TERT_synthetic_p2/tdtomo_fortmtpi/bin
+mpiexec -np 6 ./mksamples 3
 cd ../..

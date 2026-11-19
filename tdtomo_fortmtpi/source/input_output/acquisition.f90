@@ -26,13 +26,11 @@ MODULE acquisition
 
 IMPLICIT NONE
 CHARACTER (LEN=30), SAVE                                :: electrode_file,data_file,datasets_file
-CHARACTER (LEN=30), SAVE                                :: std_file ! 07/07/25
 INTEGER, SAVE                                           :: number_of_electrodes,number_of_measurements,number_of_datasets
 DOUBLE PRECISION, DIMENSION(:,:), ALLOCATABLE, SAVE     :: electrodes
 INTEGER, DIMENSION(:,:), ALLOCATABLE, SAVE              :: quadrupoles
 DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: observed_data,data_noise
 INTEGER, DIMENSION(:), ALLOCATABLE, SAVE                :: dataset_associations
-DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, SAVE       :: std_val ! 07/07/25
 
 
 CONTAINS
@@ -44,7 +42,6 @@ INTEGER :: problem_type
 
 CALL read_electrodes()
 CALL read_measurements(problem_type)
-CALL read_distances()
 
 END SUBROUTINE
 
@@ -185,33 +182,5 @@ END IF
 
 END SUBROUTINE
 
-
-SUBROUTINE read_distances()
-! Reads the file containing electrode coordinates distances between electrodes of a same quadrupole. This file is structured as follows:
-!
-!       line 1          number of electrodes in array
-!       line 2-end      distances 
-
-IMPLICIT NONE
-DOUBLE PRECISION        :: val
-INTEGER                 :: nn,IOstatus
-LOGICAL                 :: verbose=.FALSE.
-
-IF (ALLOCATED(std_val)) DEALLOCATE(std_val)
-
-OPEN(UNIT=10,FILE=std_file,STATUS='OLD')
-READ(10,*)number_of_electrodes
-
-ALLOCATE(std_val(number_of_electrodes))
-
-DO nn=1,number_of_electrodes
-        READ(10,*,IOSTAT=IOstatus)val
-        std_val(nn)=val
-END DO
-
-IF (verbose) WRITE(*,*)'IOstatus=',IOstatus
-CLOSE(10)
-
-END SUBROUTINE
 
 END MODULE

@@ -32,7 +32,7 @@ Part of the architecture of TransMontpInv is detailed in the following chart. Fi
 |   |   |   ├── compile
 │   │   │   ├── cptfiles
 │   │   │   ├── forward
-|   |   |   |   ├── ert_ddp_2_5d
+|   |   |   |   ├── ert_ddp2_5d
 |   |   |   |   |   ├── fielddata                   # To be updated by the user
 |   |   |   |   |   ├── post_processing
 |   |   |   |   |   |    ├── farum_elecConfig.py    # To be updated by the user

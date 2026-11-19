@@ -18,6 +18,7 @@ import fwdFunctions as fwd
 
 if __name__ == "__main__":
 
+
     # ---------- Get the name of the current folder (name depends on the chain) ----------
     path_folder = os.getcwd()
     name_new_folder = os.path.basename(os.getcwd())

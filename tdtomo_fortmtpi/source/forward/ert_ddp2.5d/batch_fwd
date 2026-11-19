@@ -12,7 +12,7 @@
 
 echo "Running on $SLURM_NODELIST" 
 
-cd /home/lelimouzinl/scratch_lelimouzinl/ert_ddp_2_5d_sept25_mapEigen/src/electrical_resistivity/Release/
+cd /home/lelimouzinl/scratch_lelimouzinl/ert_ddp2.5d/src/electrical_resistivity/Release/
 make clean
 make exec -j 24
 cd ../../../

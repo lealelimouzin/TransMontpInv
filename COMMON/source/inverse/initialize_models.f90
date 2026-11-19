@@ -84,7 +84,6 @@ IF (run_number.EQ.1) THEN
                 filefrac = TRIM(filefrac)
 
                 INQUIRE(FILE=filefrac, EXIST=Existent0)
-                write(*,*) Existent0
                 IF (Existent0) THEN
                         CALL EXECUTE_COMMAND_LINE ("python3 ../../../source/inverse/initialize_fracmodels.py",CMDSTAT=CSTAT)
 

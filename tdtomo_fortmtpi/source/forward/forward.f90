@@ -129,6 +129,7 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
         
         ! Run forward model
         CALL EXECUTE_COMMAND_LINE ("python3 ../../../source/forward/ert_ddp2.5d/main.py",CMDSTAT=CSTAT)
+        write(*,*) CSTAT
         IF ((CSTAT > 0).OR.(CSTAT < 0)) THEN
                 PRINT *, "Command execution failed when running Python in forward.f90"
         END IF

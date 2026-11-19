@@ -26,8 +26,7 @@
 MODULE noise_calculation
 
 USE acquisition, ONLY: observed_data,data_noise,dataset_associations,&
-                       number_of_measurements,number_of_datasets,&
-                       std_val
+                       number_of_measurements,number_of_datasets
 USE chains, ONLY: noise_type,a_current,a_proposed,b_current,b_proposed,&
                   lambda_current,lambda_proposed,sigma_current,sigma_proposed,&
                   noise_current,noise_proposed,noise_delayed,&
@@ -145,7 +144,6 @@ INTEGER                                                                 :: ii,jj
 DO ii=1,number_of_measurements
         jj=dataset_associations(ii)
         !estimated_noise(ii)=lambda(jj)*data_uncertainty(ii)
-        !estimated_noise(ii)=lambda(jj)*(data_uncertainty(ii)+std_val(ii)) ! test 18/07/25
         estimated_noise(ii)=lambda(jj)*(data_uncertainty(ii)+sigma_mat)
 END DO
 END SUBROUTINE

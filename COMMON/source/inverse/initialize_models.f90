@@ -27,7 +27,7 @@ SUBROUTINE initialize_models()
 USE chains
 USE random_generator
 USE debug
-USE input_files, ONLY: modelling_method,path_fwdFrac
+USE input_files, ONLY: modelling_method
 USE string_conversion
 IMPLICIT NONE
 INTEGER                 :: nn,CSTAT,I
@@ -36,9 +36,10 @@ DOUBLE PRECISION        :: random_deviate
 REAL,DIMENSION(5,6)     :: tempo
 CHARACTER(100)          :: namefile,nametmp
 CHARACTER(300)          :: namedir
-CHARACTER(400)          :: filename
-LOGICAL                 :: Existent=.FALSE.,Existent2=.FALSE.
-CHARACTER(400)          :: C
+CHARACTER(400)          :: filename,filefrac,filenamebis
+LOGICAL                 :: Existent=.FALSE.,Existent2=.FALSE., Existent0=.FALSE.
+CHARACTER(400)          :: C,cwd
+REAL                    :: x1,x2,z1,z2
 
 IF (debug_mode) WRITE(debug_unit,*)'--- Chain ',TRIM(chain_name),': initializing models ---'
 
@@ -77,39 +78,108 @@ IF (run_number.EQ.1) THEN
                 END IF
 
                 CALL CHDIR (namedir)
+                 
+                CALL getcwd(cwd)
+                filefrac= TRIM(cwd)//"/../../lib_fractures.txt"
+                filefrac = TRIM(filefrac)
 
-                CALL EXECUTE_COMMAND_LINE ("python3 ../../../source/inverse/initialize_fracmodels.py",CMDSTAT=CSTAT)
+                INQUIRE(FILE=filefrac, EXIST=Existent0)
+                write(*,*) Existent0
+                IF (Existent0) THEN
+                        CALL EXECUTE_COMMAND_LINE ("python3 ../../../source/inverse/initialize_fracmodels.py",CMDSTAT=CSTAT)
 
-                IF ((CSTAT > 0).OR.(CSTAT < 0)) THEN
-                        PRINT *, "Command execution failed when running Python in initialize_models.f90"
-                END IF
+                        IF ((CSTAT > 0).OR.(CSTAT < 0)) THEN
+                                PRINT *, "Command execution failed when running Python in initialize_models.f90"
+                        END IF
 
-                CALL GETCWD(C)
+                        CALL GETCWD(C)
 
-                ! Fill up current arrays
-                filename = ADJUSTL(ADJUSTR(C)//TRIM("/input/testDFN/DFN.txt"))
-                INQUIRE(FILE=filename, EXIST=Existent)
-                IF (EXistent) THEN
-                        open (unit=15, file=filename, status='old', action='read')
-                        read(15,*)
-                        read(15,*) ncell_current
-                                do I=1,ncell_current
-                                        read(15,*) tempo(I,:) ! fractures from DFN.txt
+                        ! Fill up current arrays
+                        filename = ADJUSTL(ADJUSTR(C)//TRIM("/input/testDFN/DFN.txt"))
+                        INQUIRE(FILE=filename, EXIST=Existent)
+                        IF (EXistent) THEN
+                                open (unit=15, file=filename, status='old', action='read')
+                                read(15,*)
+                                read(15,*) ncell_current
+                                        do I=1,ncell_current
+                                                read(15,*) tempo(I,:) ! fractures from DFN.txt
+                                        end do
+                                close(15)
+                                DO nn=1,ncell_current
+                                        if (tempo(nn,1).LE.tempo(nn,3)) then ! x1 <= x2
+                                                voronoi_current(nn,1) = tempo(nn,1) + ABS(tempo(nn,3)-tempo(nn,1))/2 ! x centre
+                                        else
+                                                voronoi_current(nn,1) = tempo(nn,3) + ABS(tempo(nn,3)-tempo(nn,1))/2 ! x centre
+                                        end if
+                                        if (tempo(nn,2).LE.tempo(nn,4)) then ! z1 <= z2
+                                                voronoi_current(nn,3) = tempo(nn,2) + ABS(tempo(nn,4)-tempo(nn,2))/2 ! z centre
+                                        else
+                                                voronoi_current(nn,3) = tempo(nn,4) + ABS(tempo(nn,4)-tempo(nn,2))/2 ! z centre
+                                        end if
+                                        !voronoi_current(nn,1) = tempo(nn,1) + ABS(tempo(nn,3)-tempo(nn,1))/2 ! x centre
+                                        !voronoi_current(nn,3) = tempo(nn,2) + ABS(tempo(nn,4)-tempo(nn,2))/2 ! z centre
+                                        !voronoi_current(nn,4) = ABS(tempo(nn,3)-tempo(nn,1)) ! length
+                                        voronoi_current(nn,4) = SQRT( (tempo(nn,3)-tempo(nn,1))**2 + (tempo(nn,4)-tempo(nn,2))**2 ) ! length
+                                        IF (opt_parameters.EQ.1) THEN 
+                                                voronoi_current(nn,5)=ATAN((tempo(nn,4)-tempo(nn,2)) / (tempo(nn,3)-tempo(nn,1)))
+                                                IF (voronoi_current(nn,5).LT.0) THEN 
+                                                        voronoi_current(nn,5)= pi + voronoi_current(nn,5)
+                                                END IF
+                                        ELSEIF (opt_parameters.EQ.2) THEN
+                                                voronoi_current(nn,5) = aperture_fixed
+                                        END IF
                                 end do
-                        close(15)
-                        DO nn=1,ncell_current
-                                voronoi_current(nn,1) = tempo(nn,1) + ABS(tempo(nn,3)-tempo(nn,1))/2 ! x centre
-                                voronoi_current(nn,3) = tempo(nn,2) + ABS(tempo(nn,4)-tempo(nn,2))/2 ! z centre
-                                !voronoi_current(nn,4) = ABS(tempo(nn,3)-tempo(nn,1)) ! length
-                                voronoi_current(nn,4) = SQRT( (tempo(nn,3)-tempo(nn,1))**2 + (tempo(nn,4)-tempo(nn,2))**2 ) ! length
-                                IF (opt_parameters.EQ.1) THEN 
-                                        !voronoi_current(nn,5) = 0 ! angle
-                                        voronoi_current(nn,5) = ACOS( ABS(voronoi_current(nn,1)-tempo(nn,1)) &
-                                                                * 2/voronoi_current(nn,4) ) ! angle
-                                ELSEIF (opt_parameters.EQ.2) THEN
-                                        voronoi_current(nn,5) = 0.03 ! aperture
-                                END IF
-                        end do
+                 
+                        END IF
+
+                ELSE 
+                        ! Initial random number of cells 
+                        ncell_current=INT(1)
+
+                        CALL EXECUTE_COMMAND_LINE ("python3 ../../../source/inverse/initialize_fracmodels.py",CMDSTAT=CSTAT)
+
+                        IF ((CSTAT > 0).OR.(CSTAT < 0)) THEN
+                                PRINT *, "Command execution failed when running Python in initialize_models.f90"
+                        END IF
+                        ! To generate a single random pathway:
+                        voronoi_current(1,1)=x_min+unirand()*(x_max-x_min)             
+                        voronoi_current(1,2)=y_min+unirand()*(y_max-y_min)             
+                        voronoi_current(1,3)=z_min+unirand()*(z_max-z_min)              
+                        voronoi_current(1,4)=powerrand(value_min,value_max,powerlaw_a) 
+                        write(*,*)"voronoi_centre_x=",voronoi_current(1,1)," voronoi_centre_z=",voronoi_current(1,3)
+                        write(*,*)" length=",voronoi_current(1,4)
+                        ! Option
+                        IF (opt_parameters.GT.0) THEN
+                                voronoi_current(1,5) = opt_min + unirand()*(opt_max-opt_min)  
+                        END IF
+                        ! Check if the fracture is still in the domain
+                        CALL check_frac_inside_domain(voronoi_proposed(1,:))
+                        ! Write files 
+                        ! DFN.txt
+                        IF (opt_parameters.EQ.1) THEN 
+                                x1 = voronoi_current(1,1) - COS(voronoi_current(1,5))*voronoi_current(1,4)/2 ! x1
+                                x2 = voronoi_current(1,1) + COS(voronoi_current(1,5))*voronoi_current(1,4)/2 ! x2
+                                z1 = voronoi_current(1,3) - SIN(voronoi_current(1,5))*voronoi_current(1,4)/2 ! z1
+                                z2 = voronoi_current(1,3) + SIN(voronoi_current(1,5))*voronoi_current(1,4)/2 ! z2
+                        ELSE
+                                x1 = voronoi_current(1,1) - voronoi_current(1,4)/2 ! x1
+                                x2 = voronoi_current(1,1) + voronoi_current(1,4)/2 ! x2
+                                z1 = voronoi_current(1,3) ! z1
+                                z2 = voronoi_current(1,3) ! z2  
+                        END IF 
+                        write(*,*) "x1=",x1," z1=",z1, " x2=",x2, " z2=",z2
+                        
+                        CALL GETCWD(C)
+                        filename = ADJUSTL(ADJUSTR(C)//TRIM("/input/testDFN/DFN.txt"))
+                        write(*,*)"filename for the frac : ",filename
+                        open (unit=16, file=filename, status='old', action='write')
+                                write(16,*)"DETERMINISTIC1"
+                                write(16,*)1
+                                write(16,*)x1,z1,x2,z2,aperture_fixed,conductivity_fixed
+                        close(16)
+                        filenamebis=ADJUSTL(ADJUSTR(C)//TRIM("/results_fwd/DFN_initial.txt"))
+                        CALL EXECUTE_COMMAND_LINE ("cp "//filename//" "//filenamebis,CMDSTAT=CSTAT)
+
                 END IF
         END IF
 
@@ -125,8 +195,8 @@ IF (run_number.EQ.1) THEN
                 END DO
         ELSE IF (noise_type.EQ.3.OR.noise_type.EQ.6) THEN
                 DO nn=1,number_of_datasets
-                        !lambda_current(nn)=lambda_min+unirand()*(lambda_max-lambda_min)
-                        lambda_current(nn)=1 ! 18/07/25
+                        !lambda_current(nn)=lambda_min+unirand()*(lambda_max-lambda_min) ! Random start
+                        lambda_current(nn)=1                                             ! Fixe start
                 END DO
         END IF
 

@@ -28,6 +28,7 @@ MODULE alpha_calculation
 USE chains, ONLY: chain_name,l_change
 USE debug
 USE input_files, ONLY: modelling_method
+USE acquisition, ONLY: observed_data
 IMPLICIT NONE
 
 
@@ -217,7 +218,8 @@ misfit=0
 DO ii=1,number_of_measurements
 
         IF (modelling_method.EQ.2) THEN
-                IF (modelled_data(ii).GT.0) THEN
+                !IF (modelled_data(ii).GT.0) THEN
+                IF (((modelled_data(ii).GT.0).EQV..True.).AND.((observed_data(ii).GT.0).EQV..True.)) THEN
                         IF (likelihood_type.EQ.0) likelihood=likelihood+(observed_data(ii)-modelled_data(ii))**2&
                                                                 /(2*(uncertainty(ii)**2))
                         IF (likelihood_type.EQ.1) likelihood=likelihood+ABS((observed_data(ii)-modelled_data(ii))&
@@ -251,7 +253,8 @@ INTEGER                                         :: ii
 normalization=0
 
 DO ii=1,number_of_measurements
-        IF (modelled_data(ii).GT.0) THEN
+        !IF (modelled_data(ii).GT.0) THEN
+        IF (((modelled_data(ii).GT.0).EQV..True.).AND.((observed_data(ii).GT.0).EQV..True.)) THEN
                 normalization=normalization+LOG(uncertainty_current(ii)/uncertainty_proposed(ii))
         END IF
 END DO

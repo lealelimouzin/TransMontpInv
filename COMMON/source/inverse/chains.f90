@@ -44,7 +44,8 @@ DOUBLE PRECISION, SAVE                                  :: lambda_min,lambda_max
 DOUBLE PRECISION, SAVE                                  :: sigma_min,sigma_max
 DOUBLE PRECISION, SAVE                                  :: sigma_mat,rho_mat
 INTEGER,SAVE                                            :: opt_parameters
-DOUBLE PRECISION,SAVE                                   :: opt_min,opt_max 
+DOUBLE PRECISION,SAVE                                   :: opt_min,opt_max
+DOUBLE PRECISION,SAVE                                   :: aperture_fixed,conductivity_fixed
 ! Proposals
 LOGICAL, SAVE                                           :: use_delayed_value,use_delayed_position
 LOGICAL, SAVE                                           :: use_delayed_opt
@@ -131,6 +132,7 @@ INTEGER, SAVE                                           :: misfits_unit=53
 INTEGER, SAVE                                           :: acceptance_unit=54
 INTEGER, SAVE                                           :: temperatures_unit=55
 INTEGER, SAVE                                           :: residuals_unit=56
+INTEGER :: ival ! 03/09/26
 
 CONTAINS
 
@@ -583,10 +585,10 @@ SUBROUTINE check_inside_prior()
                         IF (voronoi_delayed(cell_number,3).LT.z_min.OR.&
                         voronoi_delayed(cell_number,3).GT.z_max) inside_prior_delayed=.FALSE.
                         IF (voronoi_delayed(cell_number,4).LT.value_min.OR.&
-                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior=.FALSE.
+                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior_delayed=.FALSE.
                         IF (opt_parameters.GT.0) THEN
                                 IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
-                                voronoi_delayed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+                                voronoi_delayed(cell_number,5).GT.opt_max) inside_prior_delayed=.FALSE.
                         END IF
                 END IF
         ELSE IF (value) THEN
@@ -611,10 +613,10 @@ SUBROUTINE check_inside_prior()
                         IF (voronoi_delayed(cell_number,3).LT.z_min.OR.&
                         voronoi_delayed(cell_number,3).GT.z_max) inside_prior_delayed=.FALSE.
                         IF (voronoi_delayed(cell_number,4).LT.value_min.OR.&
-                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior=.FALSE.
+                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior_delayed=.FALSE.
                         IF (opt_parameters.GT.0) THEN
                                 IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
-                                voronoi_delayed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+                                voronoi_delayed(cell_number,5).GT.opt_max) inside_prior_delayed=.FALSE.
                         END IF
                 END IF
         ELSE IF (noise) THEN
@@ -651,11 +653,19 @@ SUBROUTINE check_inside_prior()
                         IF (voronoi_delayed(cell_number,3).LT.z_min.OR.&
                         voronoi_delayed(cell_number,3).GT.z_max) inside_prior_delayed=.FALSE.
                         IF (voronoi_delayed(cell_number,4).LT.value_min.OR.&
-                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior=.FALSE.
+                        voronoi_delayed(cell_number,4).GT.value_max) inside_prior_delayed=.FALSE.
                         IF (voronoi_delayed(cell_number,5).LT.opt_min.OR.&
-                        voronoi_delayed(cell_number,5).GT.opt_max) inside_prior=.FALSE.
+                        voronoi_delayed(cell_number,5).GT.opt_max) inside_prior_delayed=.FALSE.
                 END IF
         END IF
+
+        IF ((delayed_opt).OR.(delayed_value).OR.(delayed_position)) THEN
+                WRITE(*,*) "For the delayed proposition at chain ",TRIM(int2str(chain_number)),&
+                 " PRIOR_DELAYED = ", inside_prior_delayed
+        ELSE
+                WRITE(*,*) "For the proposition at chain ",TRIM(int2str(chain_number)), " PRIOR = ", inside_prior
+        END IF
+
 END SUBROUTINE
 
 
@@ -705,7 +715,7 @@ SUBROUTINE check_frac_inside_domain(fracture)
         DOUBLE PRECISION, DIMENSION(:) :: fracture
         DOUBLE PRECISION               :: length,x1,x2,z1,z2,angle
         INTEGER(KIND=4), PARAMETER     :: dim_num = 2
-        INTEGER(KIND=4)                :: ival
+        INTEGER(KIND=4)               :: ival
         REAL(KIND=8)                   :: p1(dim_num)
         REAL(KIND=8)                   :: p2(dim_num)
         REAL(KIND=8)                   :: pa(dim_num),pa_old(dim_num)
@@ -749,10 +759,15 @@ SUBROUTINE check_frac_inside_domain(fracture)
                 ELSE
                         fracture(3) = pa(2) - abs( (pb(2)-pa(2))/2 )!z
                 END IF
-                fracture(4) = (pb(1)-pa(1))/COS(angle) !l
-                if (fracture(4).LT.0.) THEN
-                        WRITE(*,*)"WARNING: negative length"
-                END IF
+                !fracture(4) = abs( (pb(1)-pa(1))/COS(angle) ) !l ! 26/05/18
+                !26/05/30
+                fracture(4) = ATAN( (pb(2)-pa(2)) / (pb(1)-pa(1)) )
+	        IF (fracture(4).LT.0) THEN 
+	                fracture(4)= pi + fracture(4)
+	        END IF
+                !if (fracture(4).LT.0.) THEN
+                !        WRITE(*,*)"WARNING: negative length"
+                !END IF
         END IF
 END SUBROUTINE
 

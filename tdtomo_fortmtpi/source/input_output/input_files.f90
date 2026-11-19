@@ -35,7 +35,6 @@ CHARACTER (LEN=30), SAVE                        :: average_file,stdev_file,media
                                                    rms_file,entropy_file,skewness_file,kurtosis_file,ncellsi_file,misfiti_file,&
                                                    postncells_file,postnoise_file,postvalue_file,node_file,first_file,last_file,&
                                                    residuals_histo_file
-CHARACTER (LEN=200), SAVE                       :: path_fwdFrac
 INTEGER, SAVE                                   :: x_number_of_pixels,y_number_of_pixels,z_number_of_pixels,&
                                                    value_number_of_pixels,noise_number_of_pixels,residuals_number_of_pixels,&
                                                    vtx_or_xyz
@@ -48,14 +47,14 @@ CONTAINS
 
 SUBROUTINE read_mksamples_in()
 ! Reads mksamples.in
-USE acquisition, ONLY: electrode_file,data_file,datasets_file,number_of_datasets,std_file
+USE acquisition, ONLY: electrode_file,data_file,datasets_file,number_of_datasets
 USE chains, ONLY: number_of_datasets,ncell_min,ncell_max,value_min,value_max,x_min,x_max,y_min,y_max,z_min,z_max,&
                   noise_type,a_min,a_max,b_min,b_max,lambda_min,lambda_max,sigma_min,sigma_max,&
                   value_change,value_change_delayed,x_change,y_change,z_change,x_change_delayed,y_change_delayed,z_change_delayed,&
                   birth_change,a_change,b_change,lambda_change,sigma_change,likelihood_type,&
                   max_runtime,number_of_samples,max_number_of_samples,display_interval,no_data,&
                   parallel_tempering,jump_type,tempering_start,sigma_mat,rho_mat,number_of_parameters,opt_parameters,&
-                  opt_min,opt_max,opt_change,opt_change_delayed,pi,powerlaw_a
+                  opt_min,opt_max,opt_change,opt_change_delayed,pi,powerlaw_a,aperture_fixed,conductivity_fixed
 IMPLICIT NONE
 INTEGER                 :: nn
 CHARACTER(LEN=3)        :: section
@@ -105,15 +104,20 @@ READ(60,*)rho_mat
 READ(60,*)opt_parameters
 IF (opt_parameters.EQ.1) THEN !angle
         READ(60,*)opt_min,opt_max
-        opt_max=opt_max*2*pi/360 ! Convert degrees to radians
+        opt_min=opt_min*pi/180 ! Convert degrees to radians
+        opt_max=opt_max*pi/180 ! Convert degrees to radians
         READ(60,*)
+        READ(60,*)aperture_fixed
 ELSEIF (opt_parameters.EQ.2) THEN !aperture
         READ(60,*)
         READ(60,*)opt_min,opt_max
+        READ(60,*)
 ELSE
         READ(60,*)
         READ(60,*)
+        READ(60,*)aperture_fixed
 END IF
+READ(60,*)conductivity_fixed
 ! ---
 READ(60,*)
 READ(60,*)
@@ -154,26 +158,9 @@ READ(60,*)
 READ(60,*)
 READ(60,*)parallel_tempering
 IF (parallel_tempering.EQ.1) THEN
-        CALL read_tempering_parameters()
-ELSE
-        READ(60,*)
-        READ(60,*)
-        READ(60,*)
-        READ(60,*) 
-        READ(60,*) 
+        CALL read_tempering_parameters() 
 END IF
 IF (input_error) section='(I)'
-READ(60,*) 
-READ(60,*) 
-READ(60,*) 
-READ(60,'(a200)')path_fwdFrac
-IF (input_error) section='(J)'
-! Test 07/07/25
-READ(60,*) 
-READ(60,*) 
-READ(60,*) 
-READ(60,'(a20)')std_file
-! end test 07/07/25
 CLOSE(60)
 
 IF (save_residuals.NE.0.AND.save_residuals.NE.1) THEN

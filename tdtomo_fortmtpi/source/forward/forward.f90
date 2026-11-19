@@ -25,8 +25,8 @@
 
 MODULE forward
 
-USE input_files, ONLY: modelling_method,forward_file,path_fwdFrac
-USE chains, ONLY: rho_mat,opt_parameters,x_min,x_max,z_min,z_max,chain_name
+USE input_files, ONLY: modelling_method,forward_file
+USE chains, ONLY: rho_mat,opt_parameters,x_min,x_max,z_min,z_max,chain_name,aperture_fixed,conductivity_fixed
 USE acquisition, ONLY: number_of_measurements
 USE string_conversion
 
@@ -155,8 +155,8 @@ SUBROUTINE forward_with_ert_ddp_2_5d(namedir,chain_number,modelled_data,info)
                 END DO
         CLOSE(89)
         
-        !modelled_data = modelled_data_dfn-(modelled_data_epm-rho_mat) ! If farum data
-        modelled_data = modelled_data_dfn ! If synthetic data
+        modelled_data = modelled_data_dfn-(modelled_data_epm-rho_mat)  ! Farum
+        !modelled_data = modelled_data_dfn                               ! synthetic case
         
         ! Go back to the bin directory
         cdtmp = "../../"
@@ -171,7 +171,7 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
         IMPLICIT NONE 
         INTEGER,INTENT(IN)                                      :: number_of_fractures
         DOUBLE PRECISION, DIMENSION(:,:), INTENT(IN)            :: fracture_model
-        DOUBLE PRECISION                                        :: length,x1,z,x2,sigma,b,z1,z2,angle,aperture
+        DOUBLE PRECISION                                        :: length,x1,z,x2,sigma,z1,z2,angle,b !,aperture,b
         CHARACTER(200)                                          :: namedir
         CHARACTER(400)                                          :: filenametmp
         DOUBLE PRECISION, DIMENSION(6)                          :: fracture
@@ -189,10 +189,11 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
                                 x1 = fracture_model(J,1) - length/2
                                 z = fracture_model(J,3)
                                 x2 = fracture_model(J,1) + length/2
-                                b = 0.03
-                                sigma = 2
+                                !b = 0.03
+                                b = aperture_fixed ! 26/06/01
+                                sigma = conductivity_fixed
                                 fracture = [x1, z, x2, z, b, sigma]
-                                write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F4.2,1X,F3.1)') fracture
+                                write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F6.3)') fracture
                         END DO
                 close(40)
         ELSE
@@ -208,7 +209,7 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
                                         z1 = fracture_model(J,3) - SIN(angle)*length/2
                                         x2 = fracture_model(J,1) + COS(angle)*length/2
                                         z2 = fracture_model(J,3) + SIN(angle)*length/2
-                                        b = 0.03 ! TODO: add it to mksamples.in as a default parameter
+                                        b = aperture_fixed
                                 ELSEIF (opt_parameters.EQ.2) THEN
                                         length = fracture_model(J,4)
                                         x1 = fracture_model(J,1) - length/2
@@ -222,12 +223,12 @@ SUBROUTINE write2DFN(number_of_fractures,fracture_model,namedir)
                                         z1 = fracture_model(J,3)
                                         x2 = fracture_model(J,1) + length/2
                                         z2 = fracture_model(J,3)
-                                        b = 0.03
+                                        b = aperture_fixed
                                 END IF
-                                sigma = 2
+                                sigma = conductivity_fixed
                                 fracture = [x1, z1, x2, z2, b, sigma]
                                 ! Store the DFN in a text file
-                                write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F4.2,1X,F3.1)') fracture
+                                write(40,'(F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F6.3,1X,F6.3)') fracture
                         END DO
                 close(40)
         END IF

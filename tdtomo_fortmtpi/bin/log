@@ -1,0 +1,16 @@
+
+ ***************************
+  Job started on 18-11-2026
+  at 14:17:51
+ ***************************
+
+  Hello from rj-McMC tomography and chain 1 on core 0!                 
+  Hello from rj-McMC tomography and chain 2 on core 1!                 
+ WARNING: the following directory already exists! It is removed before starting the new" simulation: results_chains/res_chain_1                                                                                                                                                                                                                                                                                  
+ WARNING: the following directory already exists! It is removed before starting the new" simulation: results_chains/res_chain_2                                                                                                                                                                                                                                                                                  
+ T
+ T
+***** Hej från Python initialize_fracmodels.py på res_chain_1! *****
+***** Hej från Python initialize_fracmodels.py på res_chain_2! *****
+***** Demat da Python main.py adalek res_chain_1 ! *****
+***** Demat da Python main.py adalek res_chain_2 ! *****

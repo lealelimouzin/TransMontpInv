@@ -20,7 +20,6 @@ import subprocess
 from post_processing.mainEPM import mainEPM
 from post_processing.mainDFN import mainDFN
 try:
-    #sys.path.append(pjoin(os.getcwd(), '..', '..','src','electrical_resistivity', 'Release'))
     sys.path.append(pjoin(os.getcwd(),'..','..','..','source','forward','ert_ddp2.5d','src','electrical_resistivity', 'Release'))
     from  PERFORM import perform
 except:

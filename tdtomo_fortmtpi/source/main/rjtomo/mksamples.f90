@@ -459,7 +459,7 @@ DO WHILE (iteration.LT.number_of_samples.AND.&
                         write(*,*) 'MH acceptance criterion DELAYED at chain ',TRIM(chain_name),&
                                          &'=', LOG(random_deviate)
                         IF (accepted) accepted_delayed=.TRUE.
-                        write(*,*) '     Is the poposed DELAYED model accepted at chain ', TRIM(chain_name), '? ', accepted_delayed
+                        write(*,*) '     Is the proposed DELAYED model accepted at chain ', TRIM(chain_name), '? ', accepted_delayed
                 END IF
                 
         END IF
